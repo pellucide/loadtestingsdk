@@ -1,29 +1,16 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
 
 ### What is this repository for? ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* This repo will hold the code, examples, and documentation for using the various load testing scripts. Please create pull requests if you would like to add anything to the repo
+
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+* Clone the repo. This repository consists of individual folders for each of the scriprtin environments. Each of those folders contains a separate README. Pleae review the per-folder README for setup instructions.
+
 
 ### Contribution guidelines ###
+* Please send pull requests.
 
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
