@@ -1,4 +1,4 @@
-# JMETER SCRIPTING#
+# POSTMAN SCRIPTING#
 
 
 ### What is this repository for? ###
