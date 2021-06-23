@@ -1,0 +1,838 @@
+{
+	"info": {
+		"_postman_id": "3f9d9400-9720-4060-8fbe-7c98528a1bc6",
+		"name": "Load testing_Keybank",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Bind request",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f45f1ac2-b647-4112-9d9d-9f9d9f95b9d0",
+						"exec": [
+							"var moment = require('moment');",
+							"pm.globals.set('momemt_timestamp', moment().unix());",
+							"",
+							"if (pm.environment.has(\"forgejs\")) {",
+							"    self = {};",
+							"    console.log(\"have forgejs\");",
+							"    eval(pm.environment.get(\"forgejs\"));",
+							"    var forge = self.forge;",
+							"    var rsa = forge.pki.rsa;",
+							"",
+							"    // generate an RSA key pair ",
+							"    var keypair = rsa.generateKeyPair({bits: 512, e: 0x10001});",
+							"    var privatekey = forge.pki.privateKeyToPem(keypair.privateKey);",
+							"    var publickey = forge.pki.publicKeyToPem(keypair.publicKey,500);",
+							"    publickeyNoHeader = publickey.replace(/[\\n\\r]*-----BEGIN.*[\\r\\n]+/m, '')",
+							"                                 .replace(/[\\n\\r]+-----END.*[\\n\\r]+/m, \"\");",
+							"    privatekeyNoHeader = privatekey.replace(/[\\n\\r]*-----BEGIN.*[\\r\\n]+/m, '')",
+							"                                   .replace(/[\\n\\r]+-----END.*[\\n\\r]+/m, '');",
+							"    console.log(`publickeyNoHeader  = ${publickeyNoHeader}`);",
+							"    console.log(`privatekeyNoHeader = ${privatekeyNoHeader}`);",
+							"",
+							"    console.log(`privatekey = ${privatekey}`);",
+							"    console.log(`publickey = ${publickey}`);",
+							"    pm.globals.set(\"public_key_noheader\", publickeyNoHeader);",
+							"    pm.globals.set(\"public_key\", publickey);",
+							"    pm.globals.set('private_key', privatekey);",
+							"}",
+							"",
+							"//load jsEncrypt and generate the keys",
+							"/*",
+							"if(pm.environment.has(\"jsencrypt\")){",
+							"    console.log(\"have jsencrypt\");",
+							"    eval(pm.environment.get(\"jsencrypt\"));",
+							"    console.log(`jsEncrypt = ${JSEncrypt}`);",
+							"    jsEnc = new JSEncrypt();",
+							"    key = jsEnc.getKey();",
+							"    console.log(key);",
+							"    privatekey = jsEnc.getPrivateKeyB64();",
+							"    publickey = jsEnc.getPublicKeyB64();",
+							"    console.log(`privatekey = ${privatekey}`);",
+							"    console.log(`publickey = ${publickey}`);",
+							"    pm.globals.set(\"public_key_noheader\", publickey);",
+							"    pm.globals.set('private_key', privatekey);",
+							"    ",
+							"    var encrypted = jsEnc.encrypt(\"asdf\");",
+							"    console.log(`encrypt(\"asdf\") = ${encrypted}`);",
+							"    var decrypted = jsEnc.decrypt(encrypted);",
+							"    console.log(`decrypt(${encrypted}) = ${decrypted}`);",
+							"    ",
+							"    var encrypted = jsEnc.encrypt(\"asdf\");",
+							"    console.log(`encrypt(\"asdf\") = ${encrypted}`);",
+							"    var decrypted = jsEnc.decrypt(encrypted);",
+							"    console.log(`decrypt(${encrypted}) = ${decrypted}`);",
+							"}",
+							"*/",
+							"",
+							"//load few other crypto libs",
+							"/**",
+							" * not required for now",
+							"var libs = [\"prng4\", \"rng\", \"sha1\", \"sec\", \"base64\", \"jsbn\", \"jsbn2\", \"rsa\", \"rsa2\", \"ec\"];",
+							"for (var lib in libs) {",
+							"    console.log(`checking for ${libs[lib]}`)",
+							"    if(pm.globals.has(libs[lib])){",
+							"         console.log(`have ${libs[lib]}`);",
+							"         eval(pm.globals.get(libs[lib]));",
+							"    } else {",
+							"        console.log(`!!! no ${libs[lib]} !!!`)",
+							"    }",
+							"}",
+							"rsakey = new RSAKey()",
+							"rsakey.generate(1024, \"0x10001\")",
+							"encrypted = rsakey.encrypt(\"asdfa\")",
+							"console.log(`encrypted = ${encrypted}`)",
+							"",
+							"*/",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "057b5b5c-109c-4713-8baa-5aaf6559f2f5",
+						"exec": [
+							"",
+							"pm.test(\"Get Device ID\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"    var jsonData = pm.response.json();",
+							"    console.log(`jsonData = ${jsonData.headers}`);",
+							"    var headers = jsonData.headers;",
+							"    for (var index in headers) {",
+							"        //console.log(\"header = \",JSON.stringify(headers[index]));",
+							"        if (headers[index].type == \"device_id\") {",
+							"            deviceId = headers[index].device_id;",
+							"        }",
+							"        if (headers[index].type == \"session_id\") {",
+							"            sessionId = headers[index].session_id;",
+							"        }",
+							"",
+							"    }",
+							"    pm.expect(deviceId).to.not.be.empty;",
+							"    pm.expect(sessionId).to.not.be.empty;",
+							"    console.log(`deviceId = ${deviceId}`);",
+							"    console.log(`sessionId = ${sessionId}`);",
+							"    pm.globals.set(\"deviceId\", deviceId);",
+							"    pm.globals.set(\"sessionId\", sessionId);",
+							"});",
+							"",
+							"pm.test(\"Get challenge\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    var jsonData = pm.response.json();",
+							"    var challenge = jsonData.data.challenge;",
+							"    var assertionId = jsonData.data.control_flow[0].assertion_id;",
+							"    console.log(`challenge=${challenge}`);",
+							"    console.log(`assertionId=${assertionId}`);",
+							"    pm.expect(challenge).to.not.be.empty;",
+							"    pm.expect(assertionId).to.not.be.empty;",
+							"    pm.globals.set(\"challenge\", challenge);",
+							"    pm.globals.set(\"assertion_id\", assertionId);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ts-client-version",
+						"value": "{{X-TS-Client-Version}}",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": "TSToken {{tokenValue}}; tid={{tokenId}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"headers\": [\n        {\n            \"type\": \"uid\",\n            \"uid\": \"{{userId}}\"\n        }\n    ],\n    \"data\": {\n        \"collection_result\": {\n            \"metadata\": {\n                \"scheme_version\": 2,\n                \"version\": \"{{X-TS-Client-Version}}\",\n                \"timestamp\": {{momemt_timestamp}}\n            },\n            \"content\": {\n                \"owner_details\": {\n                    \"possible_names\": [\n                        \"c3fa673b98c1a9ee6ecc3e38d0381966\"\n                    ],\n                    \"possible_emails\": [\n                        \"f91c98012706e141b2e3bcc286af5e06\"\n                    ]\n                },\n                \"hw_authenticators\": {\n                    \"fingerprint\": {\n                        \"supported\": true,\n                        \"secure\": true,\n                        \"user_registered\": true\n                    },\n                    \"face_id\": {\n                        \"supported\": false,\n                        \"secure\": false,\n                        \"user_registered\": false\n                    }\n                },\n                \"external_sdk_details\": {\n                    \"cognitec\": {\n                        \"version\": \"9.1.4\",\n                        \"state\": 2\n                    },\n                    \"zannah\": {\n                        \"version\": \"1.5.2\",\n                        \"state\": 3\n                    },\n                    \"dyadic\": {\n                        \"version\": \"1.3.1706.33065\",\n                        \"state\": 3\n                    }\n                },\n                \"device_details\": {\n                    \"logged_users\": 0,\n                    \"hw_type\": \"Phone\",\n                    \"wifi_network\": {\n                        \"bssid\": \"d4705a482b5be4955808176e48f7371e\",\n                        \"ssid\": \"4eb341e247478a5a5ec2ba7d755cc614\",\n                        \"secure\": true\n                    },\n                    \"tampered\": true,\n                    \"sim_operator\": \"310410\",\n                    \"roaming\": false,\n                    \"master_key_generated\": 1584545844709,\n                    \"device_id\": \"352325082345782\",\n                    \"device_model\": \"samsung/SAMSUNG-SM-G930A\",\n                    \"tz\": \"America/New_York\",\n                    \"os_version\": \"8.0.0\",\n                    \"jailbroken\": false,\n                    \"sim_operator_name\": \"\",\n                    \"frontal_camera\": true,\n                    \"device_name\": \"e51e696e84671ad9\",\n                    \"known_networks\": [\n                        {\n                            \"ssid\": \"ab2e79dbba72c3866298b74f1a1c6fa6\"\n                        },\n                        {\n                            \"ssid\": \"4eb341e247478a5a5ec2ba7d755cc614\",\n                            \"secure\": true\n                        }\n                    ],\n                    \"subscriber_id\": \"310410035590766\",\n                    \"has_hw_security\": true,\n                    \"screen_lock\": true,\n                    \"os_type\": \"Android\",\n                    \"sflags\": -1,\n                    \"connection\": \"wifi: 10.103.82.192\",\n                    \"sim_serial\": \"89014104270355907667\"\n                },\n                \"location\": {\n                    \"lng\": -74.4993894,\n                    \"h_acc\": 12.800999641418457,\n                    \"enabled\": true,\n                    \"lat\": 40.3528937\n                },\n                \"accounts\": [\n                    {\n                        \"name\": \"c4f79e15f8c6ed0715a8ea44aebc38d8\",\n                        \"type\": \"6012fa4d4ddec268fc5c7112cbb265e7\"\n                    },\n                    {\n                        \"name\": \"b8d2a60277443092b75b9a9f71bce945\",\n                        \"type\": \"3330d5072c5971394e189640a9f09b77\"\n                    }\n                ],\n                \"installed_packages\": [\n                    \"20c496910ff8da1214ae52d3750684cd\",\n                    \"09e5b19fffdd4c9da52742ce536e1d8b\",\n                    \"5f5ca4b53bed9c75720d7ae1a8b949fc\",\n                    \"2ce4266d32140417eebea06fd2d5d9cd\",\n                    \"40197bd6e7b2b8d5880b666b7a024ab6\"\n                ],\n                \"contacts\": {\n                    \"contacts_count\": 765\n                },\n                \"capabilities\": {\n                    \"audio_acquisition_supported\": true,\n                    \"finger_print_supported\": true,\n                    \"image_acquisition_supported\": true,\n                    \"persistent_keys_supported\": true,\n                    \"face_id_key_bio_protection_supported\": false,\n                    \"fido_client_present\": true,\n                    \"dyadic_present\": true,\n                    \"installed_plugins\": [\n                        {\n                            \"plugin_name\": \"dynamic-forms\",\n                            \"plugin_version\": \"1.0.0\"\n                        },\n                        {\n                            \"plugin_name\": \"totp-unbound\",\n                            \"plugin_version\": \"1.0.3\"\n                        }\n                    ],\n                    \"host_provided_features\": \"19\"\n                },\n                \"collector_state\": {\n                    \"accounts\": \"active\",\n                    \"devicedetails\": \"active\",\n                    \"contacts\": \"active\",\n                    \"owner\": \"active\",\n                    \"software\": \"active\",\n                    \"location\": \"active\",\n                    \"bluetooth\": \"active\",\n                    \"externalsdkdetails\": \"active\",\n                    \"hwauthenticators\": \"active\",\n                    \"capabilities\": \"active\",\n                    \"fidoauthenticators\": \"disabled\",\n                    \"largedata\": \"disabled\",\n                    \"localenrollments\": \"active\"\n                },\n                \"local_enrollments\": {}\n            }\n        },\n        \"public_key\": {\n            \"key\": \"{{public_key_noheader}}\",\n            \"type\": \"rsa\"\n        },\n        \"encryption_public_key\": {\n            \"key\": \"{{public_key_noheader}}\",\n            \"type\": \"rsa\"\n        },\n        \"push_token\": \"fakePushToken\",\n        \"params\": {}\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/auth/bind?aid={{appid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"auth",
+						"bind"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{appid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Assert Request",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "6be9cd15-a585-4fe2-a6c6-0d144d212eb4",
+						"exec": [
+							"",
+							"",
+							"if (pm.environment.has(\"forgejs\")) {",
+							"    self = {};",
+							"    console.log(\"have forgejs\");",
+							"    eval(pm.environment.get(\"forgejs\"));",
+							"    forge = self.forge;",
+							"    ",
+							"    var rsa = forge.pki.rsa;",
+							"    var pki = forge.pki;",
+							"",
+							"    publickeyPem = pm.globals.get(\"public_key\");",
+							"    privatekeyPem = pm.globals.get('private_key');",
+							" ",
+							"    // convert a PEM-formatted public key to a Forge public key",
+							"    var publicKey = pki.publicKeyFromPem(publickeyPem);",
+							"    var privateKey = pki.privateKeyFromPem(privatekeyPem)",
+							"    ",
+							"        ",
+							"    payloadToSign = '{\"params\":{\"title\":\"Title of information message.\",\"text\":\"Text of information message.\",\"continue_button_text\":\"OK\",\"cancel_button_text\":\"Cancel\",\"parameters\":[]},\"user_input\":\"OK\"}';",
+							"    payloadToSign_escaped = payloadToSign.replace(/\\\"/g, \"\\\\\\\"\")",
+							"    console.log(payloadToSign_escaped);",
+							"  ",
+							"    // sign data with a private key and output DigestInfo DER-encoded bytes",
+							"    // (defaults to RSASSA PKCS#1 v1.5)",
+							"    var md = forge.md.sha256.create();",
+							"    md.update(payloadToSign, 'utf8');",
+							"    var signature = privateKey.sign(md);",
+							"    signatureB64 = forge.util.encode64(signature);",
+							"    console.log(`signature =${signatureB64}`);",
+							"    ",
+							"    assertionId = pm.globals.get(\"assertion_id\");",
+							"    userId = pm.environment.get(\"userId\");",
+							"    challenge = pm.globals.get(\"challenge\");",
+							"    deviceId = pm.globals.get(\"deviceId\");",
+							"    sessionId = pm.globals.get(\"sessionId\");",
+							"    ",
+							"    body = `{\"headers\":[{\"type\":\"uid\",\"uid\":\"${userId}\"}],\"data\":{\"action\":\"confirmation\",\"assert\":\"action\",\"assertion_id\":\"${assertionId}\",\"fch\":\"${challenge}\",\"data\":{\"user_cancelled\":false,\"sign_content_data\":{\"payload\":\"${payloadToSign_escaped}\",\"signed_payload\":\"${signatureB64}\"}}}}`;",
+							"    pm.globals.set(\"bodyContent\", body);",
+							"    ",
+							"    deviceId = pm.globals.get(\"deviceId\");",
+							"    request = pm.request;",
+							"    url = pm.request.url;",
+							"    contentSignatureScheme = 1;",
+							"    contentData = replaceVariables(url.getPathWithQuery({encode:true})) + body;",
+							"    console.log(`contentData = ${contentData}`);",
+							"",
+							"    var md = forge.md.sha256.create();",
+							"    md.update(contentData, 'utf8');",
+							"    var signatureData = privateKey.sign(md);",
+							"    console.log(`signatureData = ${signatureData}`);",
+							" ",
+							"  ",
+							"    signatureB64 = forge.util.encode64(signatureData);",
+							"    var contentSignature = \"data:\" + signatureB64 + ",
+							"                           \";key-id:\" + deviceId + \";scheme:\" + contentSignatureScheme;",
+							"    console.log(`contentSignature =${contentSignature}`);",
+							"                           ",
+							"    pm.globals.set(\"contentSignature\", contentSignature);",
+							"    ",
+							"}",
+							"",
+							"//load jsEncrypt and generate the keys",
+							"/*",
+							"if(pm.environment.has(\"jsencrypt\")){",
+							"    console.log(\"have jsencrypt\");",
+							"    eval(pm.environment.get(\"jsencrypt\"));",
+							" ",
+							"    jsEnc = new JSEncrypt();",
+							"    //jsEnc.getKey();",
+							"    //privatekey = jsEnc.getPrivateKeyB64();",
+							"    //publickey = jsEnc.getPublicKeyB64();",
+							"    publickey = pm.globals.get(\"public_key_noheader\");",
+							"    privatekey = pm.globals.get('private_key');",
+							"    console.log(`privatekey = ${privatekey}`);",
+							"    console.log(`publickey = ${publickey}`);",
+							"    jsEnc.setPrivateKey(privatekey);",
+							"",
+							"    //var encrypted = jsEnc.encrypt(\"asdf\");",
+							"    //console.log(`encrypt(\"asdf\") = ${encrypted}`);",
+							"    //var decrypted = jsEnc.decrypt(encrypted);",
+							"    //console.log(`decrypt(${encrypted}) = ${decrypted}`);",
+							"    ",
+							"    payloadToSign = '{\"params\":{\"title\":\"Title of information message.\",\"text\":\"Text of information message.\",\"continue_button_text\":\"OK\",\"cancel_button_text\":\"Cancel\",\"parameters\":[]},\"user_input\":\"OK\"}';",
+							"    payloadToSign_escaped = payloadToSign.replace(/\\\"/g, \"\\\\\\\"\")",
+							"    console.log(payloadToSign_escaped);",
+							"    payloadHash = CryptoJS.SHA256(payloadToSign).toString();",
+							"    console.log(payloadHash);",
+							"    var signature = jsEnc.encrypt(payloadHash);",
+							"    console.log(signature);",
+							"    ",
+							"    assertionId = pm.globals.get(\"assertion_id\");",
+							"    userId = pm.environment.get(\"userId\");",
+							"    challenge = pm.globals.get(\"challenge\");",
+							"    deviceId = pm.globals.get(\"deviceId\");",
+							"    sessionId = pm.globals.get(\"sessionId\");",
+							"    ",
+							"    body = `{\"headers\":[{\"type\":\"uid\",\"uid\":\"${userId}\"}],\"data\":{\"action\":\"confirmation\",\"assert\":\"action\",\"assertion_id\":\"${assertionId}\",\"fch\":\"${challenge}\",\"data\":{\"user_cancelled\":false,\"sign_content_data\":{\"payload\":\"${payloadToSign_escaped}\",\"signed_payload\":\"${signature}\"}}}}`;",
+							"    pm.globals.set(\"bodyContent\", body);",
+							"    ",
+							"    deviceId = pm.globals.get(\"deviceId\");",
+							"    request = pm.request;",
+							"    url = pm.request.url;",
+							"    contentSignatureScheme = 1;",
+							"    contentData = replaceVariables(url.getPathWithQuery({encode:true})) + body;",
+							"    console.log(`contentData = ${contentData}`);",
+							"",
+							"    contentHash = CryptoJS.SHA256(contentData).toString();",
+							"    console.log(`contentHash = ${contentHash}`);",
+							"    ",
+							"    ",
+							"    ",
+							"    //signatureData = jsEnc.encrypt(contentHash)",
+							"    //decryptedData = jsEnc.decrypt(signatureData);",
+							"    //console.log(`signatureData=${signatureData}`);",
+							"    //console.log(`decryptedData = ${decryptedData}`);",
+							"    ",
+							"    signatureData = jsEnc.sign(contentData, CryptoJS.SHA256);",
+							"    signatureB64 = jsEnc.hex2b64(signatureData);",
+							"    var contentSignature = \"data:\" + signatureB64 + ",
+							"                           \";key-id:\" + deviceId + \";scheme:\" + contentSignatureScheme;",
+							"                           ",
+							"    pm.globals.set(\"contentSignature\", contentSignature);",
+							"}",
+							"*/",
+							"",
+							"function replaceVariables(templateString) {",
+							"    let tokens = _.uniq(templateString.match(/{{\\w*}}/g))",
+							"    _.forEach(tokens, t => {",
+							"       let variable = t.replace(/[{}]/g, '') ",
+							"       let value = environment[variable] || globals[variable]",
+							"       templateString = templateString.replace(new RegExp(t,'g'), value)",
+							"    });",
+							"    return templateString",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-TS-Client-Version",
+						"value": "{{X-TS-Client-Version}}",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": "TSToken {{tokenValue}}; tid={{tokenId}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Signature",
+						"value": "{{contentSignature}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{bodyContent}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/auth/assert?aid={{appid}}&did={{deviceId}}&sid={{sessionId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"auth",
+						"assert"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{appid}}"
+						},
+						{
+							"key": "did",
+							"value": "{{deviceId}}"
+						},
+						{
+							"key": "sid",
+							"value": "{{sessionId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bind request key",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bf990dac-5772-443e-956f-010e6a1ed37f",
+						"exec": [
+							"var moment = require('moment');",
+							"pm.globals.set('momemt_timestamp', moment().unix());",
+							"",
+							"if (pm.environment.has(\"forgejs\")) {",
+							"    self = {};",
+							"    console.log(\"have forgejs\");",
+							"    eval(pm.environment.get(\"forgejs\"));",
+							"    var forge = self.forge;",
+							"    var rsa = forge.pki.rsa;",
+							"",
+							"    // generate an RSA key pair ",
+							"    var keypair = rsa.generateKeyPair({bits: 512, e: 0x10001});",
+							"    var privatekey = forge.pki.privateKeyToPem(keypair.privateKey);",
+							"    var publickey = forge.pki.publicKeyToPem(keypair.publicKey,500);",
+							"    publickeyNoHeader = publickey.replace(/[\\n\\r]*-----BEGIN.*[\\r\\n]+/m, '')",
+							"                                 .replace(/[\\n\\r]+-----END.*[\\n\\r]+/m, \"\");",
+							"    privatekeyNoHeader = privatekey.replace(/[\\n\\r]*-----BEGIN.*[\\r\\n]+/m, '')",
+							"                                   .replace(/[\\n\\r]+-----END.*[\\n\\r]+/m, '');",
+							"    console.log(`publickeyNoHeader  = ${publickeyNoHeader}`);",
+							"    console.log(`privatekeyNoHeader = ${privatekeyNoHeader}`);",
+							"",
+							"    console.log(`privatekey = ${privatekey}`);",
+							"    console.log(`publickey = ${publickey}`);",
+							"    pm.globals.set(\"public_key_noheader\", publickeyNoHeader);",
+							"    pm.globals.set(\"public_key\", publickey);",
+							"    pm.globals.set('private_key', privatekey);",
+							"}",
+							"",
+							"//load jsEncrypt and generate the keys",
+							"/*",
+							"if(pm.environment.has(\"jsencrypt\")){",
+							"    console.log(\"have jsencrypt\");",
+							"    eval(pm.environment.get(\"jsencrypt\"));",
+							"    console.log(`jsEncrypt = ${JSEncrypt}`);",
+							"    jsEnc = new JSEncrypt();",
+							"    key = jsEnc.getKey();",
+							"    console.log(key);",
+							"    privatekey = jsEnc.getPrivateKeyB64();",
+							"    publickey = jsEnc.getPublicKeyB64();",
+							"    console.log(`privatekey = ${privatekey}`);",
+							"    console.log(`publickey = ${publickey}`);",
+							"    pm.globals.set(\"public_key_noheader\", publickey);",
+							"    pm.globals.set('private_key', privatekey);",
+							"    ",
+							"    var encrypted = jsEnc.encrypt(\"asdf\");",
+							"    console.log(`encrypt(\"asdf\") = ${encrypted}`);",
+							"    var decrypted = jsEnc.decrypt(encrypted);",
+							"    console.log(`decrypt(${encrypted}) = ${decrypted}`);",
+							"    ",
+							"    var encrypted = jsEnc.encrypt(\"asdf\");",
+							"    console.log(`encrypt(\"asdf\") = ${encrypted}`);",
+							"    var decrypted = jsEnc.decrypt(encrypted);",
+							"    console.log(`decrypt(${encrypted}) = ${decrypted}`);",
+							"}",
+							"*/",
+							"",
+							"//load few other crypto libs",
+							"/**",
+							" * not required for now",
+							"var libs = [\"prng4\", \"rng\", \"sha1\", \"sec\", \"base64\", \"jsbn\", \"jsbn2\", \"rsa\", \"rsa2\", \"ec\"];",
+							"for (var lib in libs) {",
+							"    console.log(`checking for ${libs[lib]}`)",
+							"    if(pm.globals.has(libs[lib])){",
+							"         console.log(`have ${libs[lib]}`);",
+							"         eval(pm.globals.get(libs[lib]));",
+							"    } else {",
+							"        console.log(`!!! no ${libs[lib]} !!!`)",
+							"    }",
+							"}",
+							"rsakey = new RSAKey()",
+							"rsakey.generate(1024, \"0x10001\")",
+							"encrypted = rsakey.encrypt(\"asdfa\")",
+							"console.log(`encrypted = ${encrypted}`)",
+							"",
+							"*/",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4a61ac36-067e-4d55-8fec-bdd85303bc83",
+						"exec": [
+							"",
+							"pm.test(\"Get Device ID\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"    var jsonData = pm.response.json();",
+							"    console.log(`jsonData = ${jsonData.headers}`);",
+							"    var headers = jsonData.headers;",
+							"    for (var index in headers) {",
+							"        //console.log(\"header = \",JSON.stringify(headers[index]));",
+							"        if (headers[index].type == \"device_id\") {",
+							"            deviceId = headers[index].device_id;",
+							"        }",
+							"        if (headers[index].type == \"session_id\") {",
+							"            sessionId = headers[index].session_id;",
+							"        }",
+							"    }",
+							"    pm.expect(deviceId).to.not.be.empty;",
+							"    pm.expect(sessionId).to.not.be.empty;",
+							"    console.log(`deviceId = ${deviceId}`);",
+							"    console.log(`sessionId = ${sessionId}`);",
+							"    pm.globals.set(\"deviceId\", deviceId);",
+							"    pm.globals.set(\"sessionId\", sessionId);",
+							"});",
+							"",
+							"pm.test(\"Get challenge\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    var jsonData = pm.response.json();",
+							"    var challenge = jsonData.data.challenge;",
+							"    var assertionId = jsonData.data.control_flow[0].methods[0].assertion_id;",
+							"    console.log(`challenge=${challenge}`);",
+							"    console.log(`assertionId=${assertionId}`);",
+							"    pm.expect(challenge).to.not.be.empty;",
+							"    pm.expect(assertionId).to.not.be.empty;",
+							"    pm.globals.set(\"challenge\", challenge);",
+							"    pm.globals.set(\"assertion_id\", assertionId);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-ts-client-version",
+						"value": "{{X-TS-Client-Version}}",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": "TSToken {{tokenValue}}; tid={{tokenId}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "CHANNEL",
+						"value": "DMA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"headers\": [\n        {\n            \"type\": \"uid\",\n            \"uid\": \"perfibxtrns001\"\n        }\n    ],\n    \"data\": {\n        \"collection_result\": {\n            \"metadata\": {\n                \"scheme_version\": 2,\n                \"version\": \"{{X-TS-Client-Version}}\",\n                \"timestamp\": {{momemt_timestamp}}\n            },\n            \"content\": {\n                \"owner_details\": {\n                    \"possible_names\": [\n                        \"c3fa673b98c1a9ee6ecc3e38d0381966\"\n                    ],\n                    \"possible_emails\": [\n                        \"f91c98012706e141b2e3bcc286af5e06\"\n                    ]\n                },\n                \"hw_authenticators\": {\n                    \"fingerprint\": {\n                        \"supported\": true,\n                        \"secure\": true,\n                        \"user_registered\": true\n                    },\n                    \"face_id\": {\n                        \"supported\": false,\n                        \"secure\": false,\n                        \"user_registered\": false\n                    }\n                },\n                \"external_sdk_details\": {\n                    \"cognitec\": {\n                        \"version\": \"9.1.4\",\n                        \"state\": 2\n                    },\n                    \"zannah\": {\n                        \"version\": \"1.5.2\",\n                        \"state\": 3\n                    },\n                    \"dyadic\": {\n                        \"version\": \"1.3.1706.33065\",\n                        \"state\": 3\n                    }\n                },\n                \"device_details\": {\n                    \"logged_users\": 0,\n                    \"hw_type\": \"Phone\",\n                    \"wifi_network\": {\n                        \"bssid\": \"d4705a482b5be4955808176e48f7371e\",\n                        \"ssid\": \"4eb341e247478a5a5ec2ba7d755cc614\",\n                        \"secure\": true\n                    },\n                    \"tampered\": true,\n                    \"sim_operator\": \"310410\",\n                    \"roaming\": false,\n                    \"master_key_generated\": 1584545844709,\n                    \"device_id\": \"352325082345782\",\n                    \"device_model\": \"samsung/SAMSUNG-SM-G930A\",\n                    \"tz\": \"America/New_York\",\n                    \"os_version\": \"8.0.0\",\n                    \"jailbroken\": false,\n                    \"sim_operator_name\": \"\",\n                    \"frontal_camera\": true,\n                    \"device_name\": \"e51e696e84671ad9\",\n                    \"known_networks\": [\n                        {\n                            \"ssid\": \"ab2e79dbba72c3866298b74f1a1c6fa6\"\n                        },\n                        {\n                            \"ssid\": \"4eb341e247478a5a5ec2ba7d755cc614\",\n                            \"secure\": true\n                        }\n                    ],\n                    \"subscriber_id\": \"310410035590766\",\n                    \"has_hw_security\": true,\n                    \"screen_lock\": true,\n                    \"os_type\": \"Android\",\n                    \"sflags\": -1,\n                    \"connection\": \"wifi: 10.103.82.192\",\n                    \"sim_serial\": \"89014104270355907667\"\n                },\n                \"location\": {\n                    \"lng\": -74.4993894,\n                    \"h_acc\": 12.800999641418457,\n                    \"enabled\": true,\n                    \"lat\": 40.3528937\n                },\n                \"accounts\": [\n                    {\n                        \"name\": \"c4f79e15f8c6ed0715a8ea44aebc38d8\",\n                        \"type\": \"6012fa4d4ddec268fc5c7112cbb265e7\"\n                    },\n                    {\n                        \"name\": \"b8d2a60277443092b75b9a9f71bce945\",\n                        \"type\": \"3330d5072c5971394e189640a9f09b77\"\n                    }\n                ],\n                \"installed_packages\": [\n                    \"20c496910ff8da1214ae52d3750684cd\",\n                    \"09e5b19fffdd4c9da52742ce536e1d8b\",\n                    \"5f5ca4b53bed9c75720d7ae1a8b949fc\",\n                    \"2ce4266d32140417eebea06fd2d5d9cd\",\n                    \"40197bd6e7b2b8d5880b666b7a024ab6\"\n                ],\n                \"contacts\": {\n                    \"contacts_count\": 765\n                },\n                \"capabilities\": {\n                    \"audio_acquisition_supported\": true,\n                    \"finger_print_supported\": true,\n                    \"image_acquisition_supported\": true,\n                    \"persistent_keys_supported\": true,\n                    \"face_id_key_bio_protection_supported\": false,\n                    \"fido_client_present\": true,\n                    \"dyadic_present\": true,\n                    \"installed_plugins\": [\n                        {\n                            \"plugin_name\": \"dynamic-forms\",\n                            \"plugin_version\": \"1.0.0\"\n                        },\n                        {\n                            \"plugin_name\": \"totp-unbound\",\n                            \"plugin_version\": \"1.0.3\"\n                        }\n                    ],\n                    \"host_provided_features\": \"19\"\n                },\n                \"collector_state\": {\n                    \"accounts\": \"active\",\n                    \"devicedetails\": \"active\",\n                    \"contacts\": \"active\",\n                    \"owner\": \"active\",\n                    \"software\": \"active\",\n                    \"location\": \"active\",\n                    \"bluetooth\": \"active\",\n                    \"externalsdkdetails\": \"active\",\n                    \"hwauthenticators\": \"active\",\n                    \"capabilities\": \"active\",\n                    \"fidoauthenticators\": \"disabled\",\n                    \"largedata\": \"disabled\",\n                    \"localenrollments\": \"active\"\n                },\n                \"local_enrollments\": {}\n            }\n        },\n        \"public_key\": {\n            \"key\": \"{{public_key_noheader}}\",\n            \"type\": \"rsa\"\n        },\n        \"encryption_public_key\": {\n            \"key\": \"{{public_key_noheader}}\",\n            \"type\": \"rsa\"\n        },\n        \"push_token\": \"fakePushToken\",\n        \"params\": {}\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ibxqv2m.key.com/auth/api/v2/auth/bind?aid=ibx_mobile",
+					"protocol": "https",
+					"host": [
+						"ibxqv2m",
+						"key",
+						"com"
+					],
+					"path": [
+						"auth",
+						"api",
+						"v2",
+						"auth",
+						"bind"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "ibx_mobile"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Assert Request key",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "72f0d94a-78eb-4f8e-8b6b-ceed9538cb52",
+						"exec": [
+							"",
+							"",
+							"if (pm.environment.has(\"forgejs\")) {",
+							"    self = {};",
+							"    console.log(\"have forgejs\");",
+							"    eval(pm.environment.get(\"forgejs\"));",
+							"    forge = self.forge;",
+							"    ",
+							"    var rsa = forge.pki.rsa;",
+							"    var pki = forge.pki;",
+							"",
+							"    publickeyPem = pm.globals.get(\"public_key\");",
+							"    privatekeyPem = pm.globals.get('private_key');",
+							" ",
+							"    // convert a PEM-formatted public key to a Forge public key",
+							"    var publicKey = pki.publicKeyFromPem(publickeyPem);",
+							"    var privateKey = pki.privateKeyFromPem(privatekeyPem)",
+							"    ",
+							"        ",
+							"    payloadToSign = '{\"params\":{\"title\":\"Title of information message.\",\"text\":\"Text of information message.\",\"continue_button_text\":\"OK\",\"cancel_button_text\":\"Cancel\",\"parameters\":[]},\"user_input\":\"OK\"}';",
+							"    payloadToSign_escaped = payloadToSign.replace(/\\\"/g, \"\\\\\\\"\")",
+							"    console.log(payloadToSign_escaped);",
+							"  ",
+							"    // sign data with a private key and output DigestInfo DER-encoded bytes",
+							"    // (defaults to RSASSA PKCS#1 v1.5)",
+							"    var md = forge.md.sha256.create();",
+							"    md.update(payloadToSign, 'utf8');",
+							"    var signature = privateKey.sign(md);",
+							"    signatureB64 = forge.util.encode64(signature);",
+							"    console.log(`signature =${signatureB64}`);",
+							"    ",
+							"    assertionId = pm.globals.get(\"assertion_id\");",
+							"    userId = pm.environment.get(\"userId\");",
+							"    challenge = pm.globals.get(\"challenge\");",
+							"    deviceId = pm.globals.get(\"deviceId\");",
+							"    sessionId = pm.globals.get(\"sessionId\");",
+							"    ",
+							"    body = `{\"headers\":[{\"type\":\"uid\",\"uid\":\"{{userId}}\"}],\"data\":{\"action\":\"confirmation\",\"assert\":\"action\",\"assertion_id\":\"${assertionId}\",\"fch\":\"${challenge}\",\"data\":{\"user_cancelled\":false,\"sign_content_data\":{\"payload\":\"${payloadToSign_escaped}\",\"signed_payload\":\"${signatureB64}\"}}}}`;",
+							"    pm.globals.set(\"bodyContent\", body);",
+							"    ",
+							"    deviceId = pm.globals.get(\"deviceId\");",
+							"    request = pm.request;",
+							"    url = pm.request.url;",
+							"    contentSignatureScheme = 1;",
+							"    contentData = replaceVariables(url.getPathWithQuery({encode:true})) + body;",
+							"    console.log(`contentData = ${contentData}`);",
+							"",
+							"    var md = forge.md.sha256.create();",
+							"    md.update(contentData, 'utf8');",
+							"    var signatureData = privateKey.sign(md);",
+							"    console.log(`signatureData = ${signatureData}`);",
+							" ",
+							"  ",
+							"    signatureB64 = forge.util.encode64(signatureData);",
+							"    var contentSignature = \"data:\" + signatureB64 + ",
+							"                           \";key-id:\" + deviceId + \";scheme:\" + contentSignatureScheme;",
+							"    console.log(`contentSignature =${contentSignature}`);",
+							"                           ",
+							"    pm.globals.set(\"contentSignature\", contentSignature);",
+							"    ",
+							"}",
+							"",
+							"//load jsEncrypt and generate the keys",
+							"/*",
+							"if(pm.environment.has(\"jsencrypt\")){",
+							"    console.log(\"have jsencrypt\");",
+							"    eval(pm.environment.get(\"jsencrypt\"));",
+							" ",
+							"    jsEnc = new JSEncrypt();",
+							"    //jsEnc.getKey();",
+							"    //privatekey = jsEnc.getPrivateKeyB64();",
+							"    //publickey = jsEnc.getPublicKeyB64();",
+							"    publickey = pm.globals.get(\"public_key_noheader\");",
+							"    privatekey = pm.globals.get('private_key');",
+							"    console.log(`privatekey = ${privatekey}`);",
+							"    console.log(`publickey = ${publickey}`);",
+							"    jsEnc.setPrivateKey(privatekey);",
+							"",
+							"    //var encrypted = jsEnc.encrypt(\"asdf\");",
+							"    //console.log(`encrypt(\"asdf\") = ${encrypted}`);",
+							"    //var decrypted = jsEnc.decrypt(encrypted);",
+							"    //console.log(`decrypt(${encrypted}) = ${decrypted}`);",
+							"    ",
+							"    payloadToSign = '{\"params\":{\"title\":\"Title of information message.\",\"text\":\"Text of information message.\",\"continue_button_text\":\"OK\",\"cancel_button_text\":\"Cancel\",\"parameters\":[]},\"user_input\":\"OK\"}';",
+							"    payloadToSign_escaped = payloadToSign.replace(/\\\"/g, \"\\\\\\\"\")",
+							"    console.log(payloadToSign_escaped);",
+							"    payloadHash = CryptoJS.SHA256(payloadToSign).toString();",
+							"    console.log(payloadHash);",
+							"    var signature = jsEnc.encrypt(payloadHash);",
+							"    console.log(signature);",
+							"    ",
+							"    assertionId = pm.globals.get(\"assertion_id\");",
+							"    userId = pm.environment.get(\"userId\");",
+							"    challenge = pm.globals.get(\"challenge\");",
+							"    deviceId = pm.globals.get(\"deviceId\");",
+							"    sessionId = pm.globals.get(\"sessionId\");",
+							"    ",
+							"    body = `{\"headers\":[{\"type\":\"uid\",\"uid\":\"${userId}\"}],\"data\":{\"action\":\"confirmation\",\"assert\":\"action\",\"assertion_id\":\"${assertionId}\",\"fch\":\"${challenge}\",\"data\":{\"user_cancelled\":false,\"sign_content_data\":{\"payload\":\"${payloadToSign_escaped}\",\"signed_payload\":\"${signature}\"}}}}`;",
+							"    pm.globals.set(\"bodyContent\", body);",
+							"    ",
+							"    deviceId = pm.globals.get(\"deviceId\");",
+							"    request = pm.request;",
+							"    url = pm.request.url;",
+							"    contentSignatureScheme = 1;",
+							"    contentData = replaceVariables(url.getPathWithQuery({encode:true})) + body;",
+							"    console.log(`contentData = ${contentData}`);",
+							"",
+							"    contentHash = CryptoJS.SHA256(contentData).toString();",
+							"    console.log(`contentHash = ${contentHash}`);",
+							"    ",
+							"    ",
+							"    ",
+							"    //signatureData = jsEnc.encrypt(contentHash)",
+							"    //decryptedData = jsEnc.decrypt(signatureData);",
+							"    //console.log(`signatureData=${signatureData}`);",
+							"    //console.log(`decryptedData = ${decryptedData}`);",
+							"    ",
+							"    signatureData = jsEnc.sign(contentData, CryptoJS.SHA256);",
+							"    signatureB64 = jsEnc.hex2b64(signatureData);",
+							"    var contentSignature = \"data:\" + signatureB64 + ",
+							"                           \";key-id:\" + deviceId + \";scheme:\" + contentSignatureScheme;",
+							"                           ",
+							"    pm.globals.set(\"contentSignature\", contentSignature);",
+							"}",
+							"*/",
+							"",
+							"function replaceVariables(templateString) {",
+							"    let tokens = _.uniq(templateString.match(/{{\\w*}}/g))",
+							"    _.forEach(tokens, t => {",
+							"       let variable = t.replace(/[{}]/g, '') ",
+							"       let value = environment[variable] || globals[variable]",
+							"       templateString = templateString.replace(new RegExp(t,'g'), value)",
+							"    });",
+							"    return templateString",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-TS-Client-Version",
+						"value": "{{X-TS-Client-Version}}",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": "TSToken {{tokenValue}}; tid={{tokenId}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Signature",
+						"value": "{{contentSignature}}",
+						"type": "text"
+					},
+					{
+						"key": "CHANNEL",
+						"value": "DMA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{bodyContent}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ibxqv2m.key.com/auth/api/v2/auth/assert?aid={{appid}}&did={{deviceId}}&sid={{sessionId}}",
+					"protocol": "https",
+					"host": [
+						"ibxqv2m",
+						"key",
+						"com"
+					],
+					"path": [
+						"auth",
+						"api",
+						"v2",
+						"auth",
+						"assert"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{appid}}"
+						},
+						{
+							"key": "did",
+							"value": "{{deviceId}}"
+						},
+						{
+							"key": "sid",
+							"value": "{{sessionId}}"
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "6e0bb131-470f-4aeb-ba60-de225b172a22",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "3533ee9b-9998-4a3a-bde5-146641a8cdf2",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

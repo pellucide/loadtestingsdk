@@ -1,0 +1,664 @@
+{
+	"info": {
+		"_postman_id": "93587a4c-fca3-4e3f-85c7-4593eb55fc2c",
+		"name": "Transmit Server-API app v3.2+",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ServerAPI Authenticate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9df3b428-67c0-4bcc-bbc4-57ad845d30e8",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"fch\", jsonData.data.challenge);",
+							"postman.setEnvironmentVariable(\"assertionid\", jsonData.data.control_flow[0].methods[0].assertion_id);",
+							"postman.setEnvironmentVariable(\"authtype\", jsonData.data.control_flow[0].methods[0].type);",
+							"//postman.setEnvironmentVariable(\"assertionid2\", jsonData.data.control_flow[0].methods[1].assertion_id);",
+							"postman.setEnvironmentVariable(\"ssid\", jsonData.headers[0].session_id);",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TS-API-Compat-Level",
+						"value": "{{apiCompatLevel}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"policy_request_id\": \"{{serverpolicyid}}\",\n    \"params\": {\n      \"url\": \"/home\"\n    \t},\n    \"features\" : []\n}\t"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/server-api/authenticate?uid={{uid}}&aid={{serveraid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"server-api",
+						"authenticate"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "aid",
+							"value": "{{serveraid}}"
+						}
+					]
+				},
+				"description": "Regular login and can be used for OTP or push approval depending on the policy configured on the server"
+			},
+			"response": []
+		},
+		{
+			"name": "ServerAPI Assert PWD",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"jwt\", jsonData.data.token);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TS-API-Compat-Level",
+						"value": "{{apiCompatLevel}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"assertion_id\":\"{{assertionid}}\",\n\t\"action\":\"authentication\",\n\t\"method\":\"{{authtype}}\",\n\t\"assert\":\"authenticate\",\n\t\"data\":{\n\t\t\"password\":\"{{password}}\"},\n\t\"fch\":\"{{fch}}\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/server-api/assert?uid={{uid}}&aid={{serveraid}}&sid={{ssid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"server-api",
+						"assert"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "aid",
+							"value": "{{serveraid}}"
+						},
+						{
+							"key": "sid",
+							"value": "{{ssid}}"
+						}
+					]
+				},
+				"description": "Regular login and can be used for OTP or push approval depending on the policy configured on the server"
+			},
+			"response": []
+		},
+		{
+			"name": "ServerAPI Authenticate for Placeholder only",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d79afa89-e5a6-441b-8130-aa077be33706",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"fch\", jsonData.data.challenge);",
+							"postman.setEnvironmentVariable(\"assertionid\", jsonData.data.control_flow[0].methods[0].assertion_id);",
+							"postman.setEnvironmentVariable(\"authtype\", jsonData.data.control_flow[0].methods[0].type);",
+							"//postman.setEnvironmentVariable(\"assertionid2\", jsonData.data.control_flow[0].methods[1].assertion_id);",
+							"postman.setEnvironmentVariable(\"ssid\", jsonData.headers[0].session_id);",
+							"",
+							"",
+							"var rawStr = CryptoJS.enc.Utf8.parse(pm.environment.get('authtype'))",
+							"var base64 = CryptoJS.enc.Base64.stringify(rawStr)",
+							"console.log(`Encrypted value: ${base64}`)",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TS-API-Compat-Level",
+						"value": "{{apiCompatLevel}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"policy_request_id\": \"{{serverpolicyid}}\",\n    \"params\": {\n      \"url\": \"/home\"\n    \t}\n}\t"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/server-api/authenticate?uid={{uid}}&aid={{serveraid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"server-api",
+						"authenticate"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "aid",
+							"value": "{{serveraid}}"
+						}
+					]
+				},
+				"description": "Regular login and can be used for OTP or push approval depending on the policy configured on the server"
+			},
+			"response": []
+		},
+		{
+			"name": "ServerAPI Assert placeholder",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "eea2acff-01c6-4a56-900d-b06022e1922c",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"jwt\", jsonData.data.token);"
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "2e90a940-e53c-490b-b259-1efa7eb288fd",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TS-API-Compat-Level",
+						"value": "{{apiCompatLevel}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"assertion_id\":\"{{assertionid}}\",\n\t\"action\":\"authentication\",\n\t\"method\":\"placeholder_ph\",\n\t\"assert\":\"authenticate\",\n\t\"data\":{\n\t\t\"token\":\"eyJhbGciOiJIUzI1NiJ9.eyJwY2QiOiJld29pWVhOelpYSjBhVzl1WDJsa0lqb2ljRFUyVDNaUWFDdFBSVzFYVmxGaGExVnZZV1J0TkhWRklpd0tJbU5vWVd4c1pXNW5aU0k2SWt3eFVWWlRLMHBvTnpBellpOWFhR2cyU3pWNFJHOHlXQ0lzQ2lKelpYTnphVzl1WDJsa0lqb2lOalZpTmpKbVlqZ3ROV1EyTmkwME5EQTFMV0psWWpBdE9HVXlOakkwTlRZMFlXRXpJaXdLSW1GMWRHaGZkSGx3WlNJNkluQnNZV05sYUc5c1pHVnlYM0JvSWdwOSIsImF1ZCI6InNlcnZlciIsInN1YiI6InRlc3QiLCJvcCI6InBsZCIsImlzcyI6IlRTIiwiZXhwIjoxNTQzODg1MDk1LCJwYXJhbXMiOnt9LCJpYXQiOjE1NDM4ODMyOTUsImp0aSI6IjdiMzE0ZDYyLTMxNzQtNDg2Zi1hMzk2LTMyNzM5NzNlMGI0NCJ9.ITTe5ng59gi4ApyrW8OCLPrMWJdr4Nwtm5ccHnU5C50\"},\n\t\"fch\":\"{{fch}}\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/server-api/assert?uid={{uid}}&aid={{serveraid}}&sid={{ssid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"server-api",
+						"assert"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "aid",
+							"value": "{{serveraid}}"
+						},
+						{
+							"key": "sid",
+							"value": "{{ssid}}"
+						}
+					]
+				},
+				"description": "Regular login and can be used for OTP or push approval depending on the policy configured on the server"
+			},
+			"response": []
+		},
+		{
+			"name": "ServerAPI Anonymous Invoke",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "633fbcbd-08a5-442a-a9ac-68c443d71a9b",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"fch\", jsonData.data.challenge);",
+							"postman.setEnvironmentVariable(\"assertionid\", jsonData.data.control_flow[0].methods[0].assertion_id);",
+							"//postman.setEnvironmentVariable(\"assertionid2\", jsonData.data.control_flow[0].methods[1].assertion_id);",
+							"postman.setEnvironmentVariable(\"ssid\", jsonData.headers[0].session_id);",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TS-API-Compat-Level",
+						"value": "{{apiCompatLevel}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"policy_request_id\": \"anon\",\n    \"params\": {\n      \"url\": \"/home\"\n    \t}\n}\t"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/server-api/anonymous_invoke?aid={{serveraid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"server-api",
+						"anonymous_invoke"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{serveraid}}"
+						}
+					]
+				},
+				"description": "Regular login and can be used for OTP or push approval depending on the policy configured on the server"
+			},
+			"response": []
+		},
+		{
+			"name": "ServerAPI Assert TOTP",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"jwt\", jsonData.data.token);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TS-API-Compat-Level",
+						"value": "3.2",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"assertion_id\":\"{{assertionid}}\",\n\t\"action\":\"authentication\",\n\t\"assert\":\"authenticate\",\n\t\"data\":{\"totp\":\"1234\"},\n\t\"method\":\"{{authtype}}\",\n\t\"fch\":\"{{fch}}\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/server-api/assert?uid={{uid}}&aid={{serveraid}}&sid={{ssid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"server-api",
+						"assert"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "aid",
+							"value": "{{serveraid}}"
+						},
+						{
+							"key": "sid",
+							"value": "{{ssid}}"
+						}
+					]
+				},
+				"description": "Regular login and can be used for OTP or push approval depending on the policy configured on the server"
+			},
+			"response": []
+		},
+		{
+			"name": "ServerAPI Assert OTP target select",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"jwt\", jsonData.data.token);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TS-API-Compat-Level",
+						"value": "{{apiCompatLevel}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"headers\":[],\n\t\"data\": {\t\n\t\t\"assertion_id\":\"{{otpassertionid}}\",\n\t\t\"action\":\"authentication\",\n\t\t\"method\":\"otp\",\n\t\t\"data\":{\"target_id\":\"1\",\"channel_index\":0},\n\t\t\"assert\":\"otp\",\n\t\t\"fch\":\"{{fch}}\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/server-api/assert?uid={{uid}}&aid={{serveraid}}&sid={{ssid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"server-api",
+						"assert"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "aid",
+							"value": "{{serveraid}}"
+						},
+						{
+							"key": "sid",
+							"value": "{{ssid}}"
+						}
+					]
+				},
+				"description": "Regular login and can be used for OTP or push approval depending on the policy configured on the server"
+			},
+			"response": []
+		},
+		{
+			"name": "ServerAPI Assert OTP",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"jwt\", jsonData.data.token);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TS-API-Compat-Level",
+						"value": "{{apiCompatLevel}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"assertion_id\":\"ca4tejpIBaFGJhNoYtnaLicF\",\n\t\"action\":\"authentication\",\n\t\"method\":\"otp\",\n\t\"assert\":\"authenticate\",\n\t\"data\":{\n\t\t\"otp\":\"534084\"},\n\t\"fch\":\"{{fch}}\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/server-api/assert?uid={{uid}}&aid={{serveraid}}&sid={{ssid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"server-api",
+						"assert"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "aid",
+							"value": "{{serveraid}}"
+						},
+						{
+							"key": "sid",
+							"value": "{{ssid}}"
+						}
+					]
+				},
+				"description": "Regular login and can be used for OTP or push approval depending on the policy configured on the server"
+			},
+			"response": []
+		},
+		{
+			"name": "ServerAPI Logout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TS-API-Compat-Level",
+						"value": "{{apiCompatLevel}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{  \"headers\": [],\n     \"data\": {\n\t   \"token\" : \"{{jwt}}\"\n    \t}\n}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/server-api/logout?uid={{uid}}&aid={{serveraid}}&sid={{ssid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"server-api",
+						"logout"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "aid",
+							"value": "{{serveraid}}"
+						},
+						{
+							"key": "sid",
+							"value": "{{ssid}}"
+						}
+					]
+				},
+				"description": "WebSDK logout, note that token section not required, logout can occur for user/app/device as specified in URL"
+			},
+			"response": []
+		},
+		{
+			"name": "ServerAPI Localization v4.3+",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "If-None-Match",
+						"value": "etag value",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{  \"headers\": [],\n     \"data\": {\n\t   \"token\" : \"{{jwt}}\"\n    \t}\n}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/resources/localization?locale={{locale}}&v=1&aid={{serveraid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"resources",
+						"localization"
+					],
+					"query": [
+						{
+							"key": "locale",
+							"value": "{{locale}}"
+						},
+						{
+							"key": "v",
+							"value": "1"
+						},
+						{
+							"key": "aid",
+							"value": "{{serveraid}}"
+						}
+					]
+				},
+				"description": "WebSDK logout, note that token section not required, logout can occur for user/app/device as specified in URL"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "c4bfa1c8-307d-46bb-8f7c-5acd6df70c71",
+			"key": "X-TS-Client-Version",
+			"value": "4.3.0; [1,2,3,6,7,8,10,11,12,14,28]",
+			"type": "string",
+			"description": ""
+		}
+	]
+}

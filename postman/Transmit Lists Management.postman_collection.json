@@ -1,0 +1,177 @@
+{
+	"info": {
+		"_postman_id": "475327b1-b76b-415d-96b4-16a036f1a261",
+		"name": "Transmit Lists Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Ops - Export String Typed Lists",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/lists/actions/export?ltype=string_list",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"lists",
+						"actions",
+						"export"
+					],
+					"query": [
+						{
+							"key": "ltype",
+							"value": "string_list"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ops - Export IP Typed Lists",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/lists/actions/export?ltype=ip_list",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"lists",
+						"actions",
+						"export"
+					],
+					"query": [
+						{
+							"key": "ltype",
+							"value": "ip_list"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ops - Get Typed Lists metadata",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/lists?=&ltype=ip_list",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"lists"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						},
+						{
+							"key": "ltype",
+							"value": "ip_list"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ops - Get Typed List entries",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/list?lid=URLs&ltype=string_list",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"list"
+					],
+					"query": [
+						{
+							"key": "lid",
+							"value": "URLs"
+						},
+						{
+							"key": "ltype",
+							"value": "string_list"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

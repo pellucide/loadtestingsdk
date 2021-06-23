@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "a58cca8e-dd5a-4710-aaf7-1fde39a09c17",
+		"name": "Transmit Import/Export 4.3+",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Ops - Export",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"requests\": [\n        \"tsasm:///applications/mobile_app\"\n    ]\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/export",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"export"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ops - Prepare for Import",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"exports\": [\n\t\t            {\n                \"path\": \"tsasm:///providers/a5328cdd-8cd6-4a4f-8a76-045eeb79ec23\",\n                \"data\": {\n                    \"provider_type\": \"function-web-request\",\n                    \"name\": \"WebSvcRisk\",\n                    \"provider_id\": \"a5328cdd-8cd6-4a4f-8a76-045eeb79ec23\",\n                    \"config\": {\n                        \"description\": \"test\",\n                        \"arguments\": [\n                            {\n                                \"repeats\": false,\n                                \"name\": \"riskProfile\",\n                                \"type_descriptor\": {\n                                    \"type\": \"string\"\n                                },\n                                \"description\": \"Profile for providing risk indicator\",\n                                \"optional\": false\n                            }\n                        ],\n                        \"wait_for_response\": true,\n                        \"type\": \"function-web-request\",\n                        \"web_request\": {\n                            \"fail_on_non_2xx_response\": true,\n                            \"headers\": [],\n                            \"transform\": {\n                                \"type\": \"expression\",\n                                \"value\": \"response.body[0]\"\n                            },\n                            \"response_format\": {\n                                \"schema\": {\n                                    \"type\": \"object\",\n                                    \"properties\": {\n                                        \"srv1_response\": {\n                                            \"type\": \"string\"\n                                        }\n                                    }\n                                },\n                                \"type\": \"json_array\"\n                            },\n                            \"ssl_identities\": {\n                                \"trusted_identities\": []\n                            },\n                            \"method\": \"get\",\n                            \"connection_config\": {\n                                \"follow_redirect\": false,\n                                \"request_timeout\": 30,\n                                \"use_cookie_store\": false,\n                                \"connection_timeout\": 5\n                            },\n                            \"uri\": {\n                                \"type\": \"expression\",\n                                \"value\": \"`http://127.0.0.1:3000/riskengine/risk?query={\\\"riskprofile\\\":\\\"${riskProfile}\\\"}`\"\n                            },\n                            \"authentication\": {\n                                \"type\": \"no\"\n                            },\n                            \"logging_config\": {}\n                        }\n                    },\n                    \"enabled\": true\n                },\n                \"category\": \"provider\",\n                \"type\": \"dependency\",\n                \"constraints\": [\n                    {\n                        \"server_version\": \"5.0.0\",\n                        \"type\": \"server_version\"\n                    }\n                ],\n                \"dependencies\": []\n            }\n            ]\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/prepare",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"prepare"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ops - Import",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"reports\": [\n            {\n                \"path\": \"tsasm:///providers/a5328cdd-8cd6-4a4f-8a76-045eeb79ec23\",\n                \"data\": {\n                    \"provider_type\": \"function-web-request\",\n                    \"name\": \"WebSvcRisk\",\n                    \"provider_id\": \"a5328cdd-8cd6-4a4f-8a76-045eeb79ec23\",\n                    \"config\": {\n                        \"description\": \"test\",\n                        \"arguments\": [\n                            {\n                                \"repeats\": false,\n                                \"name\": \"riskProfile\",\n                                \"type_descriptor\": {\n                                    \"type\": \"string\"\n                                },\n                                \"description\": \"Profile for providing risk indicator\",\n                                \"optional\": false\n                            }\n                        ],\n                        \"wait_for_response\": true,\n                        \"type\": \"function-web-request\",\n                        \"web_request\": {\n                            \"fail_on_non_2xx_response\": true,\n                            \"headers\": [],\n                            \"transform\": {\n                                \"type\": \"expression\",\n                                \"value\": \"response.body[0]\"\n                            },\n                            \"response_format\": {\n                                \"schema\": {\n                                    \"type\": \"object\",\n                                    \"properties\": {\n                                        \"srv1_response\": {\n                                            \"type\": \"string\"\n                                        }\n                                    }\n                                },\n                                \"type\": \"json_array\"\n                            },\n                            \"ssl_identities\": {\n                                \"trusted_identities\": []\n                            },\n                            \"method\": \"get\",\n                            \"connection_config\": {\n                                \"follow_redirect\": false,\n                                \"request_timeout\": 30,\n                                \"use_cookie_store\": false,\n                                \"connection_timeout\": 5\n                            },\n                            \"uri\": {\n                                \"type\": \"expression\",\n                                \"value\": \"`http://127.0.0.1:3000/riskengine/risk?query={\\\"riskprofile\\\":\\\"${riskProfile}\\\"}`\"\n                            },\n                            \"authentication\": {\n                                \"type\": \"no\"\n                            },\n                            \"logging_config\": {}\n                        }\n                    },\n                    \"enabled\": true\n                },\n                \"display_name\": \"WebSvcRisk\",\n                \"category\": \"provider\",\n                \"type\": \"override\",\n                \"constraints\": [\n                    {\n                        \"server_version\": \"5.0.0\",\n                        \"type\": \"server_version\"\n                    }\n                ]\n            }\n        ]\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/import",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"import"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ops - Import Non Interactive",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"exports\": [\n            {\n                \"path\": \"tsasm:///providers/a5328cdd-8cd6-4a4f-8a76-045eeb79ec23\",\n                \"data\": {\n                    \"provider_type\": \"function-web-request\",\n                    \"name\": \"WebSvcRisk\",\n                    \"provider_id\": \"a5328cdd-8cd6-4a4f-8a76-045eeb79ec23\",\n                    \"config\": {\n                        \"description\": \"test\",\n                        \"arguments\": [\n                            {\n                                \"repeats\": false,\n                                \"name\": \"riskProfile\",\n                                \"type_descriptor\": {\n                                    \"type\": \"string\"\n                                },\n                                \"description\": \"Profile for providing risk indicator\",\n                                \"optional\": false\n                            }\n                        ],\n                        \"wait_for_response\": true,\n                        \"type\": \"function-web-request\",\n                        \"web_request\": {\n                            \"fail_on_non_2xx_response\": true,\n                            \"headers\": [],\n                            \"transform\": {\n                                \"type\": \"expression\",\n                                \"value\": \"response.body[0]\"\n                            },\n                            \"response_format\": {\n                                \"schema\": {\n                                    \"type\": \"object\",\n                                    \"properties\": {\n                                        \"srv1_response\": {\n                                            \"type\": \"string\"\n                                        }\n                                    }\n                                },\n                                \"type\": \"json_array\"\n                            },\n                            \"ssl_identities\": {\n                                \"trusted_identities\": []\n                            },\n                            \"method\": \"get\",\n                            \"connection_config\": {\n                                \"follow_redirect\": false,\n                                \"request_timeout\": 30,\n                                \"use_cookie_store\": false,\n                                \"connection_timeout\": 5\n                            },\n                            \"uri\": {\n                                \"type\": \"expression\",\n                                \"value\": \"`http://127.0.0.1:3000/riskengine/risk?query={\\\"riskprofile\\\":\\\"${riskProfile}\\\"}`\"\n                            },\n                            \"authentication\": {\n                                \"type\": \"no\"\n                            },\n                            \"logging_config\": {}\n                        }\n                    },\n                    \"enabled\": true\n                },\n                \"category\": \"provider\",\n                \"type\": \"dependency\",\n\t\t\t\t\"dependencies\": [],\n                \"constraints\": [\n                    {\n                        \"server_version\": \"5.0.0\",\n                        \"type\": \"server_version\"\n                    }\n                ]\n            }\n        ]\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/import_non_interactive?conflict_resolution=dont_import&missing_dependency=ignore&container_resolution=failure",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"import_non_interactive"
+					],
+					"query": [
+						{
+							"key": "conflict_resolution",
+							"value": "dont_import"
+						},
+						{
+							"key": "missing_dependency",
+							"value": "ignore"
+						},
+						{
+							"key": "container_resolution",
+							"value": "failure"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
