@@ -1,0 +1,364 @@
+import java.io.UnsupportedEncodingException;
+import java.security.*;
+import java.security.spec.*;
+import java.util.Date;
+import java.util.Base64;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.JSONObject;
+import net.minidev.json.JSONArray;
+
+Transmit() {
+    JSONParser jsonParser = new JSONParser(JSONParser.MODE_PERMISSIVE);
+    Signature rsaSign = Signature.getInstance("SHA256withRSA");
+    KeyFactory ecFactory = KeyFactory.getInstance("EC");
+    KeyFactory rsaFactory = KeyFactory.getInstance("RSA");
+    PublicKey ecPublicKey;
+    PrivateKey ecPrivateKey;
+    PublicKey rsaPublicKey;
+    PrivateKey rsaPrivateKey;
+
+    generateRsaKeyPair() {
+        generateRsaKeyPair("rsaPrivateKeyEncoded", "rsaPublicKeyEncoded");
+    }
+    generateRsaKeyPair(String privateKeyName, String publicKeyName) {
+        if (privateKeyname == null || privateKeyName.equals("")){
+            log.error("privateKeyName cannot be empty");
+            return;
+        }
+        if (publicKeyName == null || publicKeyName.equals("")){
+            log.error("publicKeyName cannot be empty");
+            return;
+        }
+        log.info("generateRsaKeyPair()");
+        KeyPairGenerator grsa = KeyPairGenerator.getInstance("RSA");
+        grsa.initialize(1024);
+        KeyPair keypair = grsa.generateKeyPair();
+        PublicKey publicKey = keypair.getPublic();
+        PrivateKey privateKey = keypair.getPrivate(); 
+        String publicKeyEncoded = Base64.getEncoder().encodeToString(publicKey.getEncoded());
+        String privateKeyEncoded = Base64.getEncoder().encodeToString(privateKey.getEncoded());
+        log.info("======");
+        log.info(publicKeyNAme + " = " + publicKeyEncoded);
+        log.info(privateKeyName + " = " + privateKeyEncoded);
+        log.info("====");
+        vars.put(publicKeyName, publicKeyEncoded);
+        vars.put(privateKeyName, privateKeyEncoded);
+    }
+
+    generateTimeStamp() {
+        String timestamp = "" + new Date().getTime();
+        log.info("timestamp="+timestamp);
+        vars.put("timestamp", timestamp);
+    }
+
+    generateEcKeyPair() {
+        generateEcKeyPair("ecPrivateKeyEncoded", "ecPublicKeyEncoded");
+    }
+
+    generateEcKeyPair(String privateKeyName, String publicKeyName) {
+        if (privateKeyname == null || privateKeyName.equals("")){
+            log.error("privateKeyName cannot be empty");
+            return;
+        }
+        if (publicKeyName == null || publicKeyName.equals("")){
+            log.error("publicKeyName cannot be empty");
+            return;
+        }
+        ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256k1");
+        KeyPairGenerator gec = KeyPairGenerator.getInstance("EC");
+        gec.initialize(ecSpec, new SecureRandom());
+        KeyPair keypair = gec.generateKeyPair();
+        PublicKey publicKey = keypair.getPublic();
+        PrivateKey privateKey = keypair.getPrivate(); 
+
+        String publicKeyEncoded = Base64.getEncoder().encodeToString(publicKey.getEncoded());
+        String privateKeyEncoded = Base64.getEncoder().encodeToString(privateKey.getEncoded());
+        log.info("======");
+        log.info(publicKeyName + " = " + publicKeyEncoded);
+        log.info(publicKeyName + " = " + privateKeyEncoded);
+        log.info("====");
+
+        vars.put(publicKeyName, publicKeyEncoded);
+        vars.put(privateKeyName, privateKeyEncoded);
+    }
+
+    printJmeterVars() {
+        log.info("ctx="+ctx);
+        log.info("vars="+vars);
+        log.info("props="+props);
+        log.info("prev="+prev);
+        log.info("data="+data.toString());
+        log.info("responseData="+prev.getResponseDataAsString());
+
+        iterator = vars.getIterator();
+        while (iterator.hasNext()) {
+            entry = iterator.next();
+            log.info("entry="+entry);
+        }
+    }
+
+    printClassPath() {
+        classPath = getClassPath();
+        for (int ii=0; ii<classPath.length; ii++) {
+            log.info("path="+classPath[ii]);
+        }
+    }
+
+
+    processResponse() {
+        log.info("data="+data.toString());
+
+        String jsonString = prev.getResponseDataAsString();
+        log.info("responseData="+jsonString);
+        JSONObject jsonObj = (JSONObject) jsonParser.parse(jsonString);
+
+        int errorCode = jsonObj.get("error_code");
+        vars.put("errorCode", errorCode.toString());
+        log.info("errorCode="+ errorCode);
+
+        String errorMessage = jsonObj.get("error_message");
+        vars.put("errorMessage", errorMessage);
+        log.info("errorMessage="+ errorMessage);
+
+        String state = jsonObj.get("data").get("state");
+        vars.put("state", state);
+        log.info("state = " + state);
+
+
+        if (state.equals("completed")) {
+            String token = jsonObj.get("data").get("token");
+            vars.put("token", token);
+            log.info("token = " + token);
+        } else {
+            String challenge = jsonObj.get("data").get("challenge");
+            if (challenge != null && !challenge.trim().equals("")) {
+                vars.put("challenge", challenge);
+            }
+            challenge = vars.get("challenge");
+            log.info("challenge="+ challenge);
+
+            JSONArray controlFlow = jsonObj.get("data").get("control_flow");
+            vars.put("controlFlow", controlFlow.get(0).toString());
+            String assertionId = controlFlow.get(0).get("assertion_id");
+            if (assertionId != null && !assertionId.trim().equals("")) {
+                vars.put("assertionId", assertionId);
+            }
+            log.info("assertionId="+assertionId);
+
+            JSONObject appData = controlFlow.get(0).get("app_data");
+            if (appData != null) {
+                vars.put("appData", appData.toString());
+            } else {
+                vars.put("appData", "");
+            }
+            log.info("appData = " + appData);
+
+            JSONArray methods = controlFlow.get(0).get("methods");
+            log.info("methods="+methods);
+            if (methods != null) {
+                vars.put("methods", methods.toString());
+                String assertionId = methods.get(0).get("assertion_id");
+                if (assertionId != null && !assertionId.trim().equals("")) {
+                    vars.put("assertionId", assertionId);
+                }
+            } else {
+                vars.put("methods", "");
+            }
+            assertionId = vars.get("assertionId");
+            log.info("assertionId="+assertionId);
+
+
+            JSONArray headers = jsonObj.get("headers");
+            processTransmitJsonHeaders(headers);
+
+            log.info("deviceId="+vars.get("deviceId"));
+            log.info("sessionId="+vars.get("sessionId"));
+        }
+    }
+
+    getControlFlow() {
+        String jsonString = vars.get("controlFlow");
+        log.info("responseData="+jsonString);
+        JSONObject jsonObj = (JSONObject) jsonParser.parse(jsonString);
+        return jsonObj;
+    }
+
+    processTransmitJsonHeaders(JSONArray headers) {
+        for (int index=0; index<headers.size(); index++) {
+            JSONObject header = headers.get(index);
+            String headerType = header.get("type");
+            //log.info("headerType="+headerType);
+
+            if (headerType.equalsIgnoreCase("device_id")) {
+                String deviceId = header.get("device_id");
+                vars.put("deviceId", deviceId);
+            }
+            if (headerType.equalsIgnoreCase("session_id")) {
+                String sessionId = headers.get(index).get("session_id");
+                vars.put("sessionId", sessionId);
+            }
+        }
+    }
+
+    loadKeysFromEnv() {
+        loadEcKeysFromEnv() ;
+        loadRsaKeysFromEnv() ;
+    }
+
+    loadEcKeysFromEnv() {
+        String ecPrivateKeyEncoded=vars.get("ecPrivateKeyEncoded");
+        byte[] ecPrivatedata = Base64.getDecoder().decode((ecPrivateKeyEncoded.getBytes()));
+        PKCS8EncodedKeySpec ecPrivateSpec = new PKCS8EncodedKeySpec(ecPrivatedata);
+        ecPrivateKey = ecFactory.generatePrivate(ecPrivateSpec); 
+        //String ecPrivateKeyEncoded = Base64.getEncoder().encodeToString(ecPrivateKey.getEncoded());
+        //log.info("ecPrivateKeyEncoded = "+ecPrivateKeyEncoded);
+
+        String ecPublicKeyEncoded=vars.get("ecPublicKeyEncoded");
+        byte[] ecPublicdata = Base64.getDecoder().decode((ecPublicKeyEncoded.getBytes()));
+        X509EncodedKeySpec ecPublicSpec = new X509EncodedKeySpec(ecPublicdata);
+        ecPublicKey = ecFactory.generatePublic(ecPublicSpec); 
+        //String ecPubicKeyEncoded = Base64.getEncoder().encodeToString(ecPublicKey.getEncoded());
+        //log.info("ecPublicKeyEncoded = "+ecPubicKeyEncoded);
+    }
+
+    loadRsaKeysFromEnv() {
+        String privateKeyEncoded=vars.get("rsaPrivateKeyEncoded");
+        byte[] privatedata = Base64.getDecoder().decode((privateKeyEncoded.getBytes()));
+        PKCS8EncodedKeySpec privateSpec = new PKCS8EncodedKeySpec(privatedata);
+        rsaPrivateKey = rsaFactory.generatePrivate(privateSpec); 
+        //String privateKeyEncoded = Base64.getEncoder().encodeToString(rsaPrivateKey.getEncoded());
+        //log.info("privateKeyEncoded = "+privateKeyEncoded);
+
+        String publicKeyEncoded=vars.get("rsaPublicKeyEncoded");
+        byte[] publicdata = Base64.getDecoder().decode((publicKeyEncoded.getBytes()));
+        X509EncodedKeySpec publicSpec = new X509EncodedKeySpec(publicdata);
+        rsaPublicKey = rsaFactory.generatePublic(publicSpec); 
+        //String pubicKeyEncoded = Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded());
+        //log.info("publicKeyEncoded = "+pubicKeyEncoded);
+
+    }
+
+    sha256(byte[] data) {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        return digest.digest(data);
+    }
+
+    getContentSignatureRsa(String plaintext, int scheme) {
+        String publicKeyEncoded=vars.get("rsaPublicKeyEncoded");
+        byte[] publicdata = Base64.getDecoder().decode((publicKeyEncoded.getBytes()));
+        byte[] keyIdBytes = sha256(publicdata);
+        String publicKeyHash = toHexString(keyIdBytes, "%02x", "");
+
+        String sig = signRsa(plaintext);
+        String contentSignature = "data:" + sig + ";key-id:" + publicKeyHash + ";scheme:"+ scheme;
+        if (scheme != 4) {
+            String deviceId = vars.get("deviceId");
+            contentSignature = "data:" + sig + ";key-id:" + deviceId + ";scheme:"+ scheme;	
+        }
+        return contentSignature;
+    }
+
+    signEc(String plaintext){
+        loadKeysFromEnv();
+        ecSign.initSign(ecProvateKey);
+        ecSign.update(plaintext.getBytes("UTF-8"));
+        byte[] signature = rsaSign.sign();
+        return toBase64(signature);
+    }
+
+    signRsa(String plaintext){
+        loadKeysFromEnv();
+        return signRsa(plaintext, rsaPrivateKey);
+    }
+
+    signRsa(String plaintext, String privateKeyName){
+        String privateKeyEncoded=vars.get(privateKeyName);
+        byte[] privatedata = Base64.getDecoder().decode((privateKeyEncoded.getBytes()));
+        PKCS8EncodedKeySpec privateSpec = new PKCS8EncodedKeySpec(privatedata);
+        privateKey = rsaFactory.generatePrivate(privateSpec); 
+        return signRsa(plaintext, privateKey);
+    }
+
+    signRsa(String plaintext, PrivateKey privateKey){
+        rsaSign.initSign(privateKey);
+        rsaSign.update(plaintext.getBytes("UTF-8"));
+        byte[] signature = rsaSign.sign();
+        return toBase64(signature);
+    }
+
+    toBase64(byte[] signature) {
+        String sig = Base64.getEncoder().encodeToString(signature);
+        return sig;
+    }
+
+    toHexString(byte[] byteArray, String format, String extraAppend) {
+        StringBuilder sb = new StringBuilder();
+        for (int ii=0; ii<byteArray.length; ii++) {
+            String ss = String.format(format,new Object[]{byteArray[ii]});
+            sb.append(ss);
+            sb.append(extraAppend);
+        }
+        return sb.toString();
+    }
+
+    preProcess(String url, String  body, int scheme) {
+        String clientVersion = vars.get("X-TS-Client-Version-6.1.0");
+        //String deviceId=vars.get("deviceId");
+        //String sessionId=vars.get("sessionId");
+        //String appId=vars.get("appId");
+        //String url="/api/v2/auth/assert?aid="+appid+"&did="+deviceId+"&sid="+sessionId;
+        vars.put("body",body);
+        String plaintext = url + body;
+        if (scheme == 2 || scheme == 3 || scheme == 4) {
+            plaintext=url+"%%"+clientVersion+"%%" + body;
+        }
+
+        log.info("plaintext="+plaintext);
+        //log.info(toHexString(plaintext.getBytes("UTF-8"), "%d", ", "));
+
+        String contentSignature = getContentSignatureRsa(plaintext, scheme);
+        vars.put("contentSignature",contentSignature);
+        log.info("contentSignature ="+contentSignature);
+    }
+
+    processPinRegistration(challenge, assertionId) {
+        String userId = vars.get("userId");
+        String localAuthenticationChallenge = challenge + assertionId;
+        //skip generating a new keypair. Use the one one from bind
+        //generateRsaKeyPair("pinPrivateKey", "pinPublicKey");
+        fch = transmit.signRsa(localAuthenticationChallenge);
+        String publicKeyEncoded=vars.get("rsaPublicKeyEncoded");
+        body = "{\"headers\":[{\"type\":\"uid\",\"uid\":\""+userId+
+               "\"}],\"data\":{\"action\":\"registration\",\"assert\":\"register\",\"assertion_id\":\""+assertionId+
+               "\",\"fch\":\""+fch+"\",\"method\":\"pin\",\"public_key\":{\"key\":\""+publicKeyEncoded+
+               "\",\"type\":\"rsa\"},\"version\":\"v2\"}}";
+        return body;
+    }
+
+    processPinAuthentication(challenge, assertionId) {
+        String userId = vars.get("userId");
+        String localAuthenticationChallenge = challenge + assertionId;
+        fch = signRsa(localAuthenticationChallenge);
+        String publicKeyEncoded = vars.get("rsaPublicKeyEncoded");
+        body = "{\"headers\":[{\"type\":\"uid\",\"uid\":\""+userId+
+               "\"}],\"data\":{\"action\":\"authentication\",\"assert\":\"authenticate\",\"assertion_id\":\""+assertionId+
+          	   "\",\"fch\":\""+fch+"\",\"method\":\"pin\",\"data\":{}}}";
+        return body;
+    }
+
+
+    processPasswordAuthentication(passwordValue, challenge, assertionId) {
+        String userId = vars.get("userId");
+        body = "{\"headers\":[{\"type\":\"uid\",\"uid\":\""+userId+
+               "\"}],\"data\":{\"action\":\"authentication\",\"assert\":\"authenticate\",\"assertion_id\":\""+assertionId+
+               "\",\"fch\":\""+challenge+"\",\"data\":{\"password\":\""+passwordValue+
+               "\"},\"method\":\"password\"}}";
+        return body;
+    }
+
+    return this;
+}
+
+
+
+
