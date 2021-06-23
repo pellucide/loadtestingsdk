@@ -1,0 +1,138 @@
+{
+	"info": {
+		"_postman_id": "22797e20-a83f-4e35-bec6-f136a9dc53da",
+		"name": "Transmit JWT Token Operations",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Token Validation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"token\": \"{{jwt}}\",\n  \"claims_on_response\": true\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/token/validate?aid={{webaid}}&uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"token",
+						"validate"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{webaid}}"
+						},
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Token Create Cfg Token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"purpose\": \"cfg\",\n    \"context_data\":\"referToPlaceholderGuide\",\n    \"params\": {\n        \"auth\":\"password\"\n    }\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/token/create?aid={{webaid}}&uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"token",
+						"create"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{webaid}}"
+						},
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Token Create Placeholder Token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"purpose\": \"pld\",\n    \"context_data\":\"referToPlaceholderGuide\",\n    \"params\": {\n        \"auth\":\"password\"\n    }\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/token/create?aid={{webaid}}&uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"token",
+						"create"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{webaid}}"
+						},
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,125 @@
+{
+	"info": {
+		"_postman_id": "ff636311-e960-4e83-9f84-dc5f4fb0db41",
+		"name": "Transmit Approvals",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Approval Create Mobile Approval",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c1d02f2f-62d2-42ba-b2fd-240f7eba1c38",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"approvalid\", jsonData.data.id);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TS-Client-Version",
+						"value": "2.18; [1,2,3,11,12]"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n    \"title\": \"Purhcase on Amazon.com\",\n    \"source\": \"Online Banking\",\n    \"details\":\"You have made a purchase of 500$ at amazon.com\",\n    \"expiry_in\":180,\n    \"push_notification\": true,\n    \"params\":{\n        \"require_otp\": false\n    }\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/approvals?uid={{uid}}&aid={{mobileaid}}&prid=MobileAuth_approval",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"approvals"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "aid",
+							"value": "{{mobileaid}}"
+						},
+						{
+							"key": "prid",
+							"value": "MobileAuth_approval"
+						}
+					]
+				},
+				"description": "Regular login and can be used for OTP or push approval depending on the policy configured on the server"
+			},
+			"response": []
+		},
+		{
+			"name": "Approval Check Approval Status",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TS-Client-Version",
+						"value": "2.18; [1,2,3,11,12]"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{  \"headers\": [],\n     \"data\": {}\n}\n\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/approval?uid={{uid}}&apid={{approvalid}}&aid={{mobileaid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"approval"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "apid",
+							"value": "{{approvalid}}"
+						},
+						{
+							"key": "aid",
+							"value": "{{mobileaid}}"
+						}
+					]
+				},
+				"description": "Regular login and can be used for OTP or push approval depending on the policy configured on the server"
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,1467 @@
+{
+	"info": {
+		"_postman_id": "b065c3ff-0cc0-456b-a462-60f9809b601f",
+		"name": "Transmit Customer Support API",
+		"description": "API calls for Transmit Security Customer Support operations",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Support - Get User Information",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/user?uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"user"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Delete User Profile",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/user?uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"user"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Get User Log Records",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"new_user_id\":\"new1\"\n}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/reports/user?uid={{uid}}&limit=100&skip=&did={{did}}&from=1556579744000&to={{$timestamp}}000",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"reports",
+						"user"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "limit",
+							"value": "100"
+						},
+						{
+							"key": "skip",
+							"value": ""
+						},
+						{
+							"key": "did",
+							"value": "{{did}}"
+						},
+						{
+							"key": "from",
+							"value": "1556579744000"
+						},
+						{
+							"key": "to",
+							"value": "{{$timestamp}}000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Get User Custom Data",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"new_user_id\":\"new1\"\n}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/user/data?uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"user",
+						"data"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Set User Custom Data",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \n  \"custom_param_2\": \"param3\"\n}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/user/data?uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"user",
+						"data"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Clear All User Custom Data",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"new_user_id\":\"new1\"\n}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/user/data?uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"user",
+						"data"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Get Devices for User",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"assertion_id\":\"mZ2Q23f2GyPM2VeCsbhR/jtI\",\n\t\"action\":\"authentication\",\n\t\"method\":\"mobile_approve\",\n\t\"assert\":\"authenticate\",\n\t\"data\":{\n\t\t\"approval_id\":\"6cdbc40d-c1a1-4f16-a105-47f1b05168c6\"},\n\t \"fch\":\"Qp26fdhxYVdQMy8xM/541+f2\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/devices?uid={{uid}}&aid={{mobileaid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"devices"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "aid",
+							"value": "{{mobileaid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Add Device to Group",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"group_ids\": [\n    \"3325\"\n  ]\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/devices/actions/groups/add?aid={{webaid}}&uid={{uid}}&did={{did}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"devices",
+						"actions",
+						"groups",
+						"add"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{webaid}}"
+						},
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "did",
+							"value": "{{did}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Remove Device from Group",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"group_ids\": [\n    \"3325\"\n  ]\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/devices/actions/groups/remove?aid={{webaid}}&uid={{uid}}&did={{did}}&dgid=3325",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"devices",
+						"actions",
+						"groups",
+						"remove"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{webaid}}"
+						},
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "did",
+							"value": "{{did}}"
+						},
+						{
+							"key": "dgid",
+							"value": "3325"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Clear Push Token for Device",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/devices/actions/clear_push_token?aid={{mobileaid}}&uid={{uid}}&did={{did}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"devices",
+						"actions",
+						"clear_push_token"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{mobileaid}}"
+						},
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "did",
+							"value": "{{did}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Set Device Custom Data",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"custom_device_data_1\": \"param1\"\n}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/device/data?uid={{uid}}&did=3c687ed5-62a9-4a4e-8d64-9b8a93a130e2",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"device",
+						"data"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "did",
+							"value": "3c687ed5-62a9-4a4e-8d64-9b8a93a130e2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Get Device Custom Data",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"new_user_id\":\"new1\"\n}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/device/data?uid={{uid}}&did=3c687ed5-62a9-4a4e-8d64-9b8a93a130e2",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"device",
+						"data"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "did",
+							"value": "3c687ed5-62a9-4a4e-8d64-9b8a93a130e2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Clear Device Custom Data",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/device/data?uid={{uid}}&did=3c687ed5-62a9-4a4e-8d64-9b8a93a130e2",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"device",
+						"data"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "did",
+							"value": "3c687ed5-62a9-4a4e-8d64-9b8a93a130e2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Get Authenticators for Device",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"assertion_id\":\"mZ2Q23f2GyPM2VeCsbhR/jtI\",\n\t\"action\":\"authentication\",\n\t\"method\":\"mobile_approve\",\n\t\"assert\":\"authenticate\",\n\t\"data\":{\n\t\t\"approval_id\":\"6cdbc40d-c1a1-4f16-a105-47f1b05168c6\"},\n\t \"fch\":\"Qp26fdhxYVdQMy8xM/541+f2\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/authenticators?uid={{uid}}&did={{did}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"authenticators"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "did",
+							"value": "{{did}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Get All User Locks",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"",
+							"postman.setEnvironmentVariable(\"lockid\", jsonData.data[0].lock_id);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"assertion_id\":\"mZ2Q23f2GyPM2VeCsbhR/jtI\",\n\t\"action\":\"authentication\",\n\t\"method\":\"mobile_approve\",\n\t\"assert\":\"authenticate\",\n\t\"data\":{\n\t\t\"approval_id\":\"6cdbc40d-c1a1-4f16-a105-47f1b05168c6\"},\n\t \"fch\":\"Qp26fdhxYVdQMy8xM/541+f2\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/locks?uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"locks"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Unlock by lock ID",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/unlock?uid={{uid}}&lock={{lockid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"unlock"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "lock",
+							"value": "{{lockid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Lock User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/lock/user?uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"lock",
+						"user"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Lock Application",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/lock/application?aid={{webaid}}&uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"lock",
+						"application"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{webaid}}"
+						},
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Lock Device",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/lock/device?aid={{webaid}}&uid={{uid}}&did={{did}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"lock",
+						"device"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{webaid}}"
+						},
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "did",
+							"value": "{{did}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Lock Authenticator",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/lock/authenticator?aid={{webaid}}&uid={{uid}}&did={{did}}&method=password",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"lock",
+						"authenticator"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{webaid}}"
+						},
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "did",
+							"value": "{{did}}"
+						},
+						{
+							"key": "method",
+							"value": "password"
+						}
+					]
+				},
+				"description": "Locks authentictor for a specific device and application"
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Lock Application Authenticator",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/lock/application_authenticator?aid={{webaid}}&uid={{uid}}&method=password",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"lock",
+						"application_authenticator"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{webaid}}"
+						},
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "method",
+							"value": "password"
+						}
+					]
+				},
+				"description": "Locks authenticator across all devices for an application"
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Reset Application",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/reset/application?aid={{mobileaid}}&uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"reset",
+						"application"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{mobileaid}}"
+						},
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				},
+				"description": "same as Reset User in UI support menu buttons"
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Reset Device",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/reset/device?aid={{mobileaid}}&uid={{uid}}&did={{did}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"reset",
+						"device"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{mobileaid}}"
+						},
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "did",
+							"value": "{{did}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Reset Authenticator",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/reset/authenticator?aid={{mobileaid}}&uid={{uid}}&did=b39f9c6e-9073-4795-836b-5e244ed0ff78&method=fingerprint",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"reset",
+						"authenticator"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{mobileaid}}"
+						},
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "did",
+							"value": "b39f9c6e-9073-4795-836b-5e244ed0ff78"
+						},
+						{
+							"key": "method",
+							"value": "fingerprint"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Disable TOTP for device 3.5+",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/device/actions/disable_totp?uid=t2&aid={{mobileaid}}&did=6dabec80-f6a3-4c41-9657-216e4e5a2e55",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"device",
+						"actions",
+						"disable_totp"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "t2"
+						},
+						{
+							"key": "aid",
+							"value": "{{mobileaid}}"
+						},
+						{
+							"key": "did",
+							"value": "6dabec80-f6a3-4c41-9657-216e4e5a2e55"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Generate Temp Access Code",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"config\": {\n    \"expiry_in_seconds\": 1200,\n    \"usage_count\": 1,\n    \"length\": 6,\n    \"type\" : \"numeric\"\n  }\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/temp-access?uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"temp-access"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Rename User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"new_user_id\":\"new1\"\n}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/user/actions/rename?uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"user",
+						"actions",
+						"rename"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Get User Sessions 4.0+",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"assertion_id\":\"mZ2Q23f2GyPM2VeCsbhR/jtI\",\n\t\"action\":\"authentication\",\n\t\"method\":\"mobile_approve\",\n\t\"assert\":\"authenticate\",\n\t\"data\":{\n\t\t\"approval_id\":\"6cdbc40d-c1a1-4f16-a105-47f1b05168c6\"},\n\t \"fch\":\"Qp26fdhxYVdQMy8xM/541+f2\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/user/sessions?uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"user",
+						"sessions"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				},
+				"description": "added 4.0, aid param optional"
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Terminate User Session 4.0+",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/user/actions/terminate_sessions?uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"user",
+						"actions",
+						"terminate_sessions"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				},
+				"description": "added 4.0, aid, sid params optional"
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Create demo user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"demo_username\",\n  \"password\": \"demo_password\",\n  \"first_name\": \"John\",\n  \"last_name\": \"Snow\",\n  \"home_address\": \"115 The Wall, North\",\n  \"work_address\": \"115 The Wall, North\",\n  \"email_address\": \"john@wall.net\",\n  \"card_number\": \"\",\n  \"card_expiration_date\": \"\",\n  \"mobile\": \"+4412312245\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/demo_users",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"demo_users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Fiddle hack-a-doodle",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"expr\":{\"type\":\"expression\",\"value\":\"@policy.user().id\"},\"request\":{\"\":\"\"}}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/expression_fiddle?uid={{uid}}&aid={{webaid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"expression_fiddle"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						},
+						{
+							"key": "aid",
+							"value": "{{webaid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - CORS Options",
+			"request": {
+				"method": "OPTIONS",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "Access-Control-Request-Headers",
+						"value": "authorization,content-type,x-ts-client-version"
+					},
+					{
+						"key": "Access-Control-Request-Method",
+						"value": "POST"
+					},
+					{
+						"key": "Origin",
+						"value": "https://kdemo.transmit-test.com"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/web/authenticate?aid=serverapi",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"web",
+						"authenticate"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "serverapi"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

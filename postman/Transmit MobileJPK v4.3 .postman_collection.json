@@ -1,0 +1,140 @@
+{
+	"info": {
+		"_postman_id": "d8bfbefd-77ab-422b-9c96-091af0af1400",
+		"name": "Transmit MobileJPK v4.3+",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "MobileJPK Bind Android 4.3+",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2c094aaa-d756-40ff-a779-b7f3a01eeb7f",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TS-Client-Version",
+						"value": "4.3.0 (7254);[1,2,3,6,7,8,10,11,12,14,28,19]"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"headers\": [{\"type\": \"uid\",\"uid\": \"{{uid}}\"}],\n  \"data\": {\n    \"params\": {},\n    \"collection_result\": {\n      \"metadata\": {\n        \"scheme_version\": 2,\n        \"version\": \"4.3.0 (7254)\",\n        \"timestamp\": 1588195272\n      },\n      \"content\": {\n        \"owner_details\": {\n          \"possible_phone_numbers\": [\n            {\n              \"type\": 3,\n              \"number\": \"4d6157d0fe8166f1bc98e9aabbc486f2\"\n            },\n            {\n              \"type\": 2,\n              \"number\": \"728b996c33eb3c5274fe6f93ba807543\"\n            }\n          ],\n          \"possible_names\": [\n            \"2cafe69ef6bd60bb671156278ae32379\",\n            \"6711b4a3a73f0f82f6273eacb63206a3\"\n          ],\n          \"possible_addresses\": [\n            {\n              \"country\": \"d41d8cd98f00b214e9800998ecf8427e\",\n              \"type\": 2,\n              \"city\": \"\",\n              \"street\": \"4a982954198d9f82c312a7df019d033a\"\n            },\n            {\n              \"country\": \"d41d8cd98f00b224e9800998ecf8427e\",\n              \"type\": 2,\n              \"city\": \"a59767ddbb3fcdca82fa2c5bad7abb87\",\n              \"street\": \"4a982954198d9f82c312a7df019d033a\"\n            }\n          ],\n          \"possible_emails\": [\n            \"e3bc150f4e9618ee18fb8fac283df63b\"\n          ]\n        },\n        \"hw_authenticators\": {\n          \"fingerprint\": {\n            \"supported\": true,\n            \"secure\": true,\n            \"user_registered\": true\n          },\n          \"face_id\": {\n            \"supported\": false,\n            \"secure\": false,\n            \"user_registered\": false\n          }\n        },\n        \"external_sdk_details\": {\n          \"cognitec\": {\n            \"version\": \"9.1.4\",\n            \"state\": 2\n          },\n          \"zannah\": {\n            \"version\": \"1.5.2\",\n            \"state\": 3\n          },\n          \"dyadic\": {\n            \"version\": \"1.3.1706.33065\",\n            \"state\": 3\n          }\n        },\n        \"device_details\": {\n          \"logged_users\": 1,\n          \"hw_type\": \"Phone\",\n          \"wifi_network\": {\n            \"bssid\": \"f7482c1acddb25d8d64caa457e459af1\",\n            \"ssid\": \"080777abfd026e445b7ec99257094bf5\",\n            \"secure\": true\n          },\n          \"tampered\": true,\n          \"sim_operator\": \"311480\",\n          \"roaming\": false,\n          \"master_key_generated\": 1583195448183,\n          \"device_id\": \"35767208038433\",\n          \"device_model\": \"samsung/SM-G955U\",\n          \"tz\": \"America/Los_Angeles\",\n          \"os_version\": \"9\",\n          \"jailbroken\": false,\n          \"sim_operator_name\": \"Verizon\",\n          \"frontal_camera\": true,\n          \"device_name\": \"059ce0c90f4885ff\",\n          \"known_networks\": [\n            {\n              \"bssid\": \"3b1924987a1893af4e417becd5764bd8\",\n              \"ssid\": \"1f4449b42b9e0465fe53c3b3d154c88f\"\n            },\n            {\n              \"ssid\": \"080777abfd026e445b7ec99257094bf5\",\n              \"secure\": true\n            }\n          ],\n          \"subscriber_id\": \"311480238814793\",\n          \"has_hw_security\": true,\n          \"screen_lock\": true,\n          \"os_type\": \"Android\",\n          \"sflags\": -1,\n          \"connection\": \"wifi: 192.168.2.10\",\n          \"sim_serial\": \"89148000002372356574\"\n        },\n        \"location\": {\n          \"lng\": -115.800155,\n          \"h_acc\": 72.89600372314453,\n          \"enabled\": true,\n          \"lat\": 37.24804\n        },\n        \"accounts\": [\n          {\n            \"name\": \"a1234b3161b4fbfdfb96dd576b65bbeb\",\n            \"type\": \"828bd082c928a1f98b1986abbd5658b2\"\n          },\n          {\n            \"name\": \"c4f79e15f8c6ed0715a8ea44aebc38d7\",\n            \"type\": \"6012fa4d4ddec268fc5c7112cbb265e8\"\n          }\n        ],\n        \"installed_packages\": [\n          \"98e8f62c7aa0404f3e8c49c38ac87502\",\n          \"45fb746795678a1ded33faef3c58e9c7\"\n        ],\n        \"contacts\": {\n          \"contacts_count\": 914\n        },\n        \"capabilities\": {\n          \"audio_acquisition_supported\": true,\n          \"finger_print_supported\": true,\n          \"image_acquisition_supported\": true,\n          \"persistent_keys_supported\": true,\n          \"face_id_key_bio_protection_supported\": false,\n          \"fido_client_present\": true,\n          \"dyadic_present\": true,\n          \"installed_plugins\": [\n            {\n              \"plugin_name\": \"dynamic-forms\",\n              \"plugin_version\": \"1.0.0\"\n            }\n          ],\n          \"host_provided_features\": \"19\"\n        },\n        \"collector_state\": {\n          \"accounts\": \"active\",\n          \"devicedetails\": \"active\",\n          \"contacts\": \"active\",\n          \"owner\": \"active\",\n          \"software\": \"active\",\n          \"location\": \"active\",\n          \"bluetooth\": \"active\",\n          \"externalsdkdetails\": \"active\",\n          \"hwauthenticators\": \"active\",\n          \"capabilities\": \"active\",\n          \"fidoauthenticators\": \"disabled\",\n          \"largedata\": \"disabled\",\n          \"localenrollments\": \"active\"\n        },\n        \"local_enrollments\": {}\n      }\n    },\n    \"public_key\": {\n      \"key\": \"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEqgynC3BlaLZBMQoNkyJ7zLBdsqaxsSU86hRHkz/xzax46UwscGLTWjuHRlaXQc4kP0uJBI7c7bG+Z3MdfmJ9yA==\",\n      \"type\": \"ec\"\n    },\n    \"encryption_public_key\": {\n      \"key\": \"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoSWW3fkZy8he56yRGnzOYp32wZse0I2qoOHfQ0YfFmuFw9jYflHacC/hcslOWvFrG52x75KyX7iAB75iGesD9xT+QePS2MIwaEgyWQ93aEWMAwMTXgTQNEHTR4ragx54wlEo/IBEnpVQmTgBCEX2uGGThURUQP5dlmUQ8pUGTPNdO7YdGvLeP9C0RlDQn66hkDzgIIaTgFRECJFMcbzFaL+L+2MS4ROGNohzdQCr50UPzg8DAz9ZioY4S+pz4HY5C48QIyTTvusE0cqpj+Hdw3WOcfXM2DHNK0IjbfpAU820vhi8rAVjCAezhqfD9UTDgdvBccgacr1iovwTgMZuKwIDAQAB\",\n      \"type\": \"rsa\"\n    },\n    \"push_token\": \"eeYuBvJZ-6E:APA91bH-KshHfafb939HX1gAKwFEJ9fcd3OzhchT5glGVkBfwwOSZcKKhZrdFV0zyoAcBuhW6jx89BgQn4c_6xLPNky301vGcjWhFJG61b_GM55LV_2y54rswG5CiSmbAqiAl8AIzn6Y\"\n  }\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/auth/bind?aid={{mobileaid}}&locale={{locale}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"auth",
+						"bind"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{mobileaid}}"
+						},
+						{
+							"key": "locale",
+							"value": "{{locale}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MobileJPK Bind iOS 4.3+",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2c094aaa-d756-40ff-a779-b7f3a01eeb7f",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TS-Client-Version",
+						"value": "4.3.0 (7254);[1,2,3,6,7,8,10,11,12,14,28,19]"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"headers\": [{\"type\": \"uid\",\"uid\": \"{{uid}}\"}],\n  \"data\": {\n    \"params\": {},\n    \"collection_result\": {\n      \"content\": {\n        \"device_details\": {\n          \"logged_users\": 1,\n          \"biometric_db_hash\": \"ZZNGHl4VZOWDjyf3u1bVHoUo1o60cI/m7ehcjyCBPUg=\",\n          \"keychain_err_logs\": \"1582682637.396975_N/A_rsa_getKey-private: errSecInteractionNotAllowed,1582682637.361748_N/A_ec_getKey-private: errSecItemNotFound,1582682637.330098_N/A_ec_getKey-public: errSecItemNotFound,1582681554.683455_N/A_ecTarsusStdSigning_generateKeyPairSuccess,1582681554.625906_N/A_rsaTarsusStdSigning_getKey-private: errSecItemNotFound,1582681554.603697_N/A_rsaTarsusStdSigning_getKey-public: errSecItemNotFound,1582579306.650859_N/A_ecTarsusStdSigning_generateKeyPairSuccess\",\n          \"connection\": \"wifi: 192.168.2.17\",\n          \"tampered\": true,\n          \"jailbroken\": false,\n          \"screen_lock\": true,\n          \"tz\": \"America/Los_Angeles\",\n          \"application_state\": \"active\",\n          \"has_hw_security\": true,\n          \"sflags\": -1,\n          \"hw_type\": \"iPhone\",\n          \"device_name\": \"9daa7609a6d8ca0e9940375c58680cef\",\n          \"sim_operator_name\": \"Verizon\",\n          \"wifi_network\": {\n            \"bssid\": \"35c908f2e050b4bbc250b3c026ec4789\",\n            \"ssid\": \"030777abfd026e445b7ec99257094bf5\"\n          },\n          \"device_id\": \"FEC00EF2-C2AF-4A37-A829-04E0FFFBC4B3\",\n          \"os_version\": \"13.4\",\n          \"sim_operator\": \"311480\",\n          \"os_type\": \"iPhone\",\n          \"device_model\": \"iPhone9,1\"\n        },\n        \"installed_packages\": [],\n        \"location\": {\n          \"lng\": -115.800155323,\n          \"enabled\": true,\n          \"lat\": 37.24804261516983,\n          \"alt\": 218.0672607421875,\n          \"h_acc\": 30,\n          \"v_acc\": 8\n        },\n        \"capabilities\": {\n          \"audio_acquisition_supported\": true,\n          \"finger_print_supported\": true,\n          \"image_acquisition_supported\": true,\n          \"persistent_keys_supported\": true,\n          \"face_id_key_bio_protection_supported\": false,\n          \"fido_client_present\": false,\n          \"dyadic_present\": false,\n          \"installed_plugins\": [],\n          \"host_provided_features\": \"19\"\n        },\n        \"collector_state\": {\n          \"accounts\": \"disabled\",\n          \"devicedetails\": \"active\",\n          \"contacts\": \"active\",\n          \"owner\": \"active\",\n          \"software\": \"active\",\n          \"location\": \"active\",\n          \"bluetooth\": \"active\",\n          \"externalsdkdetails\": \"active\",\n          \"hwauthenticators\": \"active\",\n          \"capabilities\": \"active\",\n          \"fidoauthenticators\": \"active\",\n          \"largedata\": \"active\",\n          \"localenrollments\": \"active\"\n        },\n        \"hw_authenticators\": {\n          \"fido\": [\n            {\n              \"aaid\": \"1206#0001\"\n            },\n            {\n              \"aaid\": \"1206#0002\"\n            },\n            {\n              \"aaid\": \"1206#0003\"\n            }\n          ]\n        },\n        \"local_enrollments\": {}\n      },\n      \"metadata\": {\n        \"timestamp\": 1588198903.117361\n      }\n    },\n    \"public_key\": {\n      \"key\": \"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEnod7fx6h9vixFVMBxpVr4bYh9bu6rJ7XqY86irlTON1Vfb4BCBdwL1uFiPFTExeoAbRVIAhyahRKuis3QgcPAQ==\",\n      \"type\": \"ec\"\n    },\n    \"encryption_public_key\": {\n      \"key\": \"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqugKi3E+Zh7+6sbZDJ51BgvEBXY4JGQVMdrRD+oDatsH65rLfS9kbY5raiigyPniydDlObR64DuKhIT8NekxwQSApHCrXxIedsEPRByhpFmh+jCO7Myo3VL0LF0NPkJduCJgujNZIdewJJgn+q7QH1xxG4aub3snYMLuWS+wrQTFn8CAFbCUteX1rl9ed3w5BgwxQhoBAZcRwK7sihciWCxBDiI7/nM4216A0VWL0k989DTCejUkskKmEz/r0JNUPq8ZMxvZ00R4wm6GCHGYvg/PdcD481vSyWq8GO/P0b9vHdb5v34Rjr/VBSw2bIniNR3vWXb3uoSrzu2hgKTdywIDAQAB\",\n      \"type\": \"rsa\"\n    },\n    \"push_token\": \"f943952781f7f17858924e937c7795b461082650e75128cff62757ebab97c702\"\n  }\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/auth/bind?aid={{mobileaid}}&locale={{locale}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"auth",
+						"bind"
+					],
+					"query": [
+						{
+							"key": "aid",
+							"value": "{{mobileaid}}"
+						},
+						{
+							"key": "locale",
+							"value": "{{locale}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "79261b03-2392-4f8c-a9bb-897ce855f6bb",
+			"key": "X-TS-Client-Version",
+			"value": "4.3.0; [1,2,3,6,7,8,10,11,12,14,28]",
+			"type": "string",
+			"description": ""
+		}
+	]
+}

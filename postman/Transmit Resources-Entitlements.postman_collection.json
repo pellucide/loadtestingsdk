@@ -1,0 +1,367 @@
+{
+	"info": {
+		"_postman_id": "46d3c153-ffcb-44ab-89a7-38c77b595b36",
+		"name": "Transmit Resources/Entitlements",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create User Defined Entitlement & Add Rule",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "50d4dca9-9624-454a-bd8c-76092cfec446",
+						"exec": [
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"description\": \"bill's caretaker assignment\",\n    \"scope_id\": \"bill\",\n    \"rules\": [\n        {\n            \"type\": \"user_scope\",\n            \"rule_id\": \"read\",\n            \"principals\": [\n                \"u:subbu\"\n            ],\n            \"privileges\": [\n                {\n                    \"type\": \"generic\",\n                    \"value\": \"read\"\n                }\n            ],\n            \"result\": {\n                \"type\": \"allow\"\n            }\n        }\n    ],\n    \"id\": \"/caretaker/3245\",\n    \"type\": \"user_scope\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/access/resources",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"access",
+						"resources"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List User Defined Entitlements",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "50d4dca9-9624-454a-bd8c-76092cfec446",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/access/resources?resourceType=user_scope&scopeId=bill",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"access",
+						"resources"
+					],
+					"query": [
+						{
+							"key": "resourceType",
+							"value": "user_scope"
+						},
+						{
+							"key": "scopeId",
+							"value": "bill"
+						}
+					]
+				},
+				"description": "List user scoped entitlements for user \"bill\""
+			},
+			"response": []
+		},
+		{
+			"name": "Access Query",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "50d4dca9-9624-454a-bd8c-76092cfec446",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": \"api gateway\",\n    \"principals\": [\"u:subbu\"],\n    \"privileges\": [],\n    \"resource\": {\n        \"type\": \"user_scope\",\n        \"scope_id\": \"bill\",\n        \"resource_id\": \"/caretaker/3245\"\n    },\n    \"environment\": {\n     \n    }\n}"
+				},
+				"url": {
+					"raw": "{{url}}/access/query",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"access",
+						"query"
+					]
+				},
+				"description": "List user scoped entitlements for user \"bill\""
+			},
+			"response": []
+		},
+		{
+			"name": "Add Rule to Entitlement",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "50d4dca9-9624-454a-bd8c-76092cfec446",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"type\": \"user_scope\",\n    \"rule_id\": \"edit\",\n    \"principals\": [],\n    \"privileges\": [\n        {\n            \"type\": \"generic\",\n            \"value\": \"edit\"\n        }\n    ],\n    \"result\": {\n        \"type\": \"allow\"\n    }\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/access/rules?resourceType=user_scope&scopeId=bill&resourceId=/brokerage/98765",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"access",
+						"rules"
+					],
+					"query": [
+						{
+							"key": "resourceType",
+							"value": "user_scope"
+						},
+						{
+							"key": "scopeId",
+							"value": "bill"
+						},
+						{
+							"key": "resourceId",
+							"value": "/brokerage/98765"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Access Request Query- Result Allow",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "50d4dca9-9624-454a-bd8c-76092cfec446",
+						"exec": [
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": \"bill\",\n    \"principals\": [\"u:kurt\" ],\n    \"privileges\": [ {\n            \"type\": \"generic\",\n            \"value\": \"read\"\n        } ],\n    \"resource\": {\n        \"type\": \"user_scope\",\n        \"scope_id\": \"bill\",\n        \"resource_id\": \"/brokerage/98765\"\n    },\n    \"environment\": {}\n}"
+				},
+				"url": {
+					"raw": "{{url}}/access/query",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"access",
+						"query"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Access Request Query- Result Deny",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "50d4dca9-9624-454a-bd8c-76092cfec446",
+						"exec": [
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": \"bill\",\n    \"principals\": [\n        \"u:kurt\"\n    ],\n    \"privileges\": [\n        {\n            \"type\": \"generic\",\n            \"value\": \"edit\"\n        }\n    ],\n    \"resource\": {\n        \"type\": \"user_scope\",\n        \"scope_id\": \"bill\",\n        \"resource_id\": \"/brokerage/98765\"\n    },\n    \"environment\": {}\n}"
+				},
+				"url": {
+					"raw": "{{url}}/access/query",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"access",
+						"query"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User Defined Entitlement",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "50d4dca9-9624-454a-bd8c-76092cfec446",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/access/resource?resourceType=user_scope&scopeId=bill&resourceId=/brokerage/98765",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"access",
+						"resource"
+					],
+					"query": [
+						{
+							"key": "resourceType",
+							"value": "user_scope"
+						},
+						{
+							"key": "scopeId",
+							"value": "bill"
+						},
+						{
+							"key": "resourceId",
+							"value": "/brokerage/98765"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

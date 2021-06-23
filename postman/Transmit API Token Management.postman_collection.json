@@ -1,0 +1,151 @@
+{
+	"info": {
+		"_postman_id": "2fdf662b-fcb6-4336-b132-33ccdcad91c9",
+		"name": "Transmit API Token Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Ops - Export API tokens",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\n"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/api_tokens/actions/export",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"api_tokens",
+						"actions",
+						"export"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ops - Import API Tokens",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"items\": [\n   {\n      \"name\": \"demo2_token\",\n      \"hash\": \"7dMWPua5opVLQfL9+ln7YfAaf6tYZ7LFCWUAlMVSIMlRbF2+NrRJwfczkXlEx2G89J7e/Wr1CosyXrqkOfKhDg==\",\n      \"salt\": \"1126ca27-fa59-4540-b82e-c4c1541b380f\",\n      \"scopes\": [\n        \"auth-control-mobile-connect\",\n        \"auth-control-mobile-client\"\n      ]\n    }\n  ],\n  \"overwrite\": false\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/api_tokens/actions/import",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"api_tokens",
+						"actions",
+						"import"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ops - Create API token (not official)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"token\":\"demo\",\"name\":\"demo\",\"scopes\":[\"auth-control-mobile-client\",\"auth-control-approval-creator\",\"auth-control-user-manager\",\"auth-control-token-user\",\"auth-control-registrar\",\"auth-control-placeholder-manager\",\"auth-control-rest-client\",\"auth-control-status\",\"auth-control-mng\"],\"permissions\":[\"mng-ui-admin\"]}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/api_tokens",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"api_tokens"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ops - Delete API token (not official)",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/api_token?tid=demo2_token",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"api_token"
+					],
+					"query": [
+						{
+							"key": "tid",
+							"value": "demo2_token"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
