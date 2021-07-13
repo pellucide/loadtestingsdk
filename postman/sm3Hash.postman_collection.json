@@ -1,0 +1,93 @@
+{
+	"info": {
+		"_postman_id": "4b0cd9c9-bd0b-43f6-8334-59b15c3a6d4f",
+		"name": "sm3Hash",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "sm3hash check",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"",
+							"var hexTable;",
+							"function makeHexTable() {",
+							"  var alphabet = '0123456789abcdef'",
+							"  var table = new Array(256)",
+							"  for (var i = 0; i < 16; ++i) {",
+							"    var i16 = i * 16",
+							"    for (var j = 0; j < 16; ++j) {",
+							"      table[i16 + j] = alphabet[i] + alphabet[j]",
+							"    }",
+							"  }",
+							"  return table",
+							"}",
+							"",
+							"function hexSlice (buf, start, end) {",
+							"  var len = buf.length",
+							"",
+							"  if (!start || start < 0) start = 0",
+							"  if (!end || end < 0 || end > len) end = len",
+							"",
+							"  var out = ''",
+							"  for (var i = start; i < end; ++i) {",
+							"    out += hexTable[buf[i]]",
+							"  }",
+							"  return out",
+							"}",
+							"    hexTable = makeHexTable();",
+							"",
+							"if (pm.environment.has(\"sm3js\")) {",
+							"    module = {};",
+							"    console.log(\"have sm3js\");",
+							"    eval(pm.environment.get(\"sm3js\"));",
+							"",
+							"    var sm3js = module.exports();",
+							"    var hashString = sm3js.sum(\"abc\", \"hex\");",
+							"    var hashBytes = sm3js.sum(\"abc\");",
+							"    var hashString1 = hexSlice(hashBytes, 0);",
+							"    console.log(hashString);",
+							"    console.log(hashString1);",
+							"}",
+							"",
+							"",
+							"if (pm.environment.has(\"sm3ts\")) {",
+							"    console.log(\"have sm3ts\");",
+							"    eval(pm.environment.get(\"sm3ts\"));",
+							"",
+							"    console.log(sm3)",
+							"    var sm3ts = sm3();",
+							"    console.log(sm3ts);",
+							"",
+							"    //var hashBytes = sm3ts.sum(\"abc\");",
+							"   // var hashString = hexSlice(hashBytes, 0);",
+							"    //console.log(hashString);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://worldtimeapi.org/api/ip",
+					"protocol": "http",
+					"host": [
+						"worldtimeapi",
+						"org"
+					],
+					"path": [
+						"api",
+						"ip"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

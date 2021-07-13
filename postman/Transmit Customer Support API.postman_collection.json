@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b065c3ff-0cc0-456b-a462-60f9809b601f",
+		"_postman_id": "9f89238f-c853-4e6c-8d67-5e7900f5a8b0",
 		"name": "Transmit Customer Support API",
 		"description": "API calls for Transmit Security Customer Support operations",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -20,10 +20,6 @@
 						"value": "application/json"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "{{url}}/api/v2/mng/support/user?uid={{uid}}",
 					"host": [
@@ -40,6 +36,121 @@
 						{
 							"key": "uid",
 							"value": "{{uid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Export API Tokens",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/user?uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"user"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Import API Tokens",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tokenValue}}; tid={{tokenId}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"items\": [\n    {\n      \"name\": \"demo_token1\",\n\n      \"salt\": \"demo_token1\",\n      \"scopes\": [\n        \"auth-control-mobile-connect\",\n        \"auth-control-mobile-client\"\n      ]\n    }\n  ],\n  \"overwrite\": false\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/api_tokens/actions/import",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"api_tokens",
+						"actions",
+						"import"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Support - Create API Token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization1",
+						"value": "TSToken demo_token1; tid=demo_token1"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tokenValue}}; tid={{tokenId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"demo_token1\",\n    \"token\": \"demo_token1\",\n    \"scopes\": [\n        \"auth-control-mobile-client\",\n        \"web-gateway-config-polling\",\n        \"access-query\",\n        \"auth-control-placeholder-manager\",\n        \"auth-control-status\",\n        \"auth-control-rest-client\",\n        \"auth-control-registrar\",\n        \"auth-control-token-user\",\n        \"auth-control-mng\",\n        \"cluster-control-plane\",\n        \"auth-control-approval-creator\",\n        \"auth-control-user-manager\"\n    ],\n    \"permissions\": [\n        \"mng-ui-admin\"\n    ]\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/api_token?tid=demo_token1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"api_token"
+					],
+					"query": [
+						{
+							"key": "tid",
+							"value": "demo_token1"
 						}
 					]
 				}
@@ -100,10 +211,6 @@
 						"value": "application/json"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"new_user_id\":\"new1\"\n}\n"
-				},
 				"url": {
 					"raw": "{{url}}/api/v2/mng/reports/user?uid={{uid}}&limit=100&skip=&did={{did}}&from=1556579744000&to={{$timestamp}}000",
 					"host": [
@@ -160,10 +267,6 @@
 						"value": "application/json"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"new_user_id\":\"new1\"\n}\n"
-				},
 				"url": {
 					"raw": "{{url}}/api/v2/user/data?uid={{uid}}",
 					"host": [
@@ -277,10 +380,6 @@
 						"value": "application/json"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"assertion_id\":\"mZ2Q23f2GyPM2VeCsbhR/jtI\",\n\t\"action\":\"authentication\",\n\t\"method\":\"mobile_approve\",\n\t\"assert\":\"authenticate\",\n\t\"data\":{\n\t\t\"approval_id\":\"6cdbc40d-c1a1-4f16-a105-47f1b05168c6\"},\n\t \"fch\":\"Qp26fdhxYVdQMy8xM/541+f2\"\n}"
-				},
 				"url": {
 					"raw": "{{url}}/api/v2/mng/devices?uid={{uid}}&aid={{mobileaid}}",
 					"host": [
@@ -516,10 +615,6 @@
 						"value": "application/json"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"new_user_id\":\"new1\"\n}\n"
-				},
 				"url": {
 					"raw": "{{url}}/api/v2/device/data?uid={{uid}}&did=3c687ed5-62a9-4a4e-8d64-9b8a93a130e2",
 					"host": [
@@ -602,10 +697,6 @@
 						"value": "application/json"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"assertion_id\":\"mZ2Q23f2GyPM2VeCsbhR/jtI\",\n\t\"action\":\"authentication\",\n\t\"method\":\"mobile_approve\",\n\t\"assert\":\"authenticate\",\n\t\"data\":{\n\t\t\"approval_id\":\"6cdbc40d-c1a1-4f16-a105-47f1b05168c6\"},\n\t \"fch\":\"Qp26fdhxYVdQMy8xM/541+f2\"\n}"
-				},
 				"url": {
 					"raw": "{{url}}/api/v2/mng/authenticators?uid={{uid}}&did={{did}}",
 					"host": [
@@ -659,10 +750,6 @@
 						"value": "application/json"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"assertion_id\":\"mZ2Q23f2GyPM2VeCsbhR/jtI\",\n\t\"action\":\"authentication\",\n\t\"method\":\"mobile_approve\",\n\t\"assert\":\"authenticate\",\n\t\"data\":{\n\t\t\"approval_id\":\"6cdbc40d-c1a1-4f16-a105-47f1b05168c6\"},\n\t \"fch\":\"Qp26fdhxYVdQMy8xM/541+f2\"\n}"
-				},
 				"url": {
 					"raw": "{{url}}/api/v2/mng/support/locks?uid={{uid}}",
 					"host": [
@@ -1207,6 +1294,46 @@
 			"response": []
 		},
 		{
+			"name": "Support - Generate Temp Access Code Copy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "TSToken {{tstoken}}; tid={{tid}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"config\": {\n    \"expiry_in_seconds\": 1200,\n    \"usage_count\": 1,\n    \"length\": 6,\n    \"type\" : \"numeric\"\n  }\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/mng/support/temp-access?uid={{uid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mng",
+						"support",
+						"temp-access"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{uid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Support - Rename User",
 			"request": {
 				"method": "POST",
@@ -1262,10 +1389,6 @@
 						"value": "application/json"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"assertion_id\":\"mZ2Q23f2GyPM2VeCsbhR/jtI\",\n\t\"action\":\"authentication\",\n\t\"method\":\"mobile_approve\",\n\t\"assert\":\"authenticate\",\n\t\"data\":{\n\t\t\"approval_id\":\"6cdbc40d-c1a1-4f16-a105-47f1b05168c6\"},\n\t \"fch\":\"Qp26fdhxYVdQMy8xM/541+f2\"\n}"
-				},
 				"url": {
 					"raw": "{{url}}/api/v2/mng/support/user/sessions?uid={{uid}}",
 					"host": [
