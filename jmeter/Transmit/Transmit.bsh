@@ -120,59 +120,65 @@ Transmit() {
         vars.put("errorMessage", errorMessage);
         log.info("errorMessage="+ errorMessage);
 
-        String state = jsonObj.get("data").get("state");
-        vars.put("state", state);
-        log.info("state = " + state);
+        JSONObject jsonObjData = jsonObj.get("data");
+        if (jsonObjData == null)  {
+            return;
+        }
 
+        String state = jsonObjData.get("state");
+        if (state != null) {
+            vars.put("state", state);
+            log.info("state = " + state);
 
-        if (state.equals("completed")) {
-            String token = jsonObj.get("data").get("token");
-            vars.put("token", token);
-            log.info("token = " + token);
-        } else {
-            String challenge = jsonObj.get("data").get("challenge");
-            if (challenge != null && !challenge.trim().equals("")) {
-                vars.put("challenge", challenge);
-            }
-            challenge = vars.get("challenge");
-            log.info("challenge="+ challenge);
-
-            JSONArray controlFlow = jsonObj.get("data").get("control_flow");
-            vars.put("controlFlow", controlFlow.get(0).toString());
-            String assertionId = controlFlow.get(0).get("assertion_id");
-            if (assertionId != null && !assertionId.trim().equals("")) {
-                vars.put("assertionId", assertionId);
-            }
-            log.info("assertionId="+assertionId);
-
-            JSONObject appData = controlFlow.get(0).get("app_data");
-            if (appData != null) {
-                vars.put("appData", appData.toString());
+            if (state.equals("completed")) {
+                String token = jsonObjData.get("token");
+                vars.put("token", token);
+                log.info("token = " + token);
             } else {
-                vars.put("appData", "");
-            }
-            log.info("appData = " + appData);
+                String challenge = jsonObj.get("data").get("challenge");
+                if (challenge != null && !challenge.trim().equals("")) {
+                    vars.put("challenge", challenge);
+                }
+                challenge = vars.get("challenge");
+                log.info("challenge="+ challenge);
 
-            JSONArray methods = controlFlow.get(0).get("methods");
-            log.info("methods="+methods);
-            if (methods != null) {
-                vars.put("methods", methods.toString());
-                String assertionId = methods.get(0).get("assertion_id");
+                JSONArray controlFlow = jsonObj.get("data").get("control_flow");
+                vars.put("controlFlow", controlFlow.get(0).toString());
+                String assertionId = controlFlow.get(0).get("assertion_id");
                 if (assertionId != null && !assertionId.trim().equals("")) {
                     vars.put("assertionId", assertionId);
                 }
-            } else {
-                vars.put("methods", "");
+                log.info("assertionId="+assertionId);
+
+                JSONObject appData = controlFlow.get(0).get("app_data");
+                if (appData != null) {
+                    vars.put("appData", appData.toString());
+                } else {
+                    vars.put("appData", "");
+                }
+                log.info("appData = " + appData);
+
+                JSONArray methods = controlFlow.get(0).get("methods");
+                log.info("methods="+methods);
+                if (methods != null) {
+                    vars.put("methods", methods.toString());
+                    String assertionId = methods.get(0).get("assertion_id");
+                    if (assertionId != null && !assertionId.trim().equals("")) {
+                        vars.put("assertionId", assertionId);
+                    }
+                } else {
+                    vars.put("methods", "");
+                }
+                assertionId = vars.get("assertionId");
+                log.info("assertionId="+assertionId);
+
+
+                JSONArray headers = jsonObj.get("headers");
+                processTransmitJsonHeaders(headers);
+
+                log.info("deviceId="+vars.get("deviceId"));
+                log.info("sessionId="+vars.get("sessionId"));
             }
-            assertionId = vars.get("assertionId");
-            log.info("assertionId="+assertionId);
-
-
-            JSONArray headers = jsonObj.get("headers");
-            processTransmitJsonHeaders(headers);
-
-            log.info("deviceId="+vars.get("deviceId"));
-            log.info("sessionId="+vars.get("sessionId"));
         }
     }
 

@@ -3,7 +3,7 @@ const forge = require('node-forge')
 const supportedRoutes = {"supportedRoutes":
                             [  {"method": "POST",
                                  "route": "/contentSignature",
-                                 "bodyJson": "{\"contentB64\":\"Base64 encoded content\",\"privateKey\":\"private key in PEM format\"}",
+                                 "bodyJson": "{\"content\":\"content ASCII\",\"contentB64\":\"Base64 encoded content\",\"privateKey\":\"private key in PEM format\"}",
                                  "responseJson": "{\"signatureB64\":\"Base64 encoded content signature\"}"
                                }
                             ]
@@ -25,12 +25,11 @@ const requestListener = function (req, res) {
                  req.on("end", function() {
                      // process body
                      let jsonData = JSON.parse(body)
-                     if (!jsonData || !jsonData.contentB64 || !jsonData.privateKey) {
+                     console.log(jsonData)
+                     if (!jsonData || !(jsonData.contentB64 || jsonData.content) || !jsonData.privateKey) {
                          sendError(res);
                      } else {
-
                          res.writeHead(200)
-                         console.log(jsonData)
                          //parse private key
                          //let privatekeyNoHeader = jsonData.privateKey
                          //.replace(/[\n\r]*-----BEGIN.*[\r\n]+/m, '')
@@ -42,11 +41,13 @@ const requestListener = function (req, res) {
 
                          //create signature
                          let md = forge.md.sha256.create();
-                         let contentData = forge.util.decode64(jsonData.contentB64);
+                         let contentData =  jsonData.content
+                         if (!jsonData.content) {
+                             contentData = forge.util.decode64(jsonData.contentB64);
+                         }
                          md.update(contentData, "utf8");
                          let signature = privateKey.sign(md);
                          let signatureB64 = forge.util.encode64(signature);
-
                          let responseData = { "signatureB64": signatureB64 }
                          res.end(JSON.stringify(responseData));
                      }

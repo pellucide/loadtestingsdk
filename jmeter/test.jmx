@@ -479,7 +479,7 @@ transmit.processResponse();</stringProp>
           </BeanShellPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Password Request" enabled="true">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
             <collectionProp name="Arguments.arguments">
@@ -1047,6 +1047,628 @@ importCommands(&quot;Transmit&quot;);
 transmit = Transmit();
 transmit.processResponse();</stringProp>
           </BeanShellPostProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Logout" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${body}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">443</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/api/v2/auth/logout?aid=${appid}&amp;did=${deviceId}&amp;sid=${sessionId}</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">true</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">import org.apache.jmeter.services.FileServer;
+absolutePath = FileServer.getFileServer().getBaseDir();
+addClassPath(absolutePath);
+importCommands(&quot;Transmit&quot;);
+transmit = Transmit();
+int scheme = 4;
+String userId = vars.get(&quot;userId&quot;);
+String clientVersion = vars.get(&quot;X-TS-Client-Version-6.1.0&quot;);
+String body = &quot;{\&quot;headers\&quot;:[{\&quot;type\&quot;:\&quot;uid\&quot;,\&quot;uid\&quot;:\&quot;&quot;+userId+&quot;\&quot;}],\&quot;data\&quot;:{}}&quot;;
+url=&quot;/api/v2/auth/logout?aid=${appid}&amp;did=${deviceId}&amp;sid=${sessionId}&quot;;
+transmit.preProcess(url, body, scheme);
+
+</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">x-ts-client-version</stringProp>
+                <stringProp name="Header.value">${X-TS-Client-Version-6.1.0}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">authorization</stringProp>
+                <stringProp name="Header.value">TSToken ${tokenValue}; tid=${tokenId}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">jmetertest</stringProp>
+                <stringProp name="Header.value">true</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Signature</stringProp>
+                <stringProp name="Header.value">${contentSignature}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <url>true</url>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">import org.apache.jmeter.services.FileServer;
+absolutePath = FileServer.getFileServer().getBaseDir();
+addClassPath(absolutePath);
+importCommands(&quot;Transmit&quot;);
+transmit = Transmit();
+transmit.processResponse();</stringProp>
+          </BeanShellPostProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Login Request" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${body}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">${urlPath}</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">import org.apache.jmeter.services.FileServer;
+absolutePath = FileServer.getFileServer().getBaseDir();
+addClassPath(absolutePath);
+importCommands(&quot;Transmit&quot;);
+transmit = Transmit();
+transmit.generateTimeStamp();
+
+int scheme = 4;
+String userId = vars.get(&quot;userId&quot;);
+
+String clientVersion = vars.get(&quot;X-TS-Client-Version-6.1.0&quot;);
+String body=&quot;{\&quot;headers\&quot;:[{\&quot;type\&quot;:\&quot;uid\&quot;,\&quot;uid\&quot;:\&quot;&quot;+userId+&quot;\&quot;}],\&quot;data\&quot;:{\&quot;collection_result\&quot;:{\&quot;metadata\&quot;:{\&quot;scheme_version\&quot;:2,\&quot;version\&quot;:\&quot;6.1.06531\&quot;,\&quot;timestamp\&quot;:&quot;+&quot;1626537490&quot;+&quot;},\&quot;content\&quot;:{\&quot;hw_authenticators\&quot;:{\&quot;fido\&quot;:[{\&quot;aaid\&quot;:\&quot;1206#0001\&quot;},{\&quot;aaid\&quot;:\&quot;1206#0002\&quot;},{\&quot;aaid\&quot;:\&quot;1206#0003\&quot;}],\&quot;device_biometrics\&quot;:{\&quot;supported\&quot;:false,\&quot;user_registered\&quot;:false},\&quot;fingerprint\&quot;:{\&quot;supported\&quot;:true,\&quot;user_registered\&quot;:true},\&quot;face_id\&quot;:{\&quot;supported\&quot;:false,\&quot;user_registered\&quot;:false}},\&quot;device_details\&quot;:{\&quot;logged_users\&quot;:1,\&quot;persistence_mode\&quot;:\&quot;false\&quot;,\&quot;hw_type\&quot;:\&quot;Phone\&quot;,\&quot;tampered\&quot;:true,\&quot;sim_operator\&quot;:\&quot;310260\&quot;,\&quot;roaming\&quot;:false,\&quot;master_key_generated\&quot;:1625247266100,\&quot;device_model\&quot;:\&quot;GoogleAOSP\&quot;,\&quot;last_reboot\&quot;:261332,\&quot;tz\&quot;:\&quot;AmericaNew_York\&quot;,\&quot;os_version\&quot;:\&quot;9\&quot;,\&quot;jailbroken\&quot;:false,\&quot;security_patch\&quot;:\&quot;20190805\&quot;,\&quot;sim_operator_name\&quot;:\&quot;TMobile\&quot;,\&quot;frontal_camera\&quot;:true,\&quot;device_name\&quot;:\&quot;a42fb947dc6e7621\&quot;,\&quot;known_networks\&quot;:[{\&quot;ssid\&quot;:\&quot;03639c4e63344bebfb9ca2ef1df05646\&quot;}],\&quot;has_hw_security\&quot;:false,\&quot;screen_lock\&quot;:true,\&quot;os_type\&quot;:\&quot;Android\&quot;,\&quot;sflags\&quot;:2147483647,\&quot;supported_abis\&quot;:[\&quot;x86\&quot;,\&quot;armeabiv7a\&quot;,\&quot;armeabi\&quot;],\&quot;boot_loader\&quot;:\&quot;unknown\&quot;,\&quot;base_os\&quot;:\&quot;\&quot;},\&quot;installed_packages\&quot;:[\&quot;c048a5dd4096addf0634f3e9d3c4cc5c\&quot;,\&quot;50cf77a99066ed0902cafa5f293a85a9\&quot;,\&quot;5c29ff6c35fce8d75062ad9d4bd24d3e\&quot;,\&quot;5ee6428585a420c1fee676a368fcec3c\&quot;,\&quot;b7c039c51c133a83a8096a098526d731\&quot;,\&quot;072f89bcb516dc438e1abd2849158ef0\&quot;,\&quot;d4cb521a8bffdf30c3ed325aa656de81\&quot;,\&quot;6c1171ad3c0979c7a84dbbf086922599\&quot;,\&quot;a0be66ff10fad8551d154afc065537fc\&quot;,\&quot;7ad20db616ba8b277fd77cd3ee0748f7\&quot;,\&quot;0489f76fd6ad1327a19ab002cee45a31\&quot;],\&quot;collector_state\&quot;:{\&quot;accounts\&quot;:\&quot;disabled\&quot;,\&quot;devicedetails\&quot;:\&quot;active\&quot;,\&quot;contacts\&quot;:\&quot;disabled\&quot;,\&quot;owner\&quot;:\&quot;active\&quot;,\&quot;software\&quot;:\&quot;active\&quot;,\&quot;location\&quot;:\&quot;active\&quot;,\&quot;locationcountry\&quot;:\&quot;active\&quot;,\&quot;bluetooth\&quot;:\&quot;disabled\&quot;,\&quot;externalsdkdetails\&quot;:\&quot;active\&quot;,\&quot;hwauthenticators\&quot;:\&quot;active\&quot;,\&quot;capabilities\&quot;:\&quot;active\&quot;,\&quot;fidoauthenticators\&quot;:\&quot;active\&quot;,\&quot;largedata\&quot;:\&quot;active\&quot;,\&quot;localenrollments\&quot;:\&quot;active\&quot;,\&quot;devicefingerprint\&quot;:\&quot;active\&quot;,\&quot;apppermissions\&quot;:\&quot;disabled\&quot;},\&quot;local_enrollments\&quot;:{\&quot;pin\&quot;:{\&quot;registration_status\&quot;:\&quot;registered\&quot;,\&quot;validation_status\&quot;:\&quot;validated\&quot;}}}},\&quot;push_token\&quot;:\&quot;dummy_token\&quot;,\&quot;policy_request_id\&quot;:\&quot;default_auth\&quot;,\&quot;params\&quot;:{}}}&quot;;
+
+
+String urlPath=&quot;/api/v2/auth/login?aid=${appid}&amp;did=${deviceId}&quot;;
+vars.put(&quot;urlPath&quot;, urlPath);
+transmit.preProcess(urlPath, body, scheme);
+
+</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">x-ts-client-version</stringProp>
+                <stringProp name="Header.value">${X-TS-Client-Version-6.1.0}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">authorization</stringProp>
+                <stringProp name="Header.value">TSToken ${tokenValue}; tid=${tokenId}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">jmetertest</stringProp>
+                <stringProp name="Header.value">true</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Signature</stringProp>
+                <stringProp name="Header.value">${contentSignature}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">import org.apache.jmeter.services.FileServer;
+absolutePath = FileServer.getFileServer().getBaseDir();
+addClassPath(absolutePath);
+importCommands(&quot;Transmit&quot;);
+transmit = Transmit();
+transmit.processResponse();
+</stringProp>
+          </BeanShellPostProcessor>
+          <hashTree/>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <url>true</url>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Password Request" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${body}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">443</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">${urlPath}</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">true</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">import org.apache.jmeter.services.FileServer;
+absolutePath = FileServer.getFileServer().getBaseDir();
+addClassPath(absolutePath);
+importCommands(&quot;Transmit&quot;);
+transmit = Transmit();
+
+int scheme = 4;
+String assertionId = vars.get(&quot;assertionId&quot;);
+String challenge = vars.get(&quot;challenge&quot;);
+String passwordValue=&quot;test&quot;;
+
+
+urlPath=&quot;/api/v2/auth/assert?aid=${appid}&amp;did=${deviceId}&amp;sid=${sessionId}&quot;;
+body = transmit.processPasswordAuthentication(passwordValue, challenge, assertionId);
+vars.put(&quot;urlPath&quot;,urlPath);
+transmit.preProcess(urlPath, body, scheme);
+
+
+</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">x-ts-client-version</stringProp>
+                <stringProp name="Header.value">${X-TS-Client-Version-6.1.0}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">authorization</stringProp>
+                <stringProp name="Header.value">TSToken ${tokenValue}; tid=${tokenId}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">jmetertest</stringProp>
+                <stringProp name="Header.value">true</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Signature</stringProp>
+                <stringProp name="Header.value">${contentSignature}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <url>true</url>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">import org.apache.jmeter.services.FileServer;
+absolutePath = FileServer.getFileServer().getBaseDir();
+addClassPath(absolutePath);
+importCommands(&quot;Transmit&quot;);
+transmit = Transmit();
+transmit.processResponse();
+
+
+</stringProp>
+          </BeanShellPostProcessor>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="false">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Login Request" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+  &quot;flowId&quot;: &quot;bee72f5fa683c10e64dd6baeb79fb81cc526ee51ea414589d8f9f46a876b87b7&quot;,&#xd;
+  &quot;_requestMethod&quot;: &quot;POST&quot;,&#xd;
+  &quot;_requestServerRelativeUrl&quot;: &quot;auth/login&quot;,&#xd;
+  &quot;_requestBody&quot;: {&#xd;
+    &quot;collection_result&quot;: {&#xd;
+      &quot;metadata&quot;: {&#xd;
+        &quot;scheme_version&quot;: 2,&#xd;
+        &quot;version&quot;: &quot;6.1.0 (6531)&quot;,&#xd;
+        &quot;timestamp&quot;: 1626473683&#xd;
+      },&#xd;
+      &quot;content&quot;: {&#xd;
+        &quot;hw_authenticators&quot;: {&#xd;
+          &quot;fido&quot;: [&#xd;
+            {&#xd;
+              &quot;aaid&quot;: &quot;1206#0001&quot;&#xd;
+            },&#xd;
+            {&#xd;
+              &quot;aaid&quot;: &quot;1206#0002&quot;&#xd;
+            },&#xd;
+            {&#xd;
+              &quot;aaid&quot;: &quot;1206#0003&quot;&#xd;
+            }&#xd;
+          ],&#xd;
+          &quot;device_biometrics&quot;: {&#xd;
+            &quot;supported&quot;: false,&#xd;
+            &quot;user_registered&quot;: false&#xd;
+          },&#xd;
+          &quot;fingerprint&quot;: {&#xd;
+            &quot;supported&quot;: true,&#xd;
+            &quot;user_registered&quot;: true&#xd;
+          },&#xd;
+          &quot;face_id&quot;: {&#xd;
+            &quot;supported&quot;: false,&#xd;
+            &quot;user_registered&quot;: false&#xd;
+          }&#xd;
+        },&#xd;
+        &quot;device_details&quot;: {&#xd;
+          &quot;logged_users&quot;: 2,&#xd;
+          &quot;persistence_mode&quot;: &quot;false&quot;,&#xd;
+          &quot;hw_type&quot;: &quot;Phone&quot;,&#xd;
+          &quot;tampered&quot;: true,&#xd;
+          &quot;sim_operator&quot;: &quot;310260&quot;,&#xd;
+          &quot;roaming&quot;: false,&#xd;
+          &quot;master_key_generated&quot;: 1625247266100,&#xd;
+          &quot;device_model&quot;: &quot;Google/AOSP on IA Emulator&quot;,&#xd;
+          &quot;last_reboot&quot;: 847927,&#xd;
+          &quot;tz&quot;: &quot;America/New_York&quot;,&#xd;
+          &quot;os_version&quot;: &quot;9&quot;,&#xd;
+          &quot;jailbroken&quot;: false,&#xd;
+          &quot;security_patch&quot;: &quot;2019-08-05&quot;,&#xd;
+          &quot;sim_operator_name&quot;: &quot;T-Mobile&quot;,&#xd;
+          &quot;frontal_camera&quot;: true,&#xd;
+          &quot;device_name&quot;: &quot;a42fb947dc6e7621&quot;,&#xd;
+          &quot;known_networks&quot;: [&#xd;
+            {&#xd;
+              &quot;ssid&quot;: &quot;03639c4e63344bebfb9ca2ef1df05646&quot;&#xd;
+            }&#xd;
+          ],&#xd;
+          &quot;has_hw_security&quot;: false,&#xd;
+          &quot;screen_lock&quot;: true,&#xd;
+          &quot;os_type&quot;: &quot;Android&quot;,&#xd;
+          &quot;sflags&quot;: 2147483647,&#xd;
+          &quot;supported_abis&quot;: [&#xd;
+            &quot;x86&quot;,&#xd;
+            &quot;armeabi-v7a&quot;,&#xd;
+            &quot;armeabi&quot;&#xd;
+          ],&#xd;
+          &quot;boot_loader&quot;: &quot;unknown&quot;,&#xd;
+          &quot;base_os&quot;: &quot;&quot;&#xd;
+        },&#xd;
+        &quot;installed_packages&quot;: [&#xd;
+          &quot;c048a5dd4096addf0634f3e9d3c4cc5c&quot;,&#xd;
+          &quot;50cf77a99066ed0902cafa5f293a85a9&quot;,&#xd;
+          &quot;5c29ff6c35fce8d75062ad9d4bd24d3e&quot;,&#xd;
+          &quot;5ee6428585a420c1fee676a368fcec3c&quot;,&#xd;
+          &quot;b7c039c51c133a83a8096a098526d731&quot;,&#xd;
+          &quot;072f89bcb516dc438e1abd2849158ef0&quot;,&#xd;
+          &quot;d4cb521a8bffdf30c3ed325aa656de81&quot;,&#xd;
+          &quot;6c1171ad3c0979c7a84dbbf086922599&quot;,&#xd;
+          &quot;a0be66ff10fad8551d154afc065537fc&quot;,&#xd;
+          &quot;7ad20db616ba8b277fd77cd3ee0748f7&quot;,&#xd;
+          &quot;0489f76fd6ad1327a19ab002cee45a31&quot;&#xd;
+        ],&#xd;
+        &quot;collector_state&quot;: {&#xd;
+          &quot;accounts&quot;: &quot;disabled&quot;,&#xd;
+          &quot;devicedetails&quot;: &quot;active&quot;,&#xd;
+          &quot;contacts&quot;: &quot;disabled&quot;,&#xd;
+          &quot;owner&quot;: &quot;active&quot;,&#xd;
+          &quot;software&quot;: &quot;active&quot;,&#xd;
+          &quot;location&quot;: &quot;active&quot;,&#xd;
+          &quot;locationcountry&quot;: &quot;active&quot;,&#xd;
+          &quot;bluetooth&quot;: &quot;disabled&quot;,&#xd;
+          &quot;externalsdkdetails&quot;: &quot;active&quot;,&#xd;
+          &quot;hwauthenticators&quot;: &quot;active&quot;,&#xd;
+          &quot;capabilities&quot;: &quot;active&quot;,&#xd;
+          &quot;fidoauthenticators&quot;: &quot;active&quot;,&#xd;
+          &quot;largedata&quot;: &quot;active&quot;,&#xd;
+          &quot;localenrollments&quot;: &quot;active&quot;,&#xd;
+          &quot;devicefingerprint&quot;: &quot;active&quot;,&#xd;
+          &quot;apppermissions&quot;: &quot;disabled&quot;&#xd;
+        },&#xd;
+        &quot;local_enrollments&quot;: {&#xd;
+          &quot;pin&quot;: {&#xd;
+            &quot;registration_status&quot;: &quot;registered&quot;,&#xd;
+            &quot;validation_status&quot;: &quot;validated&quot;&#xd;
+          }&#xd;
+        }&#xd;
+      }&#xd;
+    },&#xd;
+    &quot;push_token&quot;: &quot;dummy_token&quot;,&#xd;
+    &quot;policy_request_id&quot;: &quot;default_auth&quot;,&#xd;
+    &quot;params&quot;: {}&#xd;
+  },&#xd;
+  &quot;_envelopeHeaders&quot;: [&#xd;
+    {&#xd;
+      &quot;type&quot;: &quot;flow_id&quot;,&#xd;
+      &quot;flow_id&quot;: &quot;bee72f5fa683c10e64dd6baeb79fb81cc526ee51ea414589d8f9f46a876b87b7&quot;&#xd;
+    }&#xd;
+  ]&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/api/v2/auth/login??aid=${appid}&amp;did=${deviceId}&amp;locale=en-US</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script"></stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">x-ts-client-version</stringProp>
+                <stringProp name="Header.value">${X-TS-Client-Version-6.1.0}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">authorization</stringProp>
+                <stringProp name="Header.value">TSToken ${tokenValue}; tid=${tokenId}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">jmetertest</stringProp>
+                <stringProp name="Header.value">true</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">headerforperftest</stringProp>
+                <stringProp name="Header.value">false</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">import org.apache.jmeter.services.FileServer;
+absolutePath = FileServer.getFileServer().getBaseDir();
+addClassPath(absolutePath);
+importCommands(&quot;Transmit&quot;);
+transmit = Transmit();
+transmit.processResponse();
+</stringProp>
+          </BeanShellPostProcessor>
+          <hashTree/>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <url>true</url>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
           <hashTree/>
         </hashTree>
       </hashTree>
