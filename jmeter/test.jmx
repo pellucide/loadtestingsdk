@@ -32,11 +32,6 @@
             <stringProp name="Argument.value">4.1 (6540);[1,2,3,6,7,8,10,11,12,14,19]</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="userId" elementType="Argument">
-            <stringProp name="Argument.name">userId</stringProp>
-            <stringProp name="Argument.value">test</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
           <elementProp name="X-TS-Client-Version-6.1.0" elementType="Argument">
             <stringProp name="Argument.name">X-TS-Client-Version-6.1.0</stringProp>
             <stringProp name="Argument.value">6.1.0 (7464);[1,2,3,6,7,8,10,11,12,14,28,19]</stringProp>
@@ -53,24 +48,32 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.num_threads">15</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
-        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
       </ThreadGroup>
       <hashTree>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Generate keyPairs and save" enabled="true">
           <stringProp name="BeanShellSampler.query">import org.apache.jmeter.services.FileServer;
+
 absolutePath = FileServer.getFileServer().getBaseDir();
 addClassPath(absolutePath);
 importCommands(&quot;Transmit&quot;);
 transmit = Transmit();
 
+String userId = &quot;${userId}&quot;;
+
+sessionName = transmit.getRandomString(11);
+//log.info(&quot;sessionName=&quot;+sessionName);
+
+
+transmit.setCurrentSession(sessionName, userId);
+transmit.generateTimeStamp();
 transmit.generateRsaKeyPair();
 transmit.generateEcKeyPair();
-transmit.generateTimeStamp();
 
 </stringProp>
           <stringProp name="BeanShellSampler.filename"></stringProp>
@@ -78,174 +81,13 @@ transmit.generateTimeStamp();
           <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
         </BeanShellSampler>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Bind ReQuest" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Bind Request" enabled="true">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&#xd;
-    &quot;headers&quot;: [&#xd;
-        {&#xd;
-            &quot;type&quot;: &quot;uid&quot;,&#xd;
-            &quot;uid&quot;: &quot;${userId}&quot;&#xd;
-        }&#xd;
-    ],&#xd;
-    &quot;data&quot;: {&#xd;
-        &quot;collection_result&quot;: {&#xd;
-            &quot;metadata&quot;: {&#xd;
-                &quot;scheme_version&quot;: 2,&#xd;
-                &quot;version&quot;: &quot;${X-TS-Client-Version-6.1.0}&quot;,&#xd;
-                &quot;timestamp&quot;: ${timestamp}&#xd;
-            },&#xd;
-            &quot;content&quot;: {&#xd;
-                &quot;owner_details&quot;: {&#xd;
-                    &quot;possible_names&quot;: [&#xd;
-                        &quot;c3fa673b98c1a9ee6ecc3e38d0381966&quot;&#xd;
-                    ],&#xd;
-                    &quot;possible_emails&quot;: [&#xd;
-                        &quot;f91c98012706e141b2e3bcc286af5e06&quot;&#xd;
-                    ]&#xd;
-                },&#xd;
-                &quot;hw_authenticators&quot;: {&#xd;
-                    &quot;fingerprint&quot;: {&#xd;
-                        &quot;supported&quot;: true,&#xd;
-                        &quot;secure&quot;: true,&#xd;
-                        &quot;user_registered&quot;: true&#xd;
-                    },&#xd;
-                    &quot;face_id&quot;: {&#xd;
-                        &quot;supported&quot;: false,&#xd;
-                        &quot;secure&quot;: false,&#xd;
-                        &quot;user_registered&quot;: false&#xd;
-                    }&#xd;
-                },&#xd;
-                &quot;external_sdk_details&quot;: {&#xd;
-                    &quot;cognitec&quot;: {&#xd;
-                        &quot;version&quot;: &quot;9.1.4&quot;,&#xd;
-                        &quot;state&quot;: 2&#xd;
-                    },&#xd;
-                    &quot;zannah&quot;: {&#xd;
-                        &quot;version&quot;: &quot;1.5.2&quot;,&#xd;
-                        &quot;state&quot;: 3&#xd;
-                    },&#xd;
-                    &quot;dyadic&quot;: {&#xd;
-                        &quot;version&quot;: &quot;1.3.1706.33065&quot;,&#xd;
-                        &quot;state&quot;: 3&#xd;
-                    }&#xd;
-                },&#xd;
-                &quot;device_details&quot;: {&#xd;
-                    &quot;logged_users&quot;: 0,&#xd;
-                    &quot;hw_type&quot;: &quot;Phone&quot;,&#xd;
-                    &quot;wifi_network&quot;: {&#xd;
-                        &quot;bssid&quot;: &quot;d4705a482b5be4955808176e48f7371e&quot;,&#xd;
-                        &quot;ssid&quot;: &quot;4eb341e247478a5a5ec2ba7d755cc614&quot;,&#xd;
-                        &quot;secure&quot;: true&#xd;
-                    },&#xd;
-                    &quot;tampered&quot;: true,&#xd;
-                    &quot;sim_operator&quot;: &quot;310410&quot;,&#xd;
-                    &quot;roaming&quot;: false,&#xd;
-                    &quot;master_key_generated&quot;: 1584545844709,&#xd;
-                    &quot;device_id&quot;: &quot;352325082345782&quot;,&#xd;
-                    &quot;device_model&quot;: &quot;samsung/SAMSUNG-SM-G930A&quot;,&#xd;
-                    &quot;tz&quot;: &quot;America/New_York&quot;,&#xd;
-                    &quot;os_version&quot;: &quot;8.0.0&quot;,&#xd;
-                    &quot;jailbroken&quot;: false,&#xd;
-                    &quot;sim_operator_name&quot;: &quot;&quot;,&#xd;
-                    &quot;frontal_camera&quot;: true,&#xd;
-                    &quot;device_name&quot;: &quot;e51e696e84671ad9&quot;,&#xd;
-                    &quot;known_networks&quot;: [&#xd;
-                        {&#xd;
-                            &quot;ssid&quot;: &quot;ab2e79dbba72c3866298b74f1a1c6fa6&quot;&#xd;
-                        },&#xd;
-                        {&#xd;
-                            &quot;ssid&quot;: &quot;4eb341e247478a5a5ec2ba7d755cc614&quot;,&#xd;
-                            &quot;secure&quot;: true&#xd;
-                        }&#xd;
-                    ],&#xd;
-                    &quot;subscriber_id&quot;: &quot;310410035590766&quot;,&#xd;
-                    &quot;has_hw_security&quot;: true,&#xd;
-                    &quot;screen_lock&quot;: true,&#xd;
-                    &quot;os_type&quot;: &quot;Android&quot;,&#xd;
-                    &quot;sflags&quot;: -1,&#xd;
-                    &quot;connection&quot;: &quot;wifi: 10.103.82.192&quot;,&#xd;
-                    &quot;sim_serial&quot;: &quot;89014104270355907667&quot;&#xd;
-                },&#xd;
-                &quot;location&quot;: {&#xd;
-                    &quot;lng&quot;: -74.4993894,&#xd;
-                    &quot;h_acc&quot;: 12.800999641418457,&#xd;
-                    &quot;enabled&quot;: true,&#xd;
-                    &quot;lat&quot;: 40.3528937&#xd;
-                },&#xd;
-                &quot;accounts&quot;: [&#xd;
-                    {&#xd;
-                        &quot;name&quot;: &quot;c4f79e15f8c6ed0715a8ea44aebc38d8&quot;,&#xd;
-                        &quot;type&quot;: &quot;6012fa4d4ddec268fc5c7112cbb265e7&quot;&#xd;
-                    },&#xd;
-                    {&#xd;
-                        &quot;name&quot;: &quot;b8d2a60277443092b75b9a9f71bce945&quot;,&#xd;
-                        &quot;type&quot;: &quot;3330d5072c5971394e189640a9f09b77&quot;&#xd;
-                    }&#xd;
-                ],&#xd;
-                &quot;installed_packages&quot;: [&#xd;
-                    &quot;20c496910ff8da1214ae52d3750684cd&quot;,&#xd;
-                    &quot;09e5b19fffdd4c9da52742ce536e1d8b&quot;,&#xd;
-                    &quot;5f5ca4b53bed9c75720d7ae1a8b949fc&quot;,&#xd;
-                    &quot;2ce4266d32140417eebea06fd2d5d9cd&quot;,&#xd;
-                    &quot;40197bd6e7b2b8d5880b666b7a024ab6&quot;&#xd;
-                ],&#xd;
-                &quot;contacts&quot;: {&#xd;
-                    &quot;contacts_count&quot;: 765&#xd;
-                },&#xd;
-                &quot;capabilities&quot;: {&#xd;
-                    &quot;audio_acquisition_supported&quot;: true,&#xd;
-                    &quot;finger_print_supported&quot;: true,&#xd;
-                    &quot;image_acquisition_supported&quot;: true,&#xd;
-                    &quot;persistent_keys_supported&quot;: true,&#xd;
-                    &quot;face_id_key_bio_protection_supported&quot;: false,&#xd;
-                    &quot;fido_client_present&quot;: true,&#xd;
-                    &quot;dyadic_present&quot;: true,&#xd;
-                    &quot;installed_plugins&quot;: [&#xd;
-                        {&#xd;
-                            &quot;plugin_name&quot;: &quot;dynamic-forms&quot;,&#xd;
-                            &quot;plugin_version&quot;: &quot;1.0.0&quot;&#xd;
-                        },&#xd;
-                        {&#xd;
-                            &quot;plugin_name&quot;: &quot;totp-unbound&quot;,&#xd;
-                            &quot;plugin_version&quot;: &quot;1.0.3&quot;&#xd;
-                        }&#xd;
-                    ],&#xd;
-                    &quot;host_provided_features&quot;: &quot;19&quot;&#xd;
-                },&#xd;
-                &quot;collector_state&quot;: {&#xd;
-                    &quot;accounts&quot;: &quot;active&quot;,&#xd;
-                    &quot;devicedetails&quot;: &quot;active&quot;,&#xd;
-                    &quot;contacts&quot;: &quot;active&quot;,&#xd;
-                    &quot;owner&quot;: &quot;active&quot;,&#xd;
-                    &quot;software&quot;: &quot;active&quot;,&#xd;
-                    &quot;location&quot;: &quot;active&quot;,&#xd;
-                    &quot;bluetooth&quot;: &quot;active&quot;,&#xd;
-                    &quot;externalsdkdetails&quot;: &quot;active&quot;,&#xd;
-                    &quot;hwauthenticators&quot;: &quot;active&quot;,&#xd;
-                    &quot;capabilities&quot;: &quot;active&quot;,&#xd;
-                    &quot;fidoauthenticators&quot;: &quot;disabled&quot;,&#xd;
-                    &quot;largedata&quot;: &quot;disabled&quot;,&#xd;
-                    &quot;localenrollments&quot;: &quot;active&quot;&#xd;
-                },&#xd;
-                &quot;local_enrollments&quot;: {}&#xd;
-            }&#xd;
-        },&#xd;
-        &quot;public_key&quot;: {&#xd;
-            &quot;key&quot;: &quot;${rsaPublicKeyEncoded}&quot;,&#xd;
-            &quot;type&quot;: &quot;rsa&quot;&#xd;
-        },&#xd;
-        &quot;encryption_public_key&quot;: {&#xd;
-            &quot;key&quot;: &quot;${rsaPublicKeyEncoded}&quot;,&#xd;
-            &quot;type&quot;: &quot;rsa&quot;&#xd;
-        },&#xd;
-        &quot;push_token&quot;: &quot;fakePushToken&quot;,&#xd;
-        &quot;params&quot;: {}&#xd;
-    }&#xd;
-}</stringProp>
+                <stringProp name="Argument.value">${body}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -254,7 +96,7 @@ transmit.generateTimeStamp();
           <stringProp name="HTTPSampler.port">443</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/api/v2/auth/bind?aid=${appid}</stringProp>
+          <stringProp name="HTTPSampler.path">${path}</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -266,6 +108,180 @@ transmit.generateTimeStamp();
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
         </HTTPSamplerProxy>
         <hashTree>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">import java.io.UnsupportedEncodingException;
+import java.security.*;
+import java.security.spec.*;
+import java.util.Base64;
+
+import org.apache.jmeter.services.FileServer;
+absolutePath = FileServer.getFileServer().getBaseDir();
+addClassPath(absolutePath);
+importCommands(&quot;Transmit&quot;);
+transmit = Transmit();
+
+String userId = transmit.getUserName();
+String publicKey = transmit.getRsaPublicKey();
+String ecPublicKey = transmit.getEcPublicKey();
+
+
+String appId = &quot;${appid}&quot;;
+String clientVersion = &quot;${X-TS-Client-Version-6.1.0}&quot;;
+String timestamp = &quot;${timestamp}&quot;;
+
+
+String path=&quot;/api/v2/auth/bind?aid=&quot;+appId;
+int scheme = 4;
+
+
+
+
+String body = &quot;{&quot;+
+&quot;    \&quot;data\&quot;: {&quot;+
+&quot;        \&quot;collection_result\&quot;: {&quot;+
+&quot;            \&quot;metadata\&quot;: {&quot;+
+&quot;                \&quot;scheme_version\&quot;: &quot; + scheme + &quot;,&quot;+
+&quot;                \&quot;timestamp\&quot;: &quot;+ timestamp+ &quot;,&quot;+
+&quot;                \&quot;version\&quot;: \&quot;&quot;+ clientVersion +&quot;\&quot;&quot;+
+&quot;            },&quot;+
+&quot;            \&quot;content\&quot;: {&quot;+
+&quot;                \&quot;accounts\&quot;: [&quot;+
+&quot;                    {&quot;+
+&quot;                        \&quot;name\&quot;: \&quot;&quot;+transmit.getRandomHexString(32)+&quot;\&quot;,&quot;+
+&quot;                        \&quot;type\&quot;: \&quot;&quot;+transmit.getRandomHexString(32)+&quot;\&quot;&quot;+
+&quot;                    },&quot;+
+&quot;                    {&quot;+
+&quot;                        \&quot;name\&quot;: \&quot;b8d2a60277443092b75b9a9f71bce945\&quot;,&quot;+
+&quot;                        \&quot;type\&quot;: \&quot;3330d5072c5971394e189640a9f09b77\&quot;&quot;+
+&quot;                    }&quot;+
+&quot;                ],&quot;+
+&quot;                \&quot;capabilities\&quot;: {&quot;+
+&quot;                    \&quot;audio_acquisition_supported\&quot;: true,&quot;+
+&quot;                    \&quot;dyadic_present\&quot;: true,&quot;+
+&quot;                    \&quot;face_id_key_bio_protection_supported\&quot;: false,&quot;+
+&quot;                    \&quot;fido_client_present\&quot;: true,&quot;+
+&quot;                    \&quot;finger_print_supported\&quot;: true,&quot;+
+&quot;                    \&quot;host_provided_features\&quot;: \&quot;19\&quot;,&quot;+
+&quot;                    \&quot;image_acquisition_supported\&quot;: true,&quot;+
+&quot;                    \&quot;persistent_keys_supported\&quot;: true&quot;+
+&quot;                },&quot;+
+&quot;                \&quot;collector_state\&quot;: {&quot;+
+&quot;                    \&quot;accounts\&quot;: \&quot;active\&quot;,&quot;+
+&quot;                    \&quot;bluetooth\&quot;: \&quot;active\&quot;,&quot;+
+&quot;                    \&quot;capabilities\&quot;: \&quot;active\&quot;,&quot;+
+&quot;                    \&quot;contacts\&quot;: \&quot;active\&quot;,&quot;+
+&quot;                    \&quot;devicedetails\&quot;: \&quot;active\&quot;,&quot;+
+&quot;                    \&quot;externalsdkdetails\&quot;: \&quot;active\&quot;,&quot;+
+&quot;                    \&quot;fidoauthenticators\&quot;: \&quot;disabled\&quot;,&quot;+
+&quot;                    \&quot;hwauthenticators\&quot;: \&quot;active\&quot;,&quot;+
+&quot;                    \&quot;largedata\&quot;: \&quot;disabled\&quot;,&quot;+
+&quot;                    \&quot;localenrollments\&quot;: \&quot;active\&quot;,&quot;+
+&quot;                    \&quot;location\&quot;: \&quot;active\&quot;,&quot;+
+&quot;                    \&quot;owner\&quot;: \&quot;active\&quot;,&quot;+
+&quot;                    \&quot;software\&quot;: \&quot;active\&quot;&quot;+
+&quot;                },&quot;+
+&quot;                \&quot;contacts\&quot;: {&quot;+
+&quot;                    \&quot;contacts_count\&quot;: 765&quot;+
+&quot;                },&quot;+
+&quot;                \&quot;device_details\&quot;: {&quot;+
+&quot;                    \&quot;connection\&quot;: \&quot;wifi: 10.103.82.192\&quot;,&quot;+
+&quot;                    \&quot;device_id\&quot;: \&quot;&quot;+ transmit.getRandomLong()+&quot;\&quot;,&quot;+
+&quot;                    \&quot;device_model\&quot;: \&quot;&quot;+ transmit.getRandomString(8)+&quot;\&quot;,&quot;+
+&quot;                    \&quot;device_name\&quot;: \&quot;&quot;+transmit.getRandomHexString(15)+&quot;\&quot;,&quot;+
+&quot;                    \&quot;frontal_camera\&quot;: true,&quot;+
+&quot;                    \&quot;has_hw_security\&quot;: true,&quot;+
+&quot;                    \&quot;hw_type\&quot;: \&quot;Phone\&quot;,&quot;+
+&quot;                    \&quot;jailbroken\&quot;: false,&quot;+
+&quot;                    \&quot;known_networks\&quot;: [&quot;+
+&quot;                        {&quot;+
+&quot;                            \&quot;ssid\&quot;: \&quot;ab2e79dbba72c3866298b74f1a1c6fa6\&quot;&quot;+
+&quot;                        },&quot;+
+&quot;                        {&quot;+
+&quot;                            \&quot;secure\&quot;: true,&quot;+
+&quot;                            \&quot;ssid\&quot;: \&quot;4eb341e247478a5a5ec2ba7d755cc614\&quot;&quot;+
+&quot;                        }&quot;+
+&quot;                    ],&quot;+
+&quot;                    \&quot;logged_users\&quot;: 0,&quot;+
+&quot;                    \&quot;master_key_generated\&quot;: &quot;+transmit.getRandomLong() +&quot;,&quot;+
+&quot;                    \&quot;os_type\&quot;: \&quot;Android\&quot;,&quot;+
+&quot;                    \&quot;os_version\&quot;: \&quot;8.0.0\&quot;,&quot;+
+&quot;                    \&quot;roaming\&quot;: false,&quot;+
+&quot;                    \&quot;screen_lock\&quot;: true,&quot;+
+&quot;                    \&quot;sflags\&quot;: -1,&quot;+
+&quot;                    \&quot;sim_operator\&quot;: \&quot;310410\&quot;,&quot;+
+&quot;                    \&quot;sim_operator_name\&quot;: \&quot;\&quot;,&quot;+
+&quot;                    \&quot;sim_serial\&quot;: \&quot;&quot;+transmit.getRandomLong()+&quot;\&quot;,&quot;+
+&quot;                    \&quot;subscriber_id\&quot;: \&quot;310410035590766\&quot;,&quot;+
+&quot;                    \&quot;tampered\&quot;: true,&quot;+
+&quot;                    \&quot;tz\&quot;: \&quot;America/New_York\&quot;,&quot;+
+&quot;                    \&quot;wifi_network\&quot;: {&quot;+
+&quot;                        \&quot;bssid\&quot;: \&quot;d4705a482b5be4955808176e48f7371e\&quot;,&quot;+
+&quot;                        \&quot;secure\&quot;: true,&quot;+
+&quot;                        \&quot;ssid\&quot;: \&quot;4eb341e247478a5a5ec2ba7d755cc614\&quot;&quot;+
+&quot;                    }&quot;+
+&quot;                },&quot;+
+&quot;                \&quot;hw_authenticators\&quot;: {&quot;+
+&quot;                    \&quot;face_id\&quot;: {&quot;+
+&quot;                        \&quot;secure\&quot;: false,&quot;+
+&quot;                        \&quot;supported\&quot;: false,&quot;+
+&quot;                        \&quot;user_registered\&quot;: false&quot;+
+&quot;                    },&quot;+
+&quot;                    \&quot;fingerprint\&quot;: {&quot;+
+&quot;                        \&quot;secure\&quot;: true,&quot;+
+&quot;                        \&quot;supported\&quot;: true,&quot;+
+&quot;                        \&quot;user_registered\&quot;: true&quot;+
+&quot;                    }&quot;+
+&quot;                },&quot;+
+&quot;                \&quot;installed_packages\&quot;: [&quot;+
+&quot;                    \&quot;20c496910ff8da1214ae52d3750684cd\&quot;,&quot;+
+&quot;                    \&quot;09e5b19fffdd4c9da52742ce536e1d8b\&quot;,&quot;+
+&quot;                    \&quot;5f5ca4b53bed9c75720d7ae1a8b949fc\&quot;,&quot;+
+&quot;                    \&quot;2ce4266d32140417eebea06fd2d5d9cd\&quot;,&quot;+
+&quot;                    \&quot;40197bd6e7b2b8d5880b666b7a024ab6\&quot;&quot;+
+&quot;                ],&quot;+
+&quot;                \&quot;local_enrollments\&quot;: {},&quot;+
+&quot;                \&quot;location\&quot;: {&quot;+
+&quot;                    \&quot;enabled\&quot;: true,&quot;+
+&quot;                    \&quot;h_acc\&quot;: 12.800999641418457,&quot;+
+&quot;                    \&quot;lat\&quot;: 40.3528937,&quot;+
+&quot;                    \&quot;lng\&quot;: -74.4993894&quot;+
+&quot;                },&quot;+
+&quot;                \&quot;owner_details\&quot;: {&quot;+
+&quot;                    \&quot;possible_emails\&quot;: [&quot;+
+&quot;                        \&quot;f91c98012706e141b2e3bcc286af5e06\&quot;&quot;+
+&quot;                    ],&quot;+
+&quot;                    \&quot;possible_names\&quot;: [&quot;+
+&quot;                        \&quot;c3fa673b98c1a9ee6ecc3e38d0381966\&quot;&quot;+
+&quot;                    ]&quot;+
+&quot;                }&quot;+
+&quot;            }&quot;+
+&quot;        },&quot;+
+&quot;        \&quot;public_key\&quot;: {&quot;+
+&quot;            \&quot;key\&quot;: \&quot;&quot;+ publicKey +&quot;\&quot;,&quot;+
+&quot;            \&quot;type\&quot;: \&quot;rsa\&quot;&quot;+
+&quot;        },&quot;+
+&quot;        \&quot;encryption_public_key\&quot;: {&quot;+
+&quot;            \&quot;key\&quot;: \&quot;&quot;+ publicKey + &quot;\&quot;,&quot;+
+&quot;            \&quot;type\&quot;: \&quot;rsa\&quot;&quot;+
+&quot;        }&quot;+
+&quot;    },&quot;+
+&quot;    \&quot;headers\&quot;: [&quot;+
+&quot;        {&quot;+
+&quot;            \&quot;type\&quot;: \&quot;uid\&quot;,&quot;+
+&quot;            \&quot;uid\&quot;: \&quot;&quot;+ userId + &quot;\&quot;&quot;+
+&quot;        }&quot;+
+&quot;    ],&quot;+
+&quot;    \&quot;push_token\&quot;: \&quot;fakePushToken\&quot;&quot;+
+&quot;}&quot;;
+vars.put(&quot;body&quot;, body);
+vars.put(&quot;path&quot;, path);
+transmit.preProcess(path, body, scheme);
+</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
           <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
@@ -337,11 +353,7 @@ absolutePath = FileServer.getFileServer().getBaseDir();
 addClassPath(absolutePath);
 importCommands(&quot;Transmit&quot;);
 transmit = Transmit();
-transmit.processResponse();
-
-
-
-</stringProp>
+transmit.processResponse();</stringProp>
           </BeanShellPostProcessor>
           <hashTree/>
         </hashTree>
@@ -360,7 +372,7 @@ transmit.processResponse();
           <stringProp name="HTTPSampler.port">443</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/api/v2/auth/assert?aid=${appid}&amp;did=${deviceId}&amp;sid=${sessionId}</stringProp>
+          <stringProp name="HTTPSampler.path">${path}</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -388,17 +400,23 @@ importCommands(&quot;Transmit&quot;);
 transmit = Transmit();
 
 int scheme = 4;
-String userId = vars.get(&quot;userId&quot;);
-String appData = vars.get(&quot;appData&quot;);
+String userId = transmit.getUserName();
+String appData = transmit.getSessionVar(&quot;appData&quot;);
 String clientVersion = vars.get(&quot;X-TS-Client-Version-6.1.0&quot;);
-String assertionId = vars.get(&quot;assertionId&quot;);
-String challenge = vars.get(&quot;challenge&quot;);
+String assertionId = transmit.getSessionVar(&quot;assertionId&quot;);
+String challenge = transmit.getSessionVar(&quot;challenge&quot;);
+String deviceId = transmit.getSessionVar(&quot;deviceId&quot;);
+String sessionId = transmit.getSessionVar(&quot;sessionId&quot;);
 
-String url=&quot;/api/v2/auth/assert?aid=${appid}&amp;did=${deviceId}&amp;sid=${sessionId}&quot;;
+
+String path=&quot;/api/v2/auth/assert?aid=${appid}&amp;did=&quot;+deviceId+&quot;&amp;sid=&quot;+sessionId;
 String body = &quot;{\&quot;headers\&quot;:[{\&quot;type\&quot;:\&quot;uid\&quot;,\&quot;uid\&quot;:\&quot;&quot;+userId+&quot;\&quot;}],\&quot;data\&quot;:{\&quot;action\&quot;:\&quot;form\&quot;,\&quot;assert\&quot;:\&quot;action\&quot;,\&quot;assertion_id\&quot;:\&quot;&quot;+assertionId+
 &quot;\&quot;,\&quot;fch\&quot;:\&quot;&quot;+challenge+&quot;\&quot;,\&quot;input\&quot;:&quot;+appData+&quot;}}&quot;;
 
-transmit.preProcess(url, body, scheme);
+transmit.preProcess(path, body, scheme);
+vars.put(&quot;body&quot;, transmit.getSessionVar(&quot;body&quot;));
+vars.put(&quot;contentSignature&quot;, transmit.getSessionVar(&quot;contentSignature&quot;));
+vars.put(&quot;path&quot;, path);
 
 
 </stringProp>
@@ -475,7 +493,8 @@ absolutePath = FileServer.getFileServer().getBaseDir();
 addClassPath(absolutePath);
 importCommands(&quot;Transmit&quot;);
 transmit = Transmit();
-transmit.processResponse();</stringProp>
+transmit.processResponse();
+</stringProp>
           </BeanShellPostProcessor>
           <hashTree/>
         </hashTree>
@@ -494,7 +513,7 @@ transmit.processResponse();</stringProp>
           <stringProp name="HTTPSampler.port">443</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/api/v2/auth/assert?aid=${appid}&amp;did=${deviceId}&amp;sid=${sessionId}</stringProp>
+          <stringProp name="HTTPSampler.path">${path}</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -517,15 +536,24 @@ importCommands(&quot;Transmit&quot;);
 transmit = Transmit();
 
 int scheme = 4;
-String assertionId = vars.get(&quot;assertionId&quot;);
-String challenge = vars.get(&quot;challenge&quot;);
 String passwordValue=&quot;test&quot;;
 
+int scheme = 4;
+String userId = transmit.getUserName();
+String appData = transmit.getSessionVar(&quot;appData&quot;);
+String clientVersion = vars.get(&quot;X-TS-Client-Version-6.1.0&quot;);
+String assertionId = transmit.getSessionVar(&quot;assertionId&quot;);
+String challenge = transmit.getSessionVar(&quot;challenge&quot;);
+String deviceId = transmit.getSessionVar(&quot;deviceId&quot;);
+String sessionId = transmit.getSessionVar(&quot;sessionId&quot;);
 
-url=&quot;/api/v2/auth/assert?aid=${appid}&amp;did=${deviceId}&amp;sid=${sessionId}&quot;;
+path=&quot;/api/v2/auth/assert?aid=${appid}&amp;did=&quot;+deviceId+&quot;&amp;sid=&quot;+sessionId;
 body = transmit.processPasswordAuthentication(passwordValue, challenge, assertionId);
 
-transmit.preProcess(url, body, scheme);
+transmit.preProcess(path, body, scheme);
+vars.put(&quot;body&quot;, transmit.getSessionVar(&quot;body&quot;));
+vars.put(&quot;contentSignature&quot;, transmit.getSessionVar(&quot;contentSignature&quot;));
+vars.put(&quot;path&quot;, path);
 
 
 </stringProp>
@@ -605,6 +633,7 @@ transmit = Transmit();
 transmit.processResponse();
 
 
+
 </stringProp>
           </BeanShellPostProcessor>
           <hashTree/>
@@ -624,7 +653,7 @@ transmit.processResponse();
           <stringProp name="HTTPSampler.port">443</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/api/v2/auth/assert?aid=${appid}&amp;did=${deviceId}&amp;sid=${sessionId}</stringProp>
+          <stringProp name="HTTPSampler.path">${path}</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -657,8 +686,7 @@ transmit = Transmit();
 
 int scheme = 4;
 
-String controlFlowStr = vars.get(&quot;controlFlow&quot;);
-JSONObject controlFlow = (JSONObject) transmit.jsonParser.parse(controlFlowStr);
+JSONObject controlFlow = transmit.getControlFlow();
 log.info(&quot;controlFlow=&quot;+controlFlow);
 String continue_button_text = controlFlow.get(&quot;continue_button_text&quot;);
 String cancel_button_text = controlFlow.get(&quot;cancel_button_text&quot;);
@@ -666,13 +694,15 @@ String control_flow_text = controlFlow.get(&quot;text&quot;);
 String control_flow_title = controlFlow.get(&quot;title&quot;);
 String control_flow_type = controlFlow.get(&quot;type&quot;);
 
-String userId = vars.get(&quot;userId&quot;);
-String assertionId = vars.get(&quot;assertionId&quot;);
-log.info(&quot;assertionId=&quot;+assertionId);
 String clientVersion = vars.get(&quot;X-TS-Client-Version-6.1.0&quot;);
+String userId = transmit.getUserName();
+String assertionId = transmit.getSessionVar(&quot;assertionId&quot;);
+String challenge = transmit.getSessionVar(&quot;challenge&quot;);
+String deviceId = transmit.getSessionVar(&quot;deviceId&quot;);
+String sessionId = transmit.getSessionVar(&quot;sessionId&quot;);
 
 
-String challenge = vars.get(&quot;challenge&quot;);
+
 String payloadToSign = &quot;{\&quot;params\&quot;:{\&quot;title\&quot;:\&quot;&quot;+control_flow_title+&quot;\&quot;,\&quot;text\&quot;:\&quot;&quot;+control_flow_text+&quot;\&quot;,\&quot;continue_button_text\&quot;:\&quot;&quot;+continue_button_text+&quot;\&quot;,\&quot;cancel_button_text\&quot;:\&quot;&quot;+cancel_button_text+&quot;\&quot;,\&quot;parameters\&quot;:[]},\&quot;user_input\&quot;:\&quot;&quot;+continue_button_text+&quot;\&quot;}&quot;;
 log.info(&quot;payloadToSign=&quot;+payloadToSign);
 String payloadSignature = transmit.signRsa(payloadToSign);
@@ -682,10 +712,15 @@ String to = &quot;\\\\\\\\\&quot;&quot;;
 String payload = payloadToSign.replaceAll(from, to);
 log.info(&quot;payload=&quot;+payload);
 
-url=&quot;/api/v2/auth/assert?aid=${appid}&amp;did=${deviceId}&amp;sid=${sessionId}&quot;;
+path=&quot;/api/v2/auth/assert?aid=${appid}&amp;did=&quot;+deviceId+&quot;&amp;sid=&quot;+sessionId;
+
 body = &quot;{\&quot;headers\&quot;:[{\&quot;type\&quot;:\&quot;uid\&quot;,\&quot;uid\&quot;:\&quot;&quot;+userId+&quot;\&quot;}],\&quot;data\&quot;:{\&quot;action\&quot;:\&quot;confirmation\&quot;,\&quot;assert\&quot;:\&quot;action\&quot;,\&quot;assertion_id\&quot;:\&quot;&quot;+assertionId+&quot;\&quot;,\&quot;fch\&quot;:\&quot;&quot;+challenge+&quot;\&quot;,\&quot;data\&quot;:{\&quot;user_cancelled\&quot;:false,\&quot;sign_content_data\&quot;:{\&quot;payload\&quot;:\&quot;&quot;+payload+&quot;\&quot;,\&quot;signed_payload\&quot;:\&quot;&quot;+payloadSignature+&quot;\&quot;}}}}&quot;;
 
-transmit.preProcess(url, body, scheme);
+transmit.preProcess(path, body, scheme);
+//vars.put(&quot;body&quot;, transmit.getSessionVar(&quot;body&quot;));
+vars.put(&quot;body&quot;, body);
+vars.put(&quot;contentSignature&quot;, transmit.getSessionVar(&quot;contentSignature&quot;));
+vars.put(&quot;path&quot;, path);
 </stringProp>
           </BeanShellPreProcessor>
           <hashTree/>
@@ -761,6 +796,7 @@ addClassPath(absolutePath);
 importCommands(&quot;Transmit&quot;);
 transmit = Transmit();
 transmit.processResponse();
+
 </stringProp>
           </BeanShellPostProcessor>
           <hashTree/>
@@ -780,7 +816,7 @@ transmit.processResponse();
           <stringProp name="HTTPSampler.port">443</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/api/v2/auth/assert?aid=${appid}&amp;did=${deviceId}&amp;sid=${sessionId}</stringProp>
+          <stringProp name="HTTPSampler.path">${path}</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -802,11 +838,15 @@ addClassPath(absolutePath);
 importCommands(&quot;Transmit&quot;);
 transmit = Transmit();
 int scheme = 4;
-String userId = vars.get(&quot;userId&quot;);
-String assertionId = vars.get(&quot;assertionId&quot;);
-log.info(&quot;assertionId=&quot;+assertionId);
+
 String clientVersion = vars.get(&quot;X-TS-Client-Version-6.1.0&quot;);
-String challenge = vars.get(&quot;challenge&quot;);
+String userId = transmit.getUserName();
+String assertionId = transmit.getSessionVar(&quot;assertionId&quot;);
+String challenge = transmit.getSessionVar(&quot;challenge&quot;);
+String deviceId = transmit.getSessionVar(&quot;deviceId&quot;);
+String sessionId = transmit.getSessionVar(&quot;sessionId&quot;);
+
+
 String pinValue=&quot;111111&quot;;
 String body = &quot;---undefined1---&quot;;
 controlFlow = transmit.getControlFlow();
@@ -826,8 +866,12 @@ if (controlFlow.get(&quot;type&quot;).equals(&quot;authentication&quot;)) {
           }
 	}
 }
-url=&quot;/api/v2/auth/assert?aid=${appid}&amp;did=${deviceId}&amp;sid=${sessionId}&quot;;
-transmit.preProcess(url, body, scheme);
+path=&quot;/api/v2/auth/assert?aid=${appid}&amp;did=&quot;+deviceId+&quot;&amp;sid=&quot;+sessionId;
+transmit.preProcess(path, body, scheme);
+vars.put(&quot;body&quot;, transmit.getSessionVar(&quot;body&quot;));
+vars.put(&quot;contentSignature&quot;, transmit.getSessionVar(&quot;contentSignature&quot;));
+vars.put(&quot;path&quot;, path);
+
 
 </stringProp>
           </BeanShellPreProcessor>
@@ -903,7 +947,11 @@ absolutePath = FileServer.getFileServer().getBaseDir();
 addClassPath(absolutePath);
 importCommands(&quot;Transmit&quot;);
 transmit = Transmit();
-transmit.processResponse();</stringProp>
+transmit.processResponse();
+
+
+
+</stringProp>
           </BeanShellPostProcessor>
           <hashTree/>
         </hashTree>
@@ -922,7 +970,7 @@ transmit.processResponse();</stringProp>
           <stringProp name="HTTPSampler.port">443</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/api/v2/auth/assert?aid=${appid}&amp;did=${deviceId}&amp;sid=${sessionId}</stringProp>
+          <stringProp name="HTTPSampler.path">${path}</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -943,12 +991,16 @@ absolutePath = FileServer.getFileServer().getBaseDir();
 addClassPath(absolutePath);
 importCommands(&quot;Transmit&quot;);
 transmit = Transmit();
-int scheme = 4;
-String userId = vars.get(&quot;userId&quot;);
-String assertionId = vars.get(&quot;assertionId&quot;);
-log.info(&quot;assertionId=&quot;+assertionId);
 String clientVersion = vars.get(&quot;X-TS-Client-Version-6.1.0&quot;);
-String challenge = vars.get(&quot;challenge&quot;);
+int scheme = 4;
+
+String userId = transmit.getUserName();
+String assertionId = transmit.getSessionVar(&quot;assertionId&quot;);
+String challenge = transmit.getSessionVar(&quot;challenge&quot;);
+String deviceId = transmit.getSessionVar(&quot;deviceId&quot;);
+String sessionId = transmit.getSessionVar(&quot;sessionId&quot;);
+
+
 controlFlow = transmit.getControlFlow();
 String body = &quot;---undefined2---&quot;;
 if (controlFlow.get(&quot;type&quot;).equals(&quot;registration&quot;)) {
@@ -968,8 +1020,13 @@ if (controlFlow.get(&quot;type&quot;).equals(&quot;authentication&quot;)) {
           }
 	}
 }
-url=&quot;/api/v2/auth/assert?aid=${appid}&amp;did=${deviceId}&amp;sid=${sessionId}&quot;;
-transmit.preProcess(url, body, scheme);
+
+path=&quot;/api/v2/auth/assert?aid=${appid}&amp;did=&quot;+deviceId+&quot;&amp;sid=&quot;+sessionId;
+transmit.preProcess(path, body, scheme);
+vars.put(&quot;body&quot;, transmit.getSessionVar(&quot;body&quot;));
+vars.put(&quot;contentSignature&quot;, transmit.getSessionVar(&quot;contentSignature&quot;));
+vars.put(&quot;path&quot;, path);
+
 
 </stringProp>
           </BeanShellPreProcessor>
@@ -1045,7 +1102,11 @@ absolutePath = FileServer.getFileServer().getBaseDir();
 addClassPath(absolutePath);
 importCommands(&quot;Transmit&quot;);
 transmit = Transmit();
-transmit.processResponse();</stringProp>
+transmit.processResponse();
+
+
+
+</stringProp>
           </BeanShellPostProcessor>
           <hashTree/>
         </hashTree>
@@ -1064,7 +1125,7 @@ transmit.processResponse();</stringProp>
           <stringProp name="HTTPSampler.port">443</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/api/v2/auth/logout?aid=${appid}&amp;did=${deviceId}&amp;sid=${sessionId}</stringProp>
+          <stringProp name="HTTPSampler.path">${path}</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -1086,12 +1147,21 @@ addClassPath(absolutePath);
 importCommands(&quot;Transmit&quot;);
 transmit = Transmit();
 int scheme = 4;
-String userId = vars.get(&quot;userId&quot;);
+String userId = transmit.getUserName();
+String assertionId = transmit.getSessionVar(&quot;assertionId&quot;);
+String challenge = transmit.getSessionVar(&quot;challenge&quot;);
+String deviceId = transmit.getSessionVar(&quot;deviceId&quot;);
+String sessionId = transmit.getSessionVar(&quot;sessionId&quot;);
+
+
+
 String clientVersion = vars.get(&quot;X-TS-Client-Version-6.1.0&quot;);
 String body = &quot;{\&quot;headers\&quot;:[{\&quot;type\&quot;:\&quot;uid\&quot;,\&quot;uid\&quot;:\&quot;&quot;+userId+&quot;\&quot;}],\&quot;data\&quot;:{}}&quot;;
-url=&quot;/api/v2/auth/logout?aid=${appid}&amp;did=${deviceId}&amp;sid=${sessionId}&quot;;
-transmit.preProcess(url, body, scheme);
-
+path=&quot;/api/v2/auth/logout?aid=${appid}&amp;did=&quot;+deviceId+&quot;&amp;sid=&quot;+sessionId;
+transmit.preProcess(path, body, scheme);
+vars.put(&quot;body&quot;, transmit.getSessionVar(&quot;body&quot;));
+vars.put(&quot;contentSignature&quot;, transmit.getSessionVar(&quot;contentSignature&quot;));
+vars.put(&quot;path&quot;, path);
 </stringProp>
           </BeanShellPreProcessor>
           <hashTree/>
@@ -1166,7 +1236,11 @@ absolutePath = FileServer.getFileServer().getBaseDir();
 addClassPath(absolutePath);
 importCommands(&quot;Transmit&quot;);
 transmit = Transmit();
-transmit.processResponse();</stringProp>
+transmit.processResponse();
+
+
+
+</stringProp>
           </BeanShellPostProcessor>
           <hashTree/>
         </hashTree>
@@ -1208,15 +1282,19 @@ transmit = Transmit();
 transmit.generateTimeStamp();
 
 int scheme = 4;
-String userId = vars.get(&quot;userId&quot;);
-
+String userId = transmit.getUserName();
 String clientVersion = vars.get(&quot;X-TS-Client-Version-6.1.0&quot;);
+String deviceId = transmit.getSessionVar(&quot;deviceId&quot;);
+
 String body=&quot;{\&quot;headers\&quot;:[{\&quot;type\&quot;:\&quot;uid\&quot;,\&quot;uid\&quot;:\&quot;&quot;+userId+&quot;\&quot;}],\&quot;data\&quot;:{\&quot;collection_result\&quot;:{\&quot;metadata\&quot;:{\&quot;scheme_version\&quot;:2,\&quot;version\&quot;:\&quot;6.1.06531\&quot;,\&quot;timestamp\&quot;:&quot;+&quot;1626537490&quot;+&quot;},\&quot;content\&quot;:{\&quot;hw_authenticators\&quot;:{\&quot;fido\&quot;:[{\&quot;aaid\&quot;:\&quot;1206#0001\&quot;},{\&quot;aaid\&quot;:\&quot;1206#0002\&quot;},{\&quot;aaid\&quot;:\&quot;1206#0003\&quot;}],\&quot;device_biometrics\&quot;:{\&quot;supported\&quot;:false,\&quot;user_registered\&quot;:false},\&quot;fingerprint\&quot;:{\&quot;supported\&quot;:true,\&quot;user_registered\&quot;:true},\&quot;face_id\&quot;:{\&quot;supported\&quot;:false,\&quot;user_registered\&quot;:false}},\&quot;device_details\&quot;:{\&quot;logged_users\&quot;:1,\&quot;persistence_mode\&quot;:\&quot;false\&quot;,\&quot;hw_type\&quot;:\&quot;Phone\&quot;,\&quot;tampered\&quot;:true,\&quot;sim_operator\&quot;:\&quot;310260\&quot;,\&quot;roaming\&quot;:false,\&quot;master_key_generated\&quot;:1625247266100,\&quot;device_model\&quot;:\&quot;GoogleAOSP\&quot;,\&quot;last_reboot\&quot;:261332,\&quot;tz\&quot;:\&quot;AmericaNew_York\&quot;,\&quot;os_version\&quot;:\&quot;9\&quot;,\&quot;jailbroken\&quot;:false,\&quot;security_patch\&quot;:\&quot;20190805\&quot;,\&quot;sim_operator_name\&quot;:\&quot;TMobile\&quot;,\&quot;frontal_camera\&quot;:true,\&quot;device_name\&quot;:\&quot;a42fb947dc6e7621\&quot;,\&quot;known_networks\&quot;:[{\&quot;ssid\&quot;:\&quot;03639c4e63344bebfb9ca2ef1df05646\&quot;}],\&quot;has_hw_security\&quot;:false,\&quot;screen_lock\&quot;:true,\&quot;os_type\&quot;:\&quot;Android\&quot;,\&quot;sflags\&quot;:2147483647,\&quot;supported_abis\&quot;:[\&quot;x86\&quot;,\&quot;armeabiv7a\&quot;,\&quot;armeabi\&quot;],\&quot;boot_loader\&quot;:\&quot;unknown\&quot;,\&quot;base_os\&quot;:\&quot;\&quot;},\&quot;installed_packages\&quot;:[\&quot;c048a5dd4096addf0634f3e9d3c4cc5c\&quot;,\&quot;50cf77a99066ed0902cafa5f293a85a9\&quot;,\&quot;5c29ff6c35fce8d75062ad9d4bd24d3e\&quot;,\&quot;5ee6428585a420c1fee676a368fcec3c\&quot;,\&quot;b7c039c51c133a83a8096a098526d731\&quot;,\&quot;072f89bcb516dc438e1abd2849158ef0\&quot;,\&quot;d4cb521a8bffdf30c3ed325aa656de81\&quot;,\&quot;6c1171ad3c0979c7a84dbbf086922599\&quot;,\&quot;a0be66ff10fad8551d154afc065537fc\&quot;,\&quot;7ad20db616ba8b277fd77cd3ee0748f7\&quot;,\&quot;0489f76fd6ad1327a19ab002cee45a31\&quot;],\&quot;collector_state\&quot;:{\&quot;accounts\&quot;:\&quot;disabled\&quot;,\&quot;devicedetails\&quot;:\&quot;active\&quot;,\&quot;contacts\&quot;:\&quot;disabled\&quot;,\&quot;owner\&quot;:\&quot;active\&quot;,\&quot;software\&quot;:\&quot;active\&quot;,\&quot;location\&quot;:\&quot;active\&quot;,\&quot;locationcountry\&quot;:\&quot;active\&quot;,\&quot;bluetooth\&quot;:\&quot;disabled\&quot;,\&quot;externalsdkdetails\&quot;:\&quot;active\&quot;,\&quot;hwauthenticators\&quot;:\&quot;active\&quot;,\&quot;capabilities\&quot;:\&quot;active\&quot;,\&quot;fidoauthenticators\&quot;:\&quot;active\&quot;,\&quot;largedata\&quot;:\&quot;active\&quot;,\&quot;localenrollments\&quot;:\&quot;active\&quot;,\&quot;devicefingerprint\&quot;:\&quot;active\&quot;,\&quot;apppermissions\&quot;:\&quot;disabled\&quot;},\&quot;local_enrollments\&quot;:{\&quot;pin\&quot;:{\&quot;registration_status\&quot;:\&quot;registered\&quot;,\&quot;validation_status\&quot;:\&quot;validated\&quot;}}}},\&quot;push_token\&quot;:\&quot;dummy_token\&quot;,\&quot;policy_request_id\&quot;:\&quot;default_auth\&quot;,\&quot;params\&quot;:{}}}&quot;;
 
-
-String urlPath=&quot;/api/v2/auth/login?aid=${appid}&amp;did=${deviceId}&quot;;
+String appId = &quot;${appid}&quot;;
+String urlPath=&quot;/api/v2/auth/login?aid=&quot;+appId+&quot;&amp;did=&quot;+deviceId;
 vars.put(&quot;urlPath&quot;, urlPath);
 transmit.preProcess(urlPath, body, scheme);
+vars.put(&quot;body&quot;, transmit.getSessionVar(&quot;body&quot;));
+vars.put(&quot;contentSignature&quot;, transmit.getSessionVar(&quot;contentSignature&quot;));
+
 
 </stringProp>
           </BeanShellPreProcessor>
@@ -1256,6 +1334,9 @@ addClassPath(absolutePath);
 importCommands(&quot;Transmit&quot;);
 transmit = Transmit();
 transmit.processResponse();
+
+
+
 </stringProp>
           </BeanShellPostProcessor>
           <hashTree/>
@@ -1312,7 +1393,7 @@ transmit.processResponse();
           <stringProp name="HTTPSampler.port">443</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${urlPath}</stringProp>
+          <stringProp name="HTTPSampler.path">${path}</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -1335,15 +1416,24 @@ importCommands(&quot;Transmit&quot;);
 transmit = Transmit();
 
 int scheme = 4;
-String assertionId = vars.get(&quot;assertionId&quot;);
-String challenge = vars.get(&quot;challenge&quot;);
 String passwordValue=&quot;test&quot;;
 
+int scheme = 4;
+String userId = transmit.getUserName();
+String appData = transmit.getSessionVar(&quot;appData&quot;);
+String clientVersion = vars.get(&quot;X-TS-Client-Version-6.1.0&quot;);
+String assertionId = transmit.getSessionVar(&quot;assertionId&quot;);
+String challenge = transmit.getSessionVar(&quot;challenge&quot;);
+String deviceId = transmit.getSessionVar(&quot;deviceId&quot;);
+String sessionId = transmit.getSessionVar(&quot;sessionId&quot;);
 
-urlPath=&quot;/api/v2/auth/assert?aid=${appid}&amp;did=${deviceId}&amp;sid=${sessionId}&quot;;
+path=&quot;/api/v2/auth/assert?aid=${appid}&amp;did=&quot;+deviceId+&quot;&amp;sid=&quot;+sessionId;
 body = transmit.processPasswordAuthentication(passwordValue, challenge, assertionId);
-vars.put(&quot;urlPath&quot;,urlPath);
-transmit.preProcess(urlPath, body, scheme);
+
+transmit.preProcess(path, body, scheme);
+vars.put(&quot;body&quot;, transmit.getSessionVar(&quot;body&quot;));
+vars.put(&quot;contentSignature&quot;, transmit.getSessionVar(&quot;contentSignature&quot;));
+vars.put(&quot;path&quot;, path);
 
 
 </stringProp>
@@ -1373,6 +1463,22 @@ transmit.preProcess(urlPath, body, scheme);
               </elementProp>
             </collectionProp>
           </HeaderManager>
+          <hashTree/>
+          <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">import org.apache.jmeter.services.FileServer;
+absolutePath = FileServer.getFileServer().getBaseDir();
+addClassPath(absolutePath);
+importCommands(&quot;Transmit&quot;);
+transmit = Transmit();
+transmit.processResponse();
+
+
+
+</stringProp>
+          </BeanShellPostProcessor>
           <hashTree/>
           <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
@@ -1411,6 +1517,87 @@ transmit.preProcess(urlPath, body, scheme);
             <stringProp name="filename"></stringProp>
           </ResultCollector>
           <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Logout" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${body}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">443</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">${path}</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">true</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="script">import org.apache.jmeter.services.FileServer;
+absolutePath = FileServer.getFileServer().getBaseDir();
+addClassPath(absolutePath);
+importCommands(&quot;Transmit&quot;);
+transmit = Transmit();
+int scheme = 4;
+String userId = transmit.getUserName();
+String assertionId = transmit.getSessionVar(&quot;assertionId&quot;);
+String challenge = transmit.getSessionVar(&quot;challenge&quot;);
+String deviceId = transmit.getSessionVar(&quot;deviceId&quot;);
+String sessionId = transmit.getSessionVar(&quot;sessionId&quot;);
+
+
+
+String clientVersion = vars.get(&quot;X-TS-Client-Version-6.1.0&quot;);
+String body = &quot;{\&quot;headers\&quot;:[{\&quot;type\&quot;:\&quot;uid\&quot;,\&quot;uid\&quot;:\&quot;&quot;+userId+&quot;\&quot;}],\&quot;data\&quot;:{}}&quot;;
+path=&quot;/api/v2/auth/logout?aid=${appid}&amp;did=&quot;+deviceId+&quot;&amp;sid=&quot;+sessionId;
+transmit.preProcess(path, body, scheme);
+vars.put(&quot;body&quot;, transmit.getSessionVar(&quot;body&quot;));
+vars.put(&quot;contentSignature&quot;, transmit.getSessionVar(&quot;contentSignature&quot;));
+vars.put(&quot;path&quot;, path);
+</stringProp>
+          </BeanShellPreProcessor>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">x-ts-client-version</stringProp>
+                <stringProp name="Header.value">${X-TS-Client-Version-6.1.0}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">authorization</stringProp>
+                <stringProp name="Header.value">TSToken ${tokenValue}; tid=${tokenId}</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">jmetertest</stringProp>
+                <stringProp name="Header.value">true</stringProp>
+              </elementProp>
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Signature</stringProp>
+                <stringProp name="Header.value">${contentSignature}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
           <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
             <boolProp name="resetInterpreter">false</boolProp>
             <stringProp name="parameters"></stringProp>
@@ -1423,8 +1610,46 @@ transmit = Transmit();
 transmit.processResponse();
 
 
+
 </stringProp>
           </BeanShellPostProcessor>
+          <hashTree/>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <url>true</url>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
           <hashTree/>
         </hashTree>
       </hashTree>
@@ -1672,6 +1897,55 @@ transmit.processResponse();
           <hashTree/>
         </hashTree>
       </hashTree>
+      <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
+        <stringProp name="delimiter">,</stringProp>
+        <stringProp name="fileEncoding">US-ASCII</stringProp>
+        <stringProp name="filename">/Users/jp/git/loadtestingsdk/jmeter/user.csv</stringProp>
+        <boolProp name="ignoreFirstLine">false</boolProp>
+        <boolProp name="quotedData">false</boolProp>
+        <boolProp name="recycle">true</boolProp>
+        <stringProp name="shareMode">shareMode.all</stringProp>
+        <boolProp name="stopThread">false</boolProp>
+        <stringProp name="variableNames">userId</stringProp>
+      </CSVDataSet>
+      <hashTree/>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
     </hashTree>
   </hashTree>
 </jmeterTestPlan>

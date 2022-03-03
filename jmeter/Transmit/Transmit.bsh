@@ -1,4 +1,6 @@
 import java.io.UnsupportedEncodingException;
+import java.lang.StringBuilder;
+import java.util.concurrent.ThreadLocalRandom;
 import java.security.*;
 import java.security.spec.*;
 import java.util.Date;
@@ -17,19 +19,75 @@ Transmit() {
     PublicKey rsaPublicKey;
     PrivateKey rsaPrivateKey;
 
-    generateRsaKeyPair() {
-        generateRsaKeyPair("rsaPrivateKeyEncoded", "rsaPublicKeyEncoded");
+
+    setCurrentSession(String sessionName) {
+        return vars.put("currentSesion", sessionName);
     }
-    generateRsaKeyPair(String privateKeyName, String publicKeyName) {
-        if (privateKeyname == null || privateKeyName.equals("")){
-            log.error("privateKeyName cannot be empty");
-            return;
-        }
-        if (publicKeyName == null || publicKeyName.equals("")){
-            log.error("publicKeyName cannot be empty");
-            return;
-        }
-        log.info("generateRsaKeyPair()");
+    setCurrentSession(int sessionName) {
+        return setCurrentSession(""+sessionName);
+    }
+    getCurrentSession() {
+        return vars.get("currentSesion");
+    }
+
+
+    getUserName() {
+        String sessionName = getCurrentSession();
+        return vars.get(sessionName);
+    }
+    putUserName(String userName) {
+        String sessionName = getCurrentSession();
+        return vars.put(sessionName, userName);
+    }
+    setCurrentSession(int sessionName, String userName) {
+        setCurrentSession(sessionName);
+        putUserName(userName);
+    }
+    setCurrentSession(String sessionName, String userName) {
+        setCurrentSession(sessionName);
+        putUserName(userName);
+    }
+
+
+    getSessionVar(String keyName) {
+        String sessionName = getCurrentSession();
+        String varKeyName = sessionName + keyName;
+        return vars.get(varKeyName);
+    }
+    putSessionVar(String keyName, String value) {
+        String sessionName = getCurrentSession();
+        String varKeyName = sessionName + keyName;
+        return vars.put(varKeyName, value);
+    }
+
+
+    getEcPublicKey() {
+        return getSessionVar("ecPublicKeyEncoded");
+    }
+    getEcPrivateKey() {
+        return getSessionVar("ecPrivateKeyEncoded");
+    }
+
+
+
+    getRsaPublicKey() {
+        return getSessionVar("rsaPublicKeyEncoded");
+    }
+    getRsaPrivateKey() {
+        return getSessionVar("rsaPrivateKeyEncoded");
+    }
+
+
+    getControlFlow() {
+        String jsonString = getSessionVar("controlFlow");
+        //log.info("responseData="+jsonString);
+        JSONObject jsonObj = (JSONObject) jsonParser.parse(jsonString);
+        return jsonObj;
+    }
+
+
+    generateRsaKeyPair() {
+        //log.info("generateRsaKeyPair()");
         KeyPairGenerator grsa = KeyPairGenerator.getInstance("RSA");
         grsa.initialize(1024);
         KeyPair keypair = grsa.generateKeyPair();
@@ -37,33 +95,20 @@ Transmit() {
         PrivateKey privateKey = keypair.getPrivate(); 
         String publicKeyEncoded = Base64.getEncoder().encodeToString(publicKey.getEncoded());
         String privateKeyEncoded = Base64.getEncoder().encodeToString(privateKey.getEncoded());
-        log.info("======");
-        log.info(publicKeyNAme + " = " + publicKeyEncoded);
-        log.info(privateKeyName + " = " + privateKeyEncoded);
-        log.info("====");
-        vars.put(publicKeyName, publicKeyEncoded);
-        vars.put(privateKeyName, privateKeyEncoded);
+        //log.info("rsaPublicKeyEncoded" + " = " + publicKeyEncoded);
+        //log.info("rsaPrivateKeyEncoded" + " = " + privateKeyEncoded);
+        //log.info("======");
+        putSessionVar("rsaPublicKeyEncoded", publicKeyEncoded);
+        putSessionVar("rsaPrivateKeyEncoded", privateKeyEncoded);
     }
 
     generateTimeStamp() {
         String timestamp = "" + new Date().getTime();
-        log.info("timestamp="+timestamp);
+        //log.info("timestamp="+timestamp);
         vars.put("timestamp", timestamp);
     }
 
     generateEcKeyPair() {
-        generateEcKeyPair("ecPrivateKeyEncoded", "ecPublicKeyEncoded");
-    }
-
-    generateEcKeyPair(String privateKeyName, String publicKeyName) {
-        if (privateKeyname == null || privateKeyName.equals("")){
-            log.error("privateKeyName cannot be empty");
-            return;
-        }
-        if (publicKeyName == null || publicKeyName.equals("")){
-            log.error("publicKeyName cannot be empty");
-            return;
-        }
         ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256k1");
         KeyPairGenerator gec = KeyPairGenerator.getInstance("EC");
         gec.initialize(ecSpec, new SecureRandom());
@@ -73,13 +118,12 @@ Transmit() {
 
         String publicKeyEncoded = Base64.getEncoder().encodeToString(publicKey.getEncoded());
         String privateKeyEncoded = Base64.getEncoder().encodeToString(privateKey.getEncoded());
-        log.info("======");
-        log.info(publicKeyName + " = " + publicKeyEncoded);
-        log.info(publicKeyName + " = " + privateKeyEncoded);
-        log.info("====");
+        //log.info("ecPublicKeyEncoded =" + publicKeyEncoded);
+        //log.info("ecPrivateKeyEncoded =" + " = " + privateKeyEncoded);
+        //log.info("======");
 
-        vars.put(publicKeyName, publicKeyEncoded);
-        vars.put(privateKeyName, privateKeyEncoded);
+        putSessionVar("ecPublicKeyEncoded", publicKeyEncoded);
+        putSessionVar("ecPrivateKeyEncoded", privateKeyEncoded);
     }
 
     printJmeterVars() {
@@ -106,18 +150,18 @@ Transmit() {
 
 
     processResponse() {
-        log.info("data="+data.toString());
+        //log.info("data="+data.toString());
 
         String jsonString = prev.getResponseDataAsString();
-        log.info("responseData="+jsonString);
+        //log.info("responseData="+jsonString);
         JSONObject jsonObj = (JSONObject) jsonParser.parse(jsonString);
 
         int errorCode = jsonObj.get("error_code");
-        vars.put("errorCode", errorCode.toString());
+        putSessionVar("errorCode", errorCode.toString());
         log.info("errorCode="+ errorCode);
 
         String errorMessage = jsonObj.get("error_message");
-        vars.put("errorMessage", errorMessage);
+        putSessionVar("errorMessage", errorMessage);
         log.info("errorMessage="+ errorMessage);
 
         JSONObject jsonObjData = jsonObj.get("data");
@@ -127,68 +171,60 @@ Transmit() {
 
         String state = jsonObjData.get("state");
         if (state != null) {
-            vars.put("state", state);
-            log.info("state = " + state);
+            putSessionVar("state", state);
+            //log.info("state = " + state);
 
             if (state.equals("completed")) {
                 String token = jsonObjData.get("token");
-                vars.put("token", token);
-                log.info("token = " + token);
+                putSessionVar("token", token);
+                //log.info("token = " + token);
             } else {
                 String challenge = jsonObj.get("data").get("challenge");
                 if (challenge != null && !challenge.trim().equals("")) {
-                    vars.put("challenge", challenge);
+                    putSessionVar("challenge", challenge);
                 }
-                challenge = vars.get("challenge");
-                log.info("challenge="+ challenge);
+                challenge = getSessionVar("challenge");
+                //log.info("challenge="+ challenge);
 
                 JSONArray controlFlow = jsonObj.get("data").get("control_flow");
-                vars.put("controlFlow", controlFlow.get(0).toString());
+                putSessionVar("controlFlow", controlFlow.get(0).toString());
                 String assertionId = controlFlow.get(0).get("assertion_id");
                 if (assertionId != null && !assertionId.trim().equals("")) {
-                    vars.put("assertionId", assertionId);
+                    putSessionVar("assertionId", assertionId);
                 }
-                log.info("assertionId="+assertionId);
+                //log.info("assertionId="+assertionId);
 
                 JSONObject appData = controlFlow.get(0).get("app_data");
                 if (appData != null) {
-                    vars.put("appData", appData.toString());
+                    putSessionVar("appData", appData.toString());
                 } else {
-                    vars.put("appData", "");
+                    putSessionVar("appData", "");
                 }
-                log.info("appData = " + appData);
+                //log.info("appData = " + appData);
 
                 JSONArray methods = controlFlow.get(0).get("methods");
-                log.info("methods="+methods);
+                //log.info("methods="+methods);
                 if (methods != null) {
-                    vars.put("methods", methods.toString());
+                    putSessionVar("methods", methods.toString());
                     String assertionId = methods.get(0).get("assertion_id");
                     if (assertionId != null && !assertionId.trim().equals("")) {
-                        vars.put("assertionId", assertionId);
+                        putSessionVar("assertionId", assertionId);
                     }
                 } else {
-                    vars.put("methods", "");
+                    putSessionVar("methods", "");
                 }
-                assertionId = vars.get("assertionId");
-                log.info("assertionId="+assertionId);
+                assertionId = getSessionVar("assertionId");
+                //log.info("assertionId="+assertionId);
 
 
                 JSONArray headers = jsonObj.get("headers");
                 processTransmitJsonHeaders(headers);
 
-                log.info("deviceId="+vars.get("deviceId"));
-                log.info("sessionId="+vars.get("sessionId"));
+                log.info("deviceId=" + getSessionVar("deviceId"));
+                //log.info("sessionId=" + getSessionVar("sessionId"));
             }
         }
     }
-
-    getControlFlow() {
-        String jsonString = vars.get("controlFlow");
-        log.info("responseData="+jsonString);
-        JSONObject jsonObj = (JSONObject) jsonParser.parse(jsonString);
-        return jsonObj;
-    }
-
     processTransmitJsonHeaders(JSONArray headers) {
         for (int index=0; index<headers.size(); index++) {
             JSONObject header = headers.get(index);
@@ -197,11 +233,11 @@ Transmit() {
 
             if (headerType.equalsIgnoreCase("device_id")) {
                 String deviceId = header.get("device_id");
-                vars.put("deviceId", deviceId);
+                putSessionVar("deviceId", deviceId);
             }
             if (headerType.equalsIgnoreCase("session_id")) {
                 String sessionId = headers.get(index).get("session_id");
-                vars.put("sessionId", sessionId);
+                putSessionVar("sessionId", sessionId);
             }
         }
     }
@@ -212,14 +248,15 @@ Transmit() {
     }
 
     loadEcKeysFromEnv() {
-        String ecPrivateKeyEncoded=vars.get("ecPrivateKeyEncoded");
+        String ecPrivateKeyEncoded = getEcPrivateKey();
         byte[] ecPrivatedata = Base64.getDecoder().decode((ecPrivateKeyEncoded.getBytes()));
         PKCS8EncodedKeySpec ecPrivateSpec = new PKCS8EncodedKeySpec(ecPrivatedata);
         ecPrivateKey = ecFactory.generatePrivate(ecPrivateSpec); 
         //String ecPrivateKeyEncoded = Base64.getEncoder().encodeToString(ecPrivateKey.getEncoded());
         //log.info("ecPrivateKeyEncoded = "+ecPrivateKeyEncoded);
 
-        String ecPublicKeyEncoded=vars.get("ecPublicKeyEncoded");
+
+        String ecPublicKeyEncoded = getEcPublicKey();
         byte[] ecPublicdata = Base64.getDecoder().decode((ecPublicKeyEncoded.getBytes()));
         X509EncodedKeySpec ecPublicSpec = new X509EncodedKeySpec(ecPublicdata);
         ecPublicKey = ecFactory.generatePublic(ecPublicSpec); 
@@ -228,20 +265,19 @@ Transmit() {
     }
 
     loadRsaKeysFromEnv() {
-        String privateKeyEncoded=vars.get("rsaPrivateKeyEncoded");
+        String privateKeyEncoded = getRsaPrivateKey();
         byte[] privatedata = Base64.getDecoder().decode((privateKeyEncoded.getBytes()));
         PKCS8EncodedKeySpec privateSpec = new PKCS8EncodedKeySpec(privatedata);
         rsaPrivateKey = rsaFactory.generatePrivate(privateSpec); 
         //String privateKeyEncoded = Base64.getEncoder().encodeToString(rsaPrivateKey.getEncoded());
         //log.info("privateKeyEncoded = "+privateKeyEncoded);
 
-        String publicKeyEncoded=vars.get("rsaPublicKeyEncoded");
+        String publicKeyEncoded = getRsaPublicKey();
         byte[] publicdata = Base64.getDecoder().decode((publicKeyEncoded.getBytes()));
         X509EncodedKeySpec publicSpec = new X509EncodedKeySpec(publicdata);
         rsaPublicKey = rsaFactory.generatePublic(publicSpec); 
         //String pubicKeyEncoded = Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded());
         //log.info("publicKeyEncoded = "+pubicKeyEncoded);
-
     }
 
     sha256(byte[] data) {
@@ -250,7 +286,7 @@ Transmit() {
     }
 
     getContentSignatureRsa(String plaintext, int scheme) {
-        String publicKeyEncoded=vars.get("rsaPublicKeyEncoded");
+        String publicKeyEncoded = getRsaPublicKey();
         byte[] publicdata = Base64.getDecoder().decode((publicKeyEncoded.getBytes()));
         byte[] keyIdBytes = sha256(publicdata);
         String publicKeyHash = toHexString(keyIdBytes, "%02x", "");
@@ -258,7 +294,7 @@ Transmit() {
         String sig = signRsa(plaintext);
         String contentSignature = "data:" + sig + ";key-id:" + publicKeyHash + ";scheme:"+ scheme;
         if (scheme != 4) {
-            String deviceId = vars.get("deviceId");
+            String deviceId = getSessionVar("deviceId");
             contentSignature = "data:" + sig + ";key-id:" + deviceId + ";scheme:"+ scheme;	
         }
         return contentSignature;
@@ -266,7 +302,7 @@ Transmit() {
 
     signEc(String plaintext){
         loadKeysFromEnv();
-        ecSign.initSign(ecProvateKey);
+        ecSign.initSign(ecPrivateKey);
         ecSign.update(plaintext.getBytes("UTF-8"));
         byte[] signature = rsaSign.sign();
         return toBase64(signature);
@@ -277,8 +313,8 @@ Transmit() {
         return signRsa(plaintext, rsaPrivateKey);
     }
 
-    signRsa(String plaintext, String privateKeyName){
-        String privateKeyEncoded=vars.get(privateKeyName);
+    signRsa(String sessionName, String plaintext){
+        String privateKeyEncoded = getRsaPrivateKey();
         byte[] privatedata = Base64.getDecoder().decode((privateKeyEncoded.getBytes()));
         PKCS8EncodedKeySpec privateSpec = new PKCS8EncodedKeySpec(privatedata);
         privateKey = rsaFactory.generatePrivate(privateSpec); 
@@ -309,31 +345,25 @@ Transmit() {
 
     preProcess(String url, String  body, int scheme) {
         String clientVersion = vars.get("X-TS-Client-Version-6.1.0");
-        //String deviceId=vars.get("deviceId");
-        //String sessionId=vars.get("sessionId");
-        //String appId=vars.get("appId");
-        //String url="/api/v2/auth/assert?aid="+appid+"&did="+deviceId+"&sid="+sessionId;
-        vars.put("body",body);
+        putSessionVar("body",body);
         String plaintext = url + body;
         if (scheme == 2 || scheme == 3 || scheme == 4) {
             plaintext=url+"%%"+clientVersion+"%%" + body;
         }
 
-        log.info("plaintext="+plaintext);
+        //log.info("plaintext="+plaintext);
         //log.info(toHexString(plaintext.getBytes("UTF-8"), "%d", ", "));
 
         String contentSignature = getContentSignatureRsa(plaintext, scheme);
-        vars.put("contentSignature",contentSignature);
-        log.info("contentSignature ="+contentSignature);
+        putSessionVar("contentSignature",contentSignature);
+        //log.info("contentSignature ="+contentSignature);
     }
 
-    processPinRegistration(challenge, assertionId) {
-        String userId = vars.get("userId");
+    processPinRegistration(String challenge, String assertionId) {
+        String userId = getUserName();
         String localAuthenticationChallenge = challenge + assertionId;
-        //skip generating a new keypair. Use the one one from bind
-        //generateRsaKeyPair("pinPrivateKey", "pinPublicKey");
         fch = transmit.signRsa(localAuthenticationChallenge);
-        String publicKeyEncoded=vars.get("rsaPublicKeyEncoded");
+        String publicKeyEncoded = getRsaPublicKey();
         body = "{\"headers\":[{\"type\":\"uid\",\"uid\":\""+userId+
                "\"}],\"data\":{\"action\":\"registration\",\"assert\":\"register\",\"assertion_id\":\""+assertionId+
                "\",\"fch\":\""+fch+"\",\"method\":\"pin\",\"public_key\":{\"key\":\""+publicKeyEncoded+
@@ -342,10 +372,11 @@ Transmit() {
     }
 
     processPinAuthentication(challenge, assertionId) {
-        String userId = vars.get("userId");
+        String userId = getUserName();
         String localAuthenticationChallenge = challenge + assertionId;
         fch = signRsa(localAuthenticationChallenge);
-        String publicKeyEncoded = vars.get("rsaPublicKeyEncoded");
+
+        String publicKeyEncoded = getRsaPublicKey();
         body = "{\"headers\":[{\"type\":\"uid\",\"uid\":\""+userId+
                "\"}],\"data\":{\"action\":\"authentication\",\"assert\":\"authenticate\",\"assertion_id\":\""+assertionId+
           	   "\",\"fch\":\""+fch+"\",\"method\":\"pin\",\"data\":{}}}";
@@ -354,12 +385,47 @@ Transmit() {
 
 
     processPasswordAuthentication(passwordValue, challenge, assertionId) {
-        String userId = vars.get("userId");
+        //log.info("processPasswordAuthentication(challenge="+challenge+", assertionId=" + assertionId+")");
+        String userId = getUserName();
         body = "{\"headers\":[{\"type\":\"uid\",\"uid\":\""+userId+
                "\"}],\"data\":{\"action\":\"authentication\",\"assert\":\"authenticate\",\"assertion_id\":\""+assertionId+
                "\",\"fch\":\""+challenge+"\",\"data\":{\"password\":\""+passwordValue+
                "\"},\"method\":\"password\"}}";
         return body;
+    }
+
+
+
+    //Utility functions
+
+    String DATA = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+    String HEXDATA = "ABCDEF1234567890";
+    RANDOM = new Random();
+    getRandomString(int len) {
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++) {
+            sb.append(DATA.charAt(RANDOM.nextInt(DATA.length())));
+        }
+        return sb.toString();
+
+    }
+
+    getRandomHexString(int length) {
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            sb.append(HEXDATA.charAt(RANDOM.nextInt(HEXDATA.length())));
+        }
+        return sb.toString();
+    }
+
+
+    getRandomLong() {
+        return RANDOM.nextLong();
+    }
+
+
+    getRandomInt() {
+        return RANDOM.nextInt();
     }
 
     return this;
