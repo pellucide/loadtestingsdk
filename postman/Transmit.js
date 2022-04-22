@@ -1,4 +1,4 @@
-var jsEncrypt = `
+var jsEncryptStr=`
 var navigator = { "appName":"postman", "userAgent":"transmit" }
 var self = {};
 var JSEncryptExports = {};
@@ -1358,6 +1358,7 @@ function byte2Hex(b) {
 
 // PKCS#1 (type 2, random) pad input string s to n bytes, and return a bigint
 function pkcs1pad2(s,n) {
+    console.log("pkcs1pad2(s=" +s + ", s.length=" + s.length + ", n="  + n + ")");
   if(n < s.length + 11) { // TODO: fix for utf-8
     if (!(typeof console == "undefined")) {
       console.error("Message too long for RSA");
@@ -1426,7 +1427,9 @@ function RSADoPublic(x) {
 
 // Return the PKCS#1 RSA encryption of "text" as an even-length hex string
 function RSAEncrypt(text) {
+    console.log("RSAEncrypt");
   var m = pkcs1pad2(text,(this.n.bitLength()+7)>>3);
+  console.log("m="+m);
   if(m == null) return null;
   var c = this.doPublic(m);
   if(c == null) return null;
@@ -4388,7 +4391,6 @@ RSAKey.prototype.parseKey = function (pem) {
     var reHex = /^\\s*(?:[0-9A-Fa-f][0-9A-Fa-f]\\s*)+$/;
     var der = reHex.test(pem) ? Hex.decode(pem) : self.Base64.unarmor(pem);
     var asn1 = self.ASN1.decode(der);
-    console.log("asn1="+asn1);
     if (asn1.sub.length === 9) {
 
       // Parse the private key.
@@ -4663,7 +4665,6 @@ var JSEncryptRSAKey = function (key) {
   if (key) {
     // If this is a string...
     if (typeof key === 'string') {
-        console.log("parsing key");
       this.parseKey(key);
     }
     else if (
@@ -4861,7 +4862,6 @@ JSEncrypt.prototype.encrypt = function (string) {
 JSEncrypt.prototype.getKey = function (cb) {
   // Only create new if it does not exist.
   if (!this.key) {
-      console.log("Generating a new key");
     // Get a new private key.
     this.key = new JSEncryptRSAKey();
     if (cb && {}.toString.call(cb) === '[object Function]') {
@@ -4936,9 +4936,10 @@ exports.JSEncrypt = JSEncrypt;
 var JSEncrypt = JSEncryptExports.JSEncrypt;
 `;
 
-var globals =  new Map();
-eval(jsEncrypt);
-jsEnc = new JSEncrypt();
+var globals = new Map();
+eval(jsEncryptStr);
+console.log("-------");
+jsEnc =  new JSEncrypt();
 key = jsEnc.getKey(); // getKey generates a new key if not already generated.
 //console.log(key);
 privatekey = jsEnc.getPrivateKeyB64();
@@ -4948,20 +4949,23 @@ console.log(`publickey = ${publickey}`);
 globals.set("public_key_noheader", publickey);
 globals.set("private_key", privatekey);
 
-var encrypted = jsEnc.encrypt("asdf");
-console.log(`encrypt("asdf") = ${encrypted}`);
+var plaintext = "0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789";
+var encrypted = jsEnc.encrypt(plaintext);
+console.log("encrypt("  + plaintext + ") = " + encrypted);
 var decrypted = jsEnc.decrypt(encrypted);
-console.log(`decrypt(${encrypted}) = ${decrypted}`);
+console.log("decrypt("  + encrypted +  ") = "  + decrypted);
 
-var encrypted = jsEnc.encrypt("asdf");
-console.log(`encrypt("asdf") = ${encrypted}`);
+console.log(`privatekey = ${privatekey}`);
+console.log(`publickey = ${publickey}`);
+var encrypted1 = jsEnc.encrypt(plaintext);
+console.log("encrypt1("  + plaintext + ") = "  + encrypted1);
 var decrypted = jsEnc.decrypt(encrypted);
 console.log(`decrypt(${encrypted}) = ${decrypted}`);
 
 jsEnc.setPrivateKey(privatekey); 
-var encrypted1 = jsEnc.encrypt("asdf");
-console.log(`encrypt1("asdf") = ${encrypted1}`);
-if (encrypted === encrypted1) {
+var encrypted2 = jsEnc.encrypt(plaintext);
+console.log("encrypt2("  + plaintext + ") = "  + encrypted2);
+if (encrypted === encrypted2) {
    console.log("setPrivateKey test ok");
 } else {
    console.log("setPrivateKey test failed !!");
