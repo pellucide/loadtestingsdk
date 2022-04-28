@@ -1,0 +1,347 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///providers/bb86de68-8acb-4d54-85a5-ca64d6b0cedd",
+            "data": {
+                "provider_type": "form-authscript",
+                "name": "alwaysOkForm",
+                "provider_id": "bb86de68-8acb-4d54-85a5-ca64d6b0cedd",
+                "config": {
+                    "classifiers": {
+                        "values": [
+                            {
+                                "expr": {
+                                    "type": "expression",
+                                    "value": "true"
+                                },
+                                "value": "done"
+                            }
+                        ],
+                        "fallback": "done"
+                    },
+                    "type": "form-authscript",
+                    "output_data": {
+                        "type": "expression",
+                        "value": "application_input"
+                    }
+                },
+                "enabled": true
+            },
+            "category": "provider",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.2",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        },
+        {
+            "path": "tsasm:///providers/local-user-provider",
+            "data": {
+                "provider_type": "user-local",
+                "name": "Test Users",
+                "provider_id": "local-user-provider",
+                "enabled": true
+            },
+            "category": "provider",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.2",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        },
+        {
+            "path": "tsasm:///applications/mobile/policies/default_bind/versions/bind_for_jmeter",
+            "data": {
+                "schema_version": 2,
+                "filter_criteria": {
+                    "type": "expression",
+                    "value": {
+                        "type": "expression",
+                        "value": "@contains(@policy.request().headers[\"jmetertest\"], \"true\")"
+                    }
+                },
+                "workflow": {
+                    "debug_id": "dfdea23e-b0be-4931-b8fe-0ebbb30b5b8e",
+                    "escapes": {
+                        "escapes": []
+                    },
+                    "strings": [],
+                    "action": {
+                        "variables": [
+                            {
+                                "name": "interstitial_title_text",
+                                "value": {
+                                    "type": "expression",
+                                    "value": "\"jmeter_title_text\""
+                                }
+                            },
+                            {
+                                "name": "interstitial_description_text",
+                                "value": {
+                                    "type": "expression",
+                                    "value": "\"jmeter_description_text\""
+                                }
+                            },
+                            {
+                                "name": "interstitial_button_text",
+                                "value": {
+                                    "type": "expression",
+                                    "value": "\"jmeter_button_text\""
+                                }
+                            }
+                        ],
+                        "metadata": {
+                            "type": "set_variables"
+                        },
+                        "type": "set_variables"
+                    },
+                    "type": "action",
+                    "child": {
+                        "debug_id": "06e2fe54-4cc0-42d5-860a-83f9f6316adb",
+                        "escapes": {
+                            "escapes": []
+                        },
+                        "strings": [],
+                        "action": {
+                            "metadata": {
+                                "type": "form"
+                            },
+                            "form_id": "jmeter_form",
+                            "provider_data": {
+                                "type": "expression",
+                                "value": "{}"
+                            },
+                            "app_data": {
+                                "type": "expression",
+                                "value": "{\n\"title\": \"interstitial_title_text\",\n\"descriptions\": \"interstitial_title_text\",\n\"button\": \"interstitial_title_text\",\n\"icon\": \"PADLOCK_BLUE\"\n}"
+                            },
+                            "type": "form",
+                            "form_provider": "bb86de68-8acb-4d54-85a5-ca64d6b0cedd"
+                        },
+                        "type": "action",
+                        "child": {
+                            "debug_id": "1f272be1-cdac-4154-879e-97d45a538f05",
+                            "escapes": {
+                                "escapes": []
+                            },
+                            "strings": [],
+                            "action": {
+                                "metadata": {
+                                    "type": "primary_authentication_menu"
+                                },
+                                "methods": [
+                                    {
+                                        "method": {
+                                            "type": "password"
+                                        }
+                                    }
+                                ],
+                                "options": {
+                                    "start_in_menu": true,
+                                    "update_default": true,
+                                    "start_with": "menu"
+                                },
+                                "strategy": {
+                                    "type": "primary"
+                                },
+                                "type": "authentication"
+                            },
+                            "type": "action",
+                            "child": {
+                                "debug_id": "01eb8fc8-c6af-426f-a37a-466b3a8f46fc",
+                                "escapes": {
+                                    "escapes": []
+                                },
+                                "strings": [],
+                                "action": {
+                                    "cancel_button_text": {
+                                        "type": "expression",
+                                        "value": "`Reject`"
+                                    },
+                                    "metadata": {
+                                        "type": "confirmation"
+                                    },
+                                    "continue_button_text": {
+                                        "type": "expression",
+                                        "value": "`I accept`"
+                                    },
+                                    "text": {
+                                        "type": "expression",
+                                        "value": "`TERMS`"
+                                    },
+                                    "title": {
+                                        "type": "expression",
+                                        "value": "`TERMS`"
+                                    },
+                                    "strategy": {
+                                        "type": "reject"
+                                    },
+                                    "type": "confirmation",
+                                    "parameters": []
+                                },
+                                "type": "action",
+                                "child": {
+                                    "debug_id": "5868eb45-28b7-432d-aeac-eb9c3f503aa2",
+                                    "escapes": {
+                                        "escapes": []
+                                    },
+                                    "strings": [],
+                                    "action": {
+                                        "metadata": {
+                                            "type": "registration"
+                                        },
+                                        "methods": [
+                                            {
+                                                "method": "pin"
+                                            }
+                                        ],
+                                        "type": "registration"
+                                    },
+                                    "type": "action",
+                                    "child": {
+                                        "debug_id": "e827ee2a-ef36-4056-9131-eca05860c19e",
+                                        "escapes": {
+                                            "escapes": []
+                                        },
+                                        "strings": [],
+                                        "action": {
+                                            "metadata": {
+                                                "type": "primary_authentication_menu"
+                                            },
+                                            "methods": [
+                                                {
+                                                    "method": {
+                                                        "type": "pin"
+                                                    }
+                                                }
+                                            ],
+                                            "options": {
+                                                "start_in_menu": true,
+                                                "update_default": true,
+                                                "start_with": "menu"
+                                            },
+                                            "strategy": {
+                                                "type": "primary"
+                                            },
+                                            "type": "authentication"
+                                        },
+                                        "type": "action",
+                                        "child": {
+                                            "debug_id": "f2269ffc-5989-401f-b0be-1a60d3192b5a",
+                                            "escapes": {
+                                                "escapes": []
+                                            },
+                                            "strings": [],
+                                            "action": {
+                                                "metadata": {
+                                                    "type": "auth_pass"
+                                                },
+                                                "type": "auth_pass"
+                                            },
+                                            "type": "action"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "version_id": "bind_for_jmeter",
+                "state": "version",
+                "desc": "bind for jmeter to demo Content-Signature"
+            },
+            "category": "policy_version",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.2",
+                    "type": "server_version"
+                },
+                {
+                    "application_type": "mobile",
+                    "type": "application_type"
+                },
+                {
+                    "policy_type": "bind",
+                    "type": "policy_type"
+                }
+            ],
+            "dependencies": []
+        },
+        {
+            "path": "tsasm:///applications/mobile/authenticators/pin",
+            "data": {
+                "method": "pin",
+                "level": 3,
+                "provider_config": {
+                    "method": "pin",
+                    "config_id": "mobile",
+                    "length": 6,
+                    "key": "******"
+                },
+                "category": "7776",
+                "enabled": true
+            },
+            "category": "authconfig",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.2",
+                    "type": "server_version"
+                },
+                {
+                    "application_type": "mobile",
+                    "type": "application_type"
+                }
+            ],
+            "dependencies": []
+        },
+        {
+            "path": "tsasm:///applications/mobile/authenticators/password",
+            "data": {
+                "method": "password",
+                "level": 1,
+                "provider_config_id": "8d8894be-43b3-464f-bbe0-4111c2bad8e5",
+                "category": "7776",
+                "enabled": true
+            },
+            "category": "authconfig",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.2",
+                    "type": "server_version"
+                },
+                {
+                    "application_type": "mobile",
+                    "type": "application_type"
+                }
+            ],
+            "dependencies": []
+        },
+        {
+            "path": "tsasm:///authproviders/8d8894be-43b3-464f-bbe0-4111c2bad8e5",
+            "data": {
+                "user_provider_id": "local-user-provider",
+                "method": "password",
+                "config_id": "8d8894be-43b3-464f-bbe0-4111c2bad8e5",
+                "name": "Password"
+            },
+            "category": "authprovider",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.2",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}
