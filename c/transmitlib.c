@@ -1,7 +1,3 @@
-#define OPENSSL_NO_DEPRECATED_0_9_8    1
-#define OPENSSL_NO_DEPRECATED_3_0   1
-#define OPENSSL_NO_DEPRECATED_1_1_0 1
-
 #include <sodium.h>
 #include <openssl/conf.h>
 #include <openssl/evp.h>
@@ -16,6 +12,7 @@
 #include <openssl/pem.h>
 #include <time.h>
 #include <openssl/pem.h>
+#include "cJSON.h"
 
 
 #define RSA_KEYGEN_FAILED  -1
@@ -46,7 +43,7 @@ int openssl_test_init() {
     /* Load all digest and cipher algorithms */
     OpenSSL_add_all_algorithms();
 
-        OpenSSL_add_all_digests();
+    OpenSSL_add_all_digests();
 
     /* Load config file, and other important initialisation */
     //OPENSSL_config(NULL);
@@ -527,8 +524,9 @@ int transmit_init(char *pem_str)
 
     /* introduce a bug
     sig[0] = 0;
-    */
 
+    char * jsonString = "{\"a\": 0}";
+    cJSON *json = cJSON_Parse(jsonString);
 
     /* seed random number */
     srand(time(NULL));
@@ -539,7 +537,7 @@ int transmit_init(char *pem_str)
     }
    
     openssl_test_init();
-    rc = genRsaKeyPair(2048, &rsa, 0);
+    rc = genRsaKeyPair(1024, &rsa, 0);
     if (rc != 0) 
         return rc;
 
@@ -619,23 +617,9 @@ void base64_decode(char* inbuf, int inlen, char* outbuf, int outlen) {
     BIO_free_all(b64);
 }
 
-void base64_encode(char* inbuf, int inlen, char*outbuf, int *outlen) {
-    BUF_MEM *mem_bio_mem_ptr;    //Pointer to a "memory BIO" structure holding our base64 data.
-    BIO *b64 = BIO_new(BIO_f_base64());
-    BIO *bio_out = BIO_new_mem_buf((void*) outbuf, *outlen);
-
-    BIO_push(b64, bio_out);
-    BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);  //No newlines every 64 characters or less.
-    BIO_write(b64, inbuf, inlen);
-    BIO_flush(b64);
-    BIO_get_mem_ptr(bio_out, &mem_bio_mem_ptr);  //Store address of mem_bio's memory structure.
-    *outlen = mem_bio_mem_ptr->length;
-    BIO_free_all(b64);
-}
-
 /* A BASE-64 ENCODER AND DECODER USING OPENSSL */
 /*https://stackoverflow.com/a/16511093 */
-char *base64encode (const void *b64_encode_this, int encode_this_many_bytes){
+void base64encode (const void *b64_encode_this, int encode_this_many_bytes, char *outbuf, int *outlen){
     BIO *b64_bio, *mem_bio;      //Declares two OpenSSL BIOs: a base64 filter and a memory BIO.
     BUF_MEM *mem_bio_mem_ptr;    //Pointer to a "memory BIO" structure holding our base64 data.
     b64_bio = BIO_new(BIO_f_base64());                      //Initialize our base64 filter BIO.
@@ -645,17 +629,18 @@ char *base64encode (const void *b64_encode_this, int encode_this_many_bytes){
     BIO_write(b64_bio, b64_encode_this, encode_this_many_bytes); //Records base64 encoded data.
     BIO_flush(b64_bio);   //Flush data.  Necessary for b64 encoding, because of pad characters.
     BIO_get_mem_ptr(mem_bio, &mem_bio_mem_ptr);  //Store address of mem_bio's memory structure.
-    BIO_set_close(mem_bio, BIO_NOCLOSE);   //Permit access to mem_ptr after BIOs are destroyed.
+    memcpy(outbuf, (*mem_bio_mem_ptr).data, *outlen);
+    //BIO_set_close(mem_bio, BIO_NOCLOSE);   //Permit access to mem_ptr after BIOs are destroyed.
     BIO_free_all(b64_bio);  //Destroys all BIOs in chain, starting with b64 (i.e. the 1st one).
-    BUF_MEM_grow(mem_bio_mem_ptr, (*mem_bio_mem_ptr).length + 1);   //Makes space for end null.
-    (*mem_bio_mem_ptr).data[(*mem_bio_mem_ptr).length] = '\0';  //Adds null-terminator to tail.
-    return (*mem_bio_mem_ptr).data; //Returns base-64 encoded data. (See: "buf_mem_st" struct).
+    *outlen = mem_bio_mem_ptr->length;
+    //BUF_MEM_grow(mem_bio_mem_ptr, (*mem_bio_mem_ptr).length + 1);   //Makes space for end null.
+    //(*mem_bio_mem_ptr).data[(*mem_bio_mem_ptr).length] = '\0';  //Adds null-terminator to tail.
+    //return (*mem_bio_mem_ptr).data; //Returns base-64 encoded data. (See: "buf_mem_st" struct).
 }
 
-char *base64decode (const void *b64_decode_this, int decode_this_many_bytes, int * outlen){
+void base64decode (const void *b64_decode_this, int decode_this_many_bytes, char *base64_decoded, int * outlen){
     BIO *b64_bio, *mem_bio;      //Declares two OpenSSL BIOs: a base64 filter and a memory BIO.
-    *outlen = (decode_this_many_bytes*3)/4;
-    char *base64_decoded = calloc( *outlen+1, sizeof(char));                       //+1 = null.
+    //char *base64_decoded = calloc( *outlen+1, sizeof(char));                       //+1 = null.
     b64_bio = BIO_new(BIO_f_base64());                      //Initialize our base64 filter BIO.
     mem_bio = BIO_new(BIO_s_mem());                         //Initialize our memory source BIO.
     BIO_write(mem_bio, b64_decode_this, decode_this_many_bytes); //Base64 data saved in source.
@@ -665,15 +650,87 @@ char *base64decode (const void *b64_decode_this, int decode_this_many_bytes, int
     while ( 0 < BIO_read(b64_bio, base64_decoded+decoded_byte_index, 1) ){ //Read byte-by-byte.
         decoded_byte_index++; //Increment the index until read of BIO decoded data is complete.
     } //Once we're done reading decoded data, BIO_read returns -1 even though there's no error.
+    *outlen = decoded_byte_index;
     BIO_free_all(b64_bio);  //Destroys all BIOs in chain, starting with b64 (i.e. the 1st one).
-    return base64_decoded;        //Returns base-64 decoded data with trailing null terminator.
+    return;
 }
 
 
-int signWithRsa(RSA* rsa, const unsigned char* Msg,
-              int MsgLen, unsigned char* EncMsg, int* MsgLenEnc) {
+void byteArrayToHexString(unsigned char * byteArray, int inlen, char * hexString) {
+    int ii=0;
+    for (ii=0; ii<inlen; ii++) {
+       sprintf(&hexString[ii * 2], "%02X", byteArray[ii]);
+    }
+    hexString[inlen*2] ='\0';
+}
+
+
+unsigned char signature_bytes[512];
+int signWithRsa(RSA* rsa, const unsigned char* message,
+              int MsgLen, unsigned char* outbuf, int* outbuflen) {
+
+  if (rsa == NULL) {
+      outbuf[0] = 'f';
+      outbuf[1] = 'a';
+      outbuf[2] = 'i';
+      outbuf[3] = 'l';
+      outbuf[4] = 0;
+      return -1;
+  }
+  outbuf[0] = 't';
+  outbuf[1] = 'e';
+  outbuf[2] = 's';
+  outbuf[3] = 't';
+  outbuf[4] = 0;
+  int ii=0;
+  for(ii=0; ii<512; ii++)
+     signature_bytes[ii] = 'a';
 
   int signatureLen;
+  EVP_MD_CTX* m_RSASignCtx = EVP_MD_CTX_create();
+  EVP_PKEY* priKey  = EVP_PKEY_new();
+  EVP_PKEY_assign_RSA(priKey, rsa);
+  if (EVP_DigestSignInit(m_RSASignCtx,NULL, EVP_sha256(), NULL,priKey)<=0) {
+      return -1;
+  }
+  if (EVP_DigestSignUpdate(m_RSASignCtx, message, MsgLen) <= 0) {
+      return -1;
+  }
+  if (EVP_DigestSignFinal(m_RSASignCtx, NULL, &signatureLen) <=0) {
+      return -1;
+  }
+  if (EVP_DigestSignFinal(m_RSASignCtx, signature_bytes, &signatureLen) <= 0) {
+      return -1;
+  }
+
+
+  outbuf[0] = signatureLen & 0xFF + '0'; 
+  outbuf[1] = signatureLen>>8 & 0xFF + '0'; 
+  outbuf[2] = signatureLen>>16 & 0xFF + '0'; 
+  outbuf[3] = 0;
+  //base64encode(signature_bytes, signatureLen, outbuf, outbuflen);
+  //outbuf[*outbuflen]=0;
+
+
+  //outbuf[0] = 'a';
+  //outbuf[1] = 'b';
+  //outbuf[2] = 'c';
+  //outbuf[3] = 'd';
+  //outbuf[4] = 0;
+  //byteArrayToHexString(signature_bytes, signatureLen, outbuf);
+  //outbuf[signatureLen*2]=0;
+
+  EVP_MD_CTX_destroy(m_RSASignCtx);
+  return 0;
+}
+
+int RSASign( RSA* rsa,
+              const unsigned char* Msg,
+              size_t MsgLen,
+              unsigned char * outbuf,
+              int * outbuflen) {
+  size_t MsgLenEnc;
+  unsigned char* EncMsg;
   EVP_MD_CTX* m_RSASignCtx = EVP_MD_CTX_create();
   EVP_PKEY* priKey  = EVP_PKEY_new();
   EVP_PKEY_assign_RSA(priKey, rsa);
@@ -683,26 +740,63 @@ int signWithRsa(RSA* rsa, const unsigned char* Msg,
   if (EVP_DigestSignUpdate(m_RSASignCtx, Msg, MsgLen) <= 0) {
       return -1;
   }
-  if (EVP_DigestSignFinal(m_RSASignCtx, NULL, &signatureLen) <=0) {
+  if (EVP_DigestSignFinal(m_RSASignCtx, NULL, &MsgLenEnc) <=0) {
       return -1;
   }
-  unsigned char *signature = (unsigned char*)malloc(signatureLen);
-  if (EVP_DigestSignFinal(m_RSASignCtx, signature, &signatureLen) <= 0) {
+  EncMsg = (unsigned char*)malloc(MsgLenEnc);
+  if (EVP_DigestSignFinal(m_RSASignCtx, EncMsg, &MsgLenEnc) <= 0) {
       return -1;
   }
   EVP_MD_CTX_destroy(m_RSASignCtx);
-
-  base64_encode(signature, signatureLen, EncMsg, MsgLenEnc);
-
+  base64encode(EncMsg, MsgLenEnc, outbuf, outbuflen);
+  outbuf[*outbuflen]=0;
   return 0;
 }
+void Base64Encode1( const unsigned char* buffer, 
+                   size_t length, 
+                   char* outbuf, int *outbuflen) { 
+  char* base64Text;
+  BIO *bio, *b64;
+  BUF_MEM *bufferPtr;
+  b64 = BIO_new(BIO_f_base64());
+  bio = BIO_new(BIO_s_mem());
+  BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);  //No newlines every 64 characters or less.
+  bio = BIO_push(b64, bio);
+  BIO_write(bio, buffer, length);
+  BIO_flush(bio);
+  BIO_get_mem_ptr(bio, &bufferPtr);
+  BIO_set_close(bio, BIO_NOCLOSE);
+  BIO_free_all(bio);
+  memcpy(outbuf, (*bufferPtr).data, (*bufferPtr).length); 
+  *outbuflen =  (*bufferPtr).length; 
+}
 
-void byteArrayToHexString(unsigned char * byteArray, int inlen, char * hexString) {
-    int ii=0;
-    for (ii=0; ii<inlen; ii++) {
-       sprintf(&hexString[ii * 2], "%02X", byteArray[ii]);
-    }
-    hexString[inlen*2] ='\0';
+// Sign String
+int RsaSign1( RSA* rsa,
+              const unsigned char* buffer,
+              size_t buflen,
+              unsigned char * outbuf,
+              int * outbuflen) {
+
+    const int size = RSA_size(rsa);
+    unsigned char sign[size];
+    unsigned int outlen = 0;
+
+    /* SHA256 digest */
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256_CTX sha256;
+    SHA256_Init(&sha256);
+    SHA256_Update(&sha256, buffer, buflen);
+    SHA256_Final(hash, &sha256);
+
+    /* Sign */
+    sprintf(outbuf, "test");
+    RSA_sign(NID_sha256, hash, SHA256_DIGEST_LENGTH, sign, &outlen, rsa);
+    sprintf(outbuf, "outlen=%d, size=%d",outlen, size);
+    //base64encode(sign, outlen, outbuf, outbuflen);
+    //outbuf[*outbuflen]=0;
+
+    Base64Encode1(sign, outlen, outbuf, outbuflen);
 }
 
 
@@ -718,35 +812,34 @@ void getSha256(char * inbuf, int inlen, char * outbuf, int *outlen){
 }
 
 char pem_bytes[4096];
-void getContentSignatureRsa(RSA *rsa, char * plaintext, int plaintextlen, int scheme, char * deviceId,
- char * contentSignature, int * contentSignatureLen) {
+unsigned char signatureStr[524];
+void getContentSignatureRsa(RSA *rsa, char * plaintext, int plaintextlen,
+                            int scheme, char * deviceId,
+                            char * contentSignature, int * contentSignatureLen) {
     char pem_str[1024];
-    unsigned char sha256[512];
-    unsigned char sha256str[1025];
-    unsigned char signature[1024];
+    unsigned char sha256[SHA256_DIGEST_LENGTH];
+    unsigned char sha256str[225];
+    unsigned char public_key_bytes[224];
     int decoded_len;
     int sha256len;
     int signatureLen;
 
-    signWithRsa(rsa, plaintext, plaintextlen, signature, &signatureLen);
+    //signWithRsa(rsa, plaintext, plaintextlen, signatureStr, &signatureLen);
+    //RSASign(rsa, plaintext, plaintextlen, signatureStr, &signatureLen);
+    RsaSign1(rsa, plaintext, plaintextlen, signatureStr, &signatureLen);
     if (scheme != 4) {
-        *contentSignatureLen = sprintf("%s%s%s%s%s%s", "data:", signature, ";key-id:", deviceId, ";scheme:", scheme);
+        *contentSignatureLen = sprintf("%s%s%s%s%s%d", "data:", signatureStr, ";key-id:", deviceId, ";scheme:", scheme);
     } else {
-        int pem_str_len = encode_rsa_private_key_to_pem(rsa, pem_str, 0);
-        char * pem_str1 = strchr(pem_str, '\n'); /* skip over the --- BEGIN ---- */
-        char * nextLine = strchr(pem_str1, '\n');
-        if (nextLine) *nextLine = '\0';
-        pem_str_len = strlen(pem_str1);
-        char * public_key_bytes = base64decode(pem_str1, pem_str_len, &decoded_len);
+        int pem_str_len = encode_rsa_public_key_to_pem(rsa, pem_str, 0);
+        base64decode(pem_str, pem_str_len, public_key_bytes, &decoded_len);
         getSha256(public_key_bytes, decoded_len, sha256,  &sha256len);
         byteArrayToHexString(sha256, sha256len, sha256str);
-        *contentSignatureLen = sprintf(contentSignature, "%s%s%s%s%s%s", "data:", signature, ";key-id:", sha256str, ";scheme:", scheme);
+        *contentSignatureLen = sprintf(contentSignature, "%s%s%s%s%s%d", "data:", signatureStr, ";key-id:", sha256str, ";scheme:", scheme);
     }
 }
 
-void preProcess(char * path, char * body, char * clientVersion, char * deviceId,  int scheme) {
+void preProcess_local(RSA * rsa, char * path, char * body, char * clientVersion, char * deviceId,  int scheme, char* contentSignature) {
      unsigned char plaintext[5555];
-     unsigned char contentSignature[1555];
      int len;
      int contentSignatureLen;
      if (scheme == 2 || scheme == 3 || scheme == 4) {
@@ -757,8 +850,11 @@ void preProcess(char * path, char * body, char * clientVersion, char * deviceId,
      getContentSignatureRsa(rsa, plaintext, len, scheme, deviceId, contentSignature, &contentSignatureLen);
 }
 
+void preProcess(char * path, char * body, char * clientVersion, char * deviceId, int scheme, char* contentSignature) {
+    preProcess_local(rsa, path, body, clientVersion, deviceId, scheme, contentSignature);
+}
 
-int transmit_bind(char * userId, char * clientVersion, int scheme, char * appId, char *path, char * body) { 
+int transmit_bind(char * userId, char * clientVersion, int scheme, char * appId, char *path, char * body, char * contentSignature) { 
     char pem_str[4096];
     int pem_str_len = encode_rsa_public_key_to_pem(rsa, pem_str, 0);
     long timestamp = getMilliSeconds();
@@ -772,9 +868,9 @@ int transmit_bind(char * userId, char * clientVersion, int scheme, char * appId,
     char schemestr[32];
     char timestampstr[32];
 
-    sprintf(randomLong, "%l",getRandomLong());
-    sprintf(randomLong1, "%l",getRandomLong());
-    sprintf(randomLong2, "%l",getRandomLong());
+    sprintf(randomLong, "%d",getRandomLong());
+    sprintf(randomLong1, "%d",getRandomLong());
+    sprintf(randomLong2, "%d",getRandomLong());
 
     getRandomHexString(randomHexStr, 32);
     getRandomHexString(randomHexStr1, 15);
@@ -782,18 +878,8 @@ int transmit_bind(char * userId, char * clientVersion, int scheme, char * appId,
 
     sprintf(path, "%s%s", "/api/v2/auth/bind?aid=", appId);
     sprintf(schemestr, "%d", scheme);
-    sprintf(timestampstr, "%l", timestamp);
+    sprintf(timestampstr, "%d", timestamp);
     sprintf(body, "%s", pem_str);
-
-    sprintf(body, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
-    "{ \"data\": { \"collection_result\": { \"metadata\": { \"scheme_version\": ", schemestr,
-    ", \"timestamp\": ", timestampstr,
-    ", \"version\": \"", clientVersion,
-    "\"}, \"content\": { \"accounts\": [{ \"name\": \"", randomHexStr,
-    "\",\"type\": \"", randomHexStr1,
-    "\"},{\"name\": \"b8d2a60277443092b75b9a9f71bce945\",\"type\": \"3330d5072c5971394e189640a9f09b77\" }],",
-    "\"capabilities\": {\"audio_acquisition_supported\": true, \"dyadic_present\": true,",
-    "\"face_id_key_bio_protection_supported\": false, \"fido_client_present\": true,", pem_str);
 
 
     sprintf(body, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
@@ -820,7 +906,7 @@ int transmit_bind(char * userId, char * clientVersion, int scheme, char * appId,
     "}],", " \"logged_users\": 0,", " \"master_key_generated\": ", randomLong1,
     ",\"os_type\": \"Android\", \"os_version\": \"8.0.0\", \"roaming\": false, \"screen_lock\": true, \"sflags\": -1,",
     "\"sim_operator\": \"310410\", \"sim_operator_name\": \"\", \"sim_serial\": \"", randomLong2,
-    "\" \"subscriber_id\": \"310410035590766\", \"tampered\": true, \"tz\": \"America/New_York\", \"wifi_network\": {",
+    "\", \"subscriber_id\": \"310410035590766\", \"tampered\": true, \"tz\": \"America/New_York\", \"wifi_network\": {",
     "\"bssid\": \"d4705a482b5be4955808176e48f7371e\", \"secure\": true, \"ssid\": \"4eb341e247478a5a5ec2ba7d755cc614\"",
     "}}, \"hw_authenticators\": { \"face_id\": { \"secure\": false, \"supported\": false, \"user_registered\": false",
     "},\"fingerprint\": { \"secure\": true, \"supported\": true, \"user_registered\": true}}, \"installed_packages\": [",
@@ -832,11 +918,16 @@ int transmit_bind(char * userId, char * clientVersion, int scheme, char * appId,
     "\",\"type\": \"rsa\"}, \"encryption_public_key\": { \"key\": \"", pem_str,
     "\", \"type\": \"rsa\"}}, \"headers\": [{ \"type\": \"uid\",\"uid\": \"", userId, "\"}],\"push_token\": \"fakePushToken\"}");
 
-/*
 
 
-    preProcess(path, body, clientVersion, "deviceId", scheme);
-*/
+    
+    preProcess_local(rsa, path, body, clientVersion, "deviceId", scheme, contentSignature);
 
+    cJSON *json = cJSON_Parse(body);
+    if (json == NULL) {
+         return -1;
+    }
+    int rc = cJSON_PrintPreallocated(json, body, 2999, 0);
+    return rc;
 }
 

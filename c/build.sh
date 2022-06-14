@@ -7,7 +7,7 @@ LIBOPENSSL11=./openssl-1.1/
 LIBOPENSSL3=./openssl-3/x86/
 
 rm -f transmitlib.o
-gcc -DOPENSSL_NO_DEPRECATED_3_0 -m32 -I $LIBOPENSSL3/include -I $LIBSODIUM_MINGW_WIN32/include/ -c transmitlib.c 
+gcc  -m32 -I . -I $LIBOPENSSL3/include -I $LIBSODIUM_MINGW_WIN32/include/ -c transmitlib.c 
 
 #rm EVP_PKEY_RSA_keygen.o 
 #gcc -m32 -I $LIBOPENSSL3/include -c EVP_PKEY_RSA_keygen.c 
@@ -20,9 +20,12 @@ gcc -DOPENSSL_NO_DEPRECATED_3_0 -m32 -I $LIBOPENSSL3/include -I $LIBSODIUM_MINGW
 
 rm -f transmitlib.dll
 gcc  -m32 \
+  -L . \
   -I $LIBOPENSSL3/include \
   -L $LIBOPENSSL3/bin \
   -L$LIBSODIUM_MINGW_WIN32/bin \
   -L$LIBSODIUM_MINGW_WIN32/lib \
-  --shared  transmitlib.o  -o transmitlib.dll -lsodium -lcrypto-3
+  --shared -o transmitlib.dll \
+  transmitlib.o \
+  -lsodium -lcrypto-3 -lmsys-cjson-1\
 
