@@ -28,4 +28,5 @@ gcc  -m32 \
   --shared -o transmitlib.dll \
   transmitlib.o \
   -lsodium -lcrypto-3 -lmsys-cjson-1\
-
+  && \
+  cp transmitlib.dll /home/jagat_brahma/Documents/VuGen/Scripts/CVuser2

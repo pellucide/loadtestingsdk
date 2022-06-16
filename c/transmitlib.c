@@ -1,3 +1,7 @@
+
+#define OPENSSL_API_COMPAT 0x00908000L // (version 0.9.8)
+#define OPENSSL_NO_DEPRECATED 1
+
 #include <sodium.h>
 #include <openssl/conf.h>
 #include <openssl/evp.h>
@@ -13,6 +17,7 @@
 #include <time.h>
 #include <openssl/pem.h>
 #include "cJSON.h"
+
 
 
 #define RSA_KEYGEN_FAILED  -1
@@ -33,6 +38,7 @@ char HEXDATA[] = "ABCDEF1234567890";
 int  HEXDATA_LEN = 16;
 char bindBody[4096];
 RSA * rsa = NULL;
+EVP_PKEY * pkey = NULL;
 
 
 
@@ -293,35 +299,33 @@ cleanup:
     return rv;
 }
 
-int genRsaKeyPair1(int bits)
+int genRsaKeyPair1(int bits, EVP_PKEY **pkey)
 {
-    int rv = 1;
+    int rv = 0;
     OSSL_LIB_CTX *libctx = NULL;
-    EVP_PKEY *pkey = NULL;
 
     /* Generate RSA key. */
-    pkey = generate_rsa_key_short(libctx, bits);
+    *pkey = generate_rsa_key_short(libctx, bits);
 
-    if (pkey == NULL) {
+    if (*pkey == NULL) {
         rv = RSA_KEYGEN_FAILED;
         goto cleanup;
     }
 
     /* Dump the integers comprising the key. */
-    if (dump_key(pkey) == 0) {
-        fprintf(stderr, "Failed to dump key\n");
-        goto cleanup;
-    }
+    //if (dump_key(*pkey) == 0) {
+        //fprintf(stderr, "Failed to dump key\n");
+        //goto cleanup;
+    //}
 
-    rv = 0;
 cleanup:
-    EVP_PKEY_free(pkey);
     OSSL_LIB_CTX_free(libctx);
     return rv;
 }
 
-int genRsaKeyPair2(int bits, EVP_PKEY *pkey){
+int genRsaKeyPair2(int bits, EVP_PKEY **pkey){
     EVP_PKEY_CTX *ctx;
+    EVP_PKEY *pkey1;
 
     ctx = EVP_PKEY_CTX_new_id(EVP_PKEY_RSA, NULL);
     if (!ctx) /* Error occurred */
@@ -334,8 +338,9 @@ int genRsaKeyPair2(int bits, EVP_PKEY *pkey){
         return RSA_KEYGEN_FAILED;
 
     /* Generate key */
-    if (EVP_PKEY_keygen(ctx, &pkey) <= 0) /* Error */
+    if (EVP_PKEY_keygen(ctx, &pkey1) <= 0) /* Error */
         return RSA_KEYGEN_FAILED;
+    
     printf("Success!");
 }
 
@@ -352,7 +357,7 @@ int genRsaKeyPair(int bits, RSA ** pRSA, char newway){
         if (rc != 1) {
             return RSA_KEYGEN_FAILED;
         }
-        pRSA = &rsa1;
+        *pRSA = rsa1;
     } else {
         *pRSA = RSA_generate_key(bits, RSA_3, NULL, NULL);    
         if (*pRSA == NULL) /* Error */
@@ -367,7 +372,66 @@ int genRsaKeyPair(int bits, RSA ** pRSA, char newway){
 }
 
 
-int encode_rsa_public_key_to_pem(RSA * rsa, char *output_pem_string, int includeheader) {
+int encode_rsa_public_key_to_pem(EVP_PKEY * pkey, char *output_pem_string, int includeheader) {
+    char pem_str[1824];
+    BIO *bp = BIO_new(BIO_s_mem());
+    if (!bp) {
+        return RSA_ENCODE_RSA_PUBLIC_KEY_FAILED_NEW_BUFFER_IO;
+    }
+
+    int rc = PEM_write_bio_PUBKEY(bp, pkey);
+
+    //success is indicated by a value of 1
+    if (rc != 1) {
+        return RSA_ENCODE_RSA_PUBLIC_KEY_FAILED;
+    }
+     
+    int keylen = BIO_pending(bp);
+    int len;
+    if (includeheader == 0) {
+        /* remove the headers -----BEGIN----- and -----END----- */
+
+        /* read the bio buffer into pem_Str */
+        len = BIO_read(bp, pem_str, keylen);
+
+        /* skip over the -----BEGIN---- */
+        char * pem_str1 = strchr(pem_str, '\n');
+
+        /* find -----END----- */
+        char * nextLine = strstr(pem_str1, "-----");
+
+        /* if found, mark it ad the end */
+        if (nextLine) *nextLine = '\0';
+
+        /* copy everything except newlines and count */
+        char * out2 = output_pem_string;
+        char chr;
+        len = 0;
+        while (chr = *pem_str1) {
+            if (chr != '\n' && chr != '\r') {
+                *out2 = chr;
+                len++;
+                out2++;
+            }
+            pem_str1++;
+        }
+
+        /* mark the end */
+        *out2 = '\0';
+
+        /* this following code is for copying with the newlines */
+        //strcpy(output_pem_string, pem_str1);
+        //len = strlen(pem_str1);
+    } else {
+        len = BIO_read(bp, output_pem_string, keylen);
+    }
+
+    return len;
+}
+
+
+
+int encode_rsa_public_key_to_pem_old(RSA * rsa, char *output_pem_string, int includeheader) {
     char pem_str[1824];
     BIO *bp = BIO_new(BIO_s_mem());
     if (!bp) {
@@ -425,7 +489,65 @@ int encode_rsa_public_key_to_pem(RSA * rsa, char *output_pem_string, int include
 }
 
 
-int encode_rsa_private_key_to_pem(RSA * rsa, char *output_pem_string, int includeheader) {
+int encode_rsa_private_key_to_pem(EVP_PKEY *pkey, char *output_pem_string, int includeheader) {
+    char pem_str[1824];
+    BIO *bp = BIO_new(BIO_s_mem());
+    if (!bp) {
+        return RSA_ENCODE_RSA_PRIVATE_KEY_FAILED_NEW_BUFFER_IO;
+    }
+
+    int rc = PEM_write_bio_PrivateKey(bp, pkey, NULL, NULL, 0, NULL, NULL);
+
+    //success is indicated by a value of 1
+    if (rc != 1) {
+        return RSA_ENCODE_RSA_PRIVATE_KEY_FAILED;
+    }
+     
+    int keylen = BIO_pending(bp);
+    int len = 0;
+    if (includeheader == 0) {
+        /* remove the headers -----BEGIN----- and -----END----- */
+
+        /* read the bio buffer into pem_Str */
+        len = BIO_read(bp, pem_str, keylen);
+
+        /* skip over the -----BEGIN---- */
+        char * pem_str1 = strchr(pem_str, '\n');
+
+        /* find -----END----- */
+        char * nextLine = strstr(pem_str1, "-----");
+
+        /* if found, mark it ad the end */
+        if (nextLine) *nextLine = '\0';
+
+        /* copy everything except newlines and count */
+        char * out2 = output_pem_string;
+        char chr;
+        len = 0;
+        while (chr = *pem_str1) {
+            if (chr != '\n' && chr != '\r') {
+                *out2 = chr;
+                len++;
+                out2++;
+            }
+            pem_str1++;
+        }
+
+        /* mark the end */
+        *out2 = '\0';
+
+        /* this following code is for copying with the newlines */
+        //strcpy(output_pem_string, pem_str1);
+        //len = strlen(pem_str1);
+    } else {
+        len = BIO_read(bp, output_pem_string, keylen);
+    }
+
+    return len;
+}
+
+
+int encode_rsa_private_key_to_pem_old(RSA * rsa, char *output_pem_string, int includeheader) {
     char pem_str[1824];
     BIO *bp = BIO_new(BIO_s_mem());
     if (!bp) {
@@ -482,7 +604,23 @@ int encode_rsa_private_key_to_pem(RSA * rsa, char *output_pem_string, int includ
     return len;
 }
 
-int decode_rsa_private_key_from_pem(const char* private_key_pem_str, size_t len, RSA ** rsa)
+int decode_rsa_private_key_from_pem(const char* private_key_pem_str, size_t len, EVP_PKEY ** pkey)
+{
+  BIO *bp =  BIO_new_mem_buf((void*) private_key_pem_str, len);
+  if (!bp) {
+      return RSA_DECODE_RSA_PRIVATE_KEY_FAILED_BIO;
+  }
+
+  *pkey = PEM_read_bio_PrivateKey(bp, NULL, NULL, NULL);
+
+  if (*pkey == NULL) {
+       return RSA_DECODE_RSA_PRIVATE_KEY_FAILED;
+  }
+
+  return 0;
+}
+
+int decode_rsa_private_key_from_pem_old(const char* private_key_pem_str, size_t len, RSA ** rsa)
 {
   BIO *bp =  BIO_new_mem_buf((void*) private_key_pem_str, len);
   if (!bp) {
@@ -498,7 +636,7 @@ int decode_rsa_private_key_from_pem(const char* private_key_pem_str, size_t len,
   return 0;
 }
 
-int transmit_init(char *pem_str)
+int transmit_init(char *pem_str_public, char* pem_str_private)
 {
     unsigned char signed_message[crypto_sign_BYTES + MESSAGE_LEN];
     unsigned long long signed_message_len;
@@ -537,16 +675,70 @@ int transmit_init(char *pem_str)
     }
    
     openssl_test_init();
-    rc = genRsaKeyPair(1024, &rsa, 0);
+
+    rc = genRsaKeyPair1(1024, &pkey);
     if (rc != 0) 
         return rc;
 
-    int pem_str_len = encode_rsa_private_key_to_pem(rsa, pem_str, 1);
+    int pem_str_len = encode_rsa_private_key_to_pem(pkey, pem_str_private, 1);
 
     RSA * rsa1 = NULL;
-    rc = decode_rsa_private_key_from_pem(pem_str, pem_str_len, &rsa1);
+    rc = decode_rsa_private_key_from_pem(pem_str_private, pem_str_len, &pkey);
 
-    pem_str_len = encode_rsa_public_key_to_pem(rsa, pem_str, 1);
+    pem_str_len = encode_rsa_public_key_to_pem(pkey, pem_str_public, 1);
+    return rc;
+}
+
+
+int transmit_init_old(char *pem_str_public, char* pem_str_private)
+{
+    unsigned char signed_message[crypto_sign_BYTES + MESSAGE_LEN];
+    unsigned long long signed_message_len;
+
+    unsigned char pk[crypto_box_PUBLICKEYBYTES];
+    unsigned char sk[crypto_box_SECRETKEYBYTES];
+
+    unsigned char sig[crypto_sign_BYTES];
+
+    int rc = sodium_init();
+    if (rc < 0) {
+         return -1;
+    }
+    rc =crypto_sign_keypair(pk, sk);
+    if (rc < 0) {
+         return -2;
+    }
+
+    rc = crypto_sign_detached(sig, NULL, MESSAGE, MESSAGE_LEN, sk);
+    if (rc < 0) {
+         return -3;
+    }
+
+    /* introduce a bug
+    sig[0] = 0;
+
+    char * jsonString = "{\"a\": 0}";
+    cJSON *json = cJSON_Parse(jsonString);
+
+    /* seed random number */
+    srand(time(NULL));
+
+    rc = crypto_sign_verify_detached(sig, MESSAGE, MESSAGE_LEN, pk);
+    if (rc < 0) {
+         return -4;
+    }
+   
+    openssl_test_init();
+    rc = genRsaKeyPair(1024, &rsa, 1);
+    if (rc != 0) 
+        return rc;
+
+    int pem_str_len = encode_rsa_private_key_to_pem_old(rsa, pem_str_private, 1);
+
+    RSA * rsa1 = NULL;
+    rc = decode_rsa_private_key_from_pem_old(pem_str_private, pem_str_len, &rsa1);
+
+    pem_str_len = encode_rsa_public_key_to_pem_old(rsa, pem_str_public, 1);
     return rc;
 }
 
@@ -659,7 +851,7 @@ void base64decode (const void *b64_decode_this, int decode_this_many_bytes, char
 void byteArrayToHexString(unsigned char * byteArray, int inlen, char * hexString) {
     int ii=0;
     for (ii=0; ii<inlen; ii++) {
-       sprintf(&hexString[ii * 2], "%02X", byteArray[ii]);
+       sprintf(&hexString[ii * 2], "%02x", byteArray[ii]);
     }
     hexString[inlen*2] ='\0';
 }
@@ -771,8 +963,67 @@ void Base64Encode1( const unsigned char* buffer,
   *outbuflen =  (*bufferPtr).length; 
 }
 
+void getSha256(const unsigned char * inbuf, int inlen, char * outbuf, int *outlen){
+    unsigned char md_value[EVP_MAX_MD_SIZE];
+    const EVP_MD *md = EVP_get_digestbyname("sha256");
+    EVP_MD_CTX * mdctx = EVP_MD_CTX_create();
+    EVP_DigestInit_ex(mdctx, md, NULL);
+    EVP_DigestUpdate(mdctx, inbuf, inlen);
+    EVP_DigestFinal_ex(mdctx, outbuf, outlen);
+    EVP_MD_CTX_destroy(mdctx);
+    EVP_cleanup();
+}
+
+
+
 // Sign String
-int RsaSign1( RSA* rsa,
+int RsaSign1( EVP_PKEY* signing_key,
+              const unsigned char* buffer,
+              size_t buflen,
+              unsigned char * outbuf,
+              int * outbuflen) {
+
+    EVP_PKEY_CTX *ctx;
+    /* md is a SHA-256 digest in this example. */
+    unsigned char md[32];
+    size_t mdlen = 32, siglen;
+
+    getSha256(buffer, buflen, md, &mdlen);
+    if (mdlen != 32)
+       return -1;
+
+    /*
+     * NB: assumes signing_key and md are set up before the next
+     * step. signing_key must be an RSA private key and md must
+     * point to the SHA-256 digest to be signed.
+     */
+    ctx = EVP_PKEY_CTX_new(signing_key, NULL /* no engine */);
+    if (!ctx)
+          return -1;
+    if (EVP_PKEY_sign_init(ctx) <= 0)
+          return -1;
+    if (EVP_PKEY_CTX_set_rsa_padding(ctx, RSA_PKCS1_PADDING) <= 0)
+          return -1;
+    if (EVP_PKEY_CTX_set_signature_md(ctx, EVP_sha256()) <= 0)
+          return -1;
+
+    /* Determine buffer length */
+    if (EVP_PKEY_sign(ctx, NULL, &siglen, md, mdlen) <= 0)
+          return -1;
+
+    unsigned char sign[siglen];
+
+    if (EVP_PKEY_sign(ctx, sign, &siglen, md, mdlen) <= 0)
+          return -1;
+
+    /* Signature is siglen bytes written to buffer*/
+    *outbuflen = siglen;
+
+    Base64Encode1(sign, siglen, outbuf, outbuflen);
+}
+
+// Sign String
+int RsaSign1_old( RSA* rsa,
               const unsigned char* buffer,
               size_t buflen,
               unsigned char * outbuf,
@@ -799,23 +1050,12 @@ int RsaSign1( RSA* rsa,
     Base64Encode1(sign, outlen, outbuf, outbuflen);
 }
 
-
-void getSha256(char * inbuf, int inlen, char * outbuf, int *outlen){
-    unsigned char md_value[EVP_MAX_MD_SIZE];
-    const EVP_MD *md = EVP_get_digestbyname("sha256");
-    EVP_MD_CTX * mdctx = EVP_MD_CTX_create();
-    EVP_DigestInit_ex(mdctx, md, NULL);
-    EVP_DigestUpdate(mdctx, inbuf, inlen);
-    EVP_DigestFinal_ex(mdctx, outbuf, outlen);
-    EVP_MD_CTX_destroy(mdctx);
-    EVP_cleanup();
-}
-
 char pem_bytes[4096];
 unsigned char signatureStr[524];
-void getContentSignatureRsa(RSA *rsa, char * plaintext, int plaintextlen,
+void getContentSignatureRsa(EVP_PKEY *pkey, char * plaintext, int plaintextlen,
                             int scheme, char * deviceId,
-                            char * contentSignature, int * contentSignatureLen) {
+                            char * contentSignature, int * contentSignatureLen,
+                            char * debugString) {
     char pem_str[1024];
     unsigned char sha256[SHA256_DIGEST_LENGTH];
     unsigned char sha256str[225];
@@ -826,19 +1066,49 @@ void getContentSignatureRsa(RSA *rsa, char * plaintext, int plaintextlen,
 
     //signWithRsa(rsa, plaintext, plaintextlen, signatureStr, &signatureLen);
     //RSASign(rsa, plaintext, plaintextlen, signatureStr, &signatureLen);
-    RsaSign1(rsa, plaintext, plaintextlen, signatureStr, &signatureLen);
+    RsaSign1(pkey, plaintext, plaintextlen, signatureStr, &signatureLen);
     if (scheme != 4) {
-        *contentSignatureLen = sprintf("%s%s%s%s%s%d", "data:", signatureStr, ";key-id:", deviceId, ";scheme:", scheme);
+        *contentSignatureLen = sprintf(contentSignature, "data:%s;key-id:%s;scheme:%d", signatureStr, deviceId, scheme);
     } else {
-        int pem_str_len = encode_rsa_public_key_to_pem(rsa, pem_str, 0);
+        int pem_str_len = encode_rsa_public_key_to_pem(pkey, pem_str, 0);
         base64decode(pem_str, pem_str_len, public_key_bytes, &decoded_len);
         getSha256(public_key_bytes, decoded_len, sha256,  &sha256len);
         byteArrayToHexString(sha256, sha256len, sha256str);
-        *contentSignatureLen = sprintf(contentSignature, "%s%s%s%s%s%d", "data:", signatureStr, ";key-id:", sha256str, ";scheme:", scheme);
+        *contentSignatureLen = sprintf(contentSignature, "data:%s;key-id:%s;scheme:%d", signatureStr, sha256str, scheme);
+        sprintf(debugString, "pem_str:%s;plaintext:%s;data:%s;key-id:%s;scheme:%d", pem_str, plaintext, signatureStr, sha256str, scheme);
     }
 }
 
-void preProcess_local(RSA * rsa, char * path, char * body, char * clientVersion, char * deviceId,  int scheme, char* contentSignature) {
+
+void getContentSignatureRsa_old(RSA *rsa, char * plaintext, int plaintextlen,
+                                int scheme, char * deviceId,
+                                char * contentSignature, int * contentSignatureLen,
+                                char * debugString) {
+    char pem_str[1024];
+    unsigned char sha256[SHA256_DIGEST_LENGTH];
+    unsigned char sha256str[225];
+    unsigned char public_key_bytes[224];
+    int decoded_len;
+    int sha256len;
+    int signatureLen;
+
+    //signWithRsa(rsa, plaintext, plaintextlen, signatureStr, &signatureLen);
+    //RSASign(rsa, plaintext, plaintextlen, signatureStr, &signatureLen);
+    RsaSign1_old(rsa, plaintext, plaintextlen, signatureStr, &signatureLen);
+    if (scheme != 4) {
+        *contentSignatureLen = sprintf(contentSignature, "data:%s;key-id:%s;scheme:%d", signatureStr, deviceId, scheme);
+    } else {
+        int pem_str_len = encode_rsa_public_key_to_pem_old(rsa, pem_str, 0);
+        base64decode(pem_str, pem_str_len, public_key_bytes, &decoded_len);
+        getSha256(public_key_bytes, decoded_len, sha256,  &sha256len);
+        byteArrayToHexString(sha256, sha256len, sha256str);
+        *contentSignatureLen = sprintf(contentSignature, "data:%s;key-id:%s;scheme:%d", signatureStr, sha256str, scheme);
+        sprintf(debugString, "pem_str:%s;plaintext:%s;data:%s;key-id:%s;scheme:%d", pem_str, plaintext, signatureStr, sha256str, scheme);
+    }
+}
+
+
+void preProcess_local(EVP_PKEY * pkey, char * path, char * body, char * clientVersion, char * deviceId,  int scheme, char* contentSignature, char * debugString) {
      unsigned char plaintext[5555];
      int len;
      int contentSignatureLen;
@@ -847,16 +1117,35 @@ void preProcess_local(RSA * rsa, char * path, char * body, char * clientVersion,
      } else {
          len = sprintf(plaintext, "%s%s", path, body);
      }
-     getContentSignatureRsa(rsa, plaintext, len, scheme, deviceId, contentSignature, &contentSignatureLen);
+     getContentSignatureRsa(pkey, plaintext, strlen(plaintext), scheme, deviceId, contentSignature, &contentSignatureLen, debugString);
 }
 
-void preProcess(char * path, char * body, char * clientVersion, char * deviceId, int scheme, char* contentSignature) {
-    preProcess_local(rsa, path, body, clientVersion, deviceId, scheme, contentSignature);
+
+void preProcess_local_old(RSA * rsa, char * path, char * body, char * clientVersion, char * deviceId,  int scheme, char* contentSignature, char * debugString) {
+     unsigned char plaintext[5555];
+     int len;
+     int contentSignatureLen;
+     if (scheme == 2 || scheme == 3 || scheme == 4) {
+         len = sprintf(plaintext,"%s%s%s%s%s", path, "%%", clientVersion, "%%", body);
+     } else {
+         len = sprintf(plaintext, "%s%s", path, body);
+     }
+     getContentSignatureRsa_old(rsa, plaintext, strlen(plaintext), scheme, deviceId, contentSignature, &contentSignatureLen, debugString);
 }
 
-int transmit_bind(char * userId, char * clientVersion, int scheme, char * appId, char *path, char * body, char * contentSignature) { 
+void transmit_preProcess_old(char * path, char * body, char * clientVersion, char * deviceId, int scheme, char* contentSignature, char*debugString) {
+    preProcess_local_old(rsa, path, body, clientVersion, deviceId, scheme, contentSignature, debugString);
+}
+
+
+void transmit_preProcess(char * path, char * body, char * clientVersion, char * deviceId, int scheme, char* contentSignature, char*debugString) {
+    preProcess_local(pkey, path, body, clientVersion, deviceId, scheme, contentSignature, debugString);
+}
+
+int transmit_bind_old(char * userId, char * clientVersion, int scheme, char * appId,
+                  char *path, char * body, char * contentSignature, char * debugString) { 
     char pem_str[4096];
-    int pem_str_len = encode_rsa_public_key_to_pem(rsa, pem_str, 0);
+    int pem_str_len = encode_rsa_public_key_to_pem_old(rsa, pem_str, 0);
     long timestamp = getMilliSeconds();
     char randomHexStr[32];
     char randomHexStr1[32];
@@ -921,13 +1210,163 @@ int transmit_bind(char * userId, char * clientVersion, int scheme, char * appId,
 
 
     
-    preProcess_local(rsa, path, body, clientVersion, "deviceId", scheme, contentSignature);
+    preProcess_local_old(rsa, path, body, clientVersion, "deviceId", scheme, contentSignature, debugString);
 
-    cJSON *json = cJSON_Parse(body);
-    if (json == NULL) {
-         return -1;
+    return 0;
+}
+
+int transmit_bind(char * userId, char * clientVersion, int scheme, char * appId,
+                  char *path, char * body, char * contentSignature, char * debugString) { 
+    char pem_str[4096];
+    int pem_str_len = encode_rsa_public_key_to_pem(pkey, pem_str, 0);
+    long timestamp = getMilliSeconds();
+    char randomHexStr[32];
+    char randomHexStr1[32];
+    char randomStr[15];
+    char randomStr1[15];
+    char randomLong[32];
+    char randomLong1[32];
+    char randomLong2[32];
+    char schemestr[32];
+    char timestampstr[32];
+
+    sprintf(randomLong, "%d",getRandomLong());
+    sprintf(randomLong1, "%d",getRandomLong());
+    sprintf(randomLong2, "%d",getRandomLong());
+
+    getRandomHexString(randomHexStr, 32);
+    getRandomHexString(randomHexStr1, 15);
+    getRandomString(randomStr, 8);
+
+    sprintf(path, "%s%s", "/api/v2/auth/bind?aid=", appId);
+    sprintf(schemestr, "%d", scheme);
+    sprintf(timestampstr, "%d", timestamp);
+    sprintf(body, "%s", pem_str);
+
+
+    sprintf(body, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+    "{ \"data\": { \"collection_result\": { \"metadata\": { \"scheme_version\": ", schemestr,
+    ", \"timestamp\": ", timestampstr,
+    ", \"version\": \"", clientVersion,
+    "\"}, \"content\": { \"accounts\": [{ \"name\": \"", randomHexStr,
+    "\",\"type\": \"", randomHexStr1,
+    "\"},{\"name\": \"b8d2a60277443092b75b9a9f71bce945\",\"type\": \"3330d5072c5971394e189640a9f09b77\" }],",
+    "\"capabilities\": {\"audio_acquisition_supported\": true, \"dyadic_present\": true,",
+    "\"face_id_key_bio_protection_supported\": false, \"fido_client_present\": true,",
+    "\"finger_print_supported\": true, \"host_provided_features\": \"19\", \"image_acquisition_supported\": true,",
+    "\"persistent_keys_supported\": true }, \"collector_state\": {",
+    "\"accounts\": \"active\", \"bluetooth\": \"active\", \"capabilities\": \"active\",",
+    "\"contacts\": \"active\", \"devicedetails\": \"active\", \"externalsdkdetails\": \"active\",",
+    "\"fidoauthenticators\": \"disabled\", \"hwauthenticators\": \"active\", \"largedata\": \"disabled\",",
+    "\"localenrollments\": \"active\", \"location\": \"active\", \"owner\": \"active\",", " \"software\": \"active\"},",
+    "\"contacts\": { \"contacts_count\": 765}, \"device_details\": {\"connection\": \"wifi: 10.103.82.192\",",
+    "\"device_id\": \"", randomLong,
+    "\", \"device_model\": \"", randomStr,
+    "\", \"device_name\": \"", randomHexStr1,
+    "\", \"frontal_camera\": true, \"has_hw_security\": true, \"hw_type\": \"Phone\", \"jailbroken\": false, \"known_networks\": [",
+    "{\"ssid\": \"ab2e79dbba72c3866298b74f1a1c6fa6\"}, {\"secure\": true, \"ssid\": \"4eb341e247478a5a5ec2ba7d755cc614\"",
+    "}],", " \"logged_users\": 0,", " \"master_key_generated\": ", randomLong1,
+    ",\"os_type\": \"Android\", \"os_version\": \"8.0.0\", \"roaming\": false, \"screen_lock\": true, \"sflags\": -1,",
+    "\"sim_operator\": \"310410\", \"sim_operator_name\": \"\", \"sim_serial\": \"", randomLong2,
+    "\", \"subscriber_id\": \"310410035590766\", \"tampered\": true, \"tz\": \"America/New_York\", \"wifi_network\": {",
+    "\"bssid\": \"d4705a482b5be4955808176e48f7371e\", \"secure\": true, \"ssid\": \"4eb341e247478a5a5ec2ba7d755cc614\"",
+    "}}, \"hw_authenticators\": { \"face_id\": { \"secure\": false, \"supported\": false, \"user_registered\": false",
+    "},\"fingerprint\": { \"secure\": true, \"supported\": true, \"user_registered\": true}}, \"installed_packages\": [",
+    "\"20c496910ff8da1214ae52d3750684cd\", \"09e5b19fffdd4c9da52742ce536e1d8b\", \"5f5ca4b53bed9c75720d7ae1a8b949fc\",",
+    "\"2ce4266d32140417eebea06fd2d5d9cd\", \"40197bd6e7b2b8d5880b666b7a024ab6\"], \"local_enrollments\": {},\"location\": {",
+    "\"enabled\": true, \"h_acc\": 12.800999641418457, \"lat\": 40.3528937, \"lng\": -74.4993894},\"owner_details\": {",
+    "\"possible_emails\": [ \"f91c98012706e141b2e3bcc286af5e06\"], \"possible_names\": [ \"c3fa673b98c1a9ee6ecc3e38d0381966\"]}}},",
+    "\"public_key\": { \"key\": \"", pem_str,
+    "\",\"type\": \"rsa\"}, \"encryption_public_key\": { \"key\": \"", pem_str,
+    "\", \"type\": \"rsa\"}}, \"headers\": [{ \"type\": \"uid\",\"uid\": \"", userId, "\"}],\"push_token\": \"fakePushToken\"}");
+
+    
+    preProcess_local(pkey, path, body, clientVersion, "deviceId", scheme, contentSignature, debugString);
+
+    return 0;
+}
+
+void processTransmitJsonHeaders(cJSON *headers, char * deviceId, char* sessionId) {
+    cJSON * header = NULL;
+    cJSON_ArrayForEach(header, headers)
+    {
+            char * headerType = cJSON_GetObjectItem(header,"type")->valuestring;
+            if (strcmp(headerType,"device_id") == 0) {
+                strcpy(deviceId, cJSON_GetObjectItem(header,"device_id")->valuestring);
+            }
+            if (strcmp(headerType,"session_id") == 0) {
+                strcpy(sessionId, cJSON_GetObjectItem(header,"session_id")->valuestring);
+            }
     }
-    int rc = cJSON_PrintPreallocated(json, body, 2999, 0);
-    return rc;
+}
+
+int transmit_processResponse(char * response,
+           char * deviceId, char* sessionId,
+           char * challenge, char* assertionId) {
+
+     cJSON *jsonObj = cJSON_Parse(response);
+     if (jsonObj == NULL) {
+          return -1;
+     }
+     //int rc = cJSON_PrintPreallocated(json, body, 2999, 0);
+
+     int errorCode = cJSON_GetObjectItem(jsonObj, "error_code")->valueint;
+     char * errorMessage = cJSON_GetObjectItem(jsonObj, "error_message")->valuestring;
+     cJSON * jsonObjData = cJSON_GetObjectItem(jsonObj, "data");
+     if (jsonObjData == NULL)  {
+         return -1;
+     }
+
+     cJSON * stateObj = cJSON_GetObjectItem(jsonObjData, "state");
+
+     if (cJSON_IsString(stateObj) && (stateObj->valuestring != NULL)) {
+            char * state = stateObj->valuestring;
+            if (strcmp(state, "completed") == 0) {
+                char * token = cJSON_GetObjectItem(jsonObjData, "token")->valuestring;
+            } else {
+                cJSON * challengeObj = cJSON_GetObjectItem(jsonObjData,"challenge");
+                if (cJSON_IsString(challengeObj) && (challengeObj->valuestring != NULL)) {
+                    strcpy(challenge, challengeObj->valuestring);
+                }
+                cJSON *controlFlow = cJSON_GetObjectItem(jsonObjData, "control_flow");
+                cJSON *controlFlow0 = cJSON_GetArrayItem(controlFlow, 0);
+                cJSON *assertionIdObj = cJSON_GetObjectItem(controlFlow0,"assertion_id");
+                if (cJSON_IsString(assertionIdObj) && (assertionIdObj->valuestring != NULL)) {
+                     strcpy(assertionId, assertionIdObj->valuestring);
+                }
+
+                cJSON *appData = cJSON_GetObjectItem(controlFlow0,"app_data");
+                if (appData != NULL) {
+                } else {
+                }
+
+                cJSON * methods = cJSON_GetObjectItem(controlFlow0, "methods");
+                if (methods != NULL) {
+                    cJSON *method0 = cJSON_GetArrayItem(methods, 0);
+                    strcpy(assertionId, cJSON_GetObjectItem(method0,"assertion_id")->valuestring);
+                } else {
+                }
+
+                cJSON * headers = cJSON_GetObjectItem(jsonObj, "headers");
+                processTransmitJsonHeaders(headers, deviceId, sessionId);
+            }
+     }
+     cJSON_Delete(jsonObj);
+     return 0;
+}
+
+
+
+void transmit_processPasswordAuthentication(char *userId, char *passwordValue, char *challenge, char *assertionId, char * body) {
+     sprintf(body, "%s%s%s%s%s%s%s%s%s",
+             "{\"headers\":[{\"type\":\"uid\",\"uid\":\"",
+             userId,
+             "\"}],\"data\":{\"action\":\"authentication\",\"assert\":\"authenticate\",\"assertion_id\":\"",
+             assertionId, 
+             "\",\"fch\":\"",
+             challenge,
+             "\",\"data\":{\"password\":\"",
+             passwordValue,
+             "\"},\"method\":\"password\"}}");
 }
 
