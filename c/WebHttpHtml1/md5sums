@@ -1,0 +1,11 @@
+PS C:\Users\jagat_brahma\Documents\VuGen\Scripts\WebHttpHtml1> get-filehash .\*.dll -Algorithm MD5
+
+Algorithm       Hash                                                                   Path
+---------       ----                                                                   ----
+MD5             CD932C2F8D3C7BC3ED0DE2DFE5EC2E11                                       C:\Users\jagat_brahma\Documents\VuGen\Scripts\WebHttpHtml1\libcrypto-1_1.dll
+MD5             12F2D3CFB8437BCBE2B0B0DE30F63D09                                       C:\Users\jagat_brahma\Documents\VuGen\Scripts\WebHttpHtml1\libcrypto-3.dll
+MD5             B7FA499E552027102FF0DBEB2E7EA413                                       C:\Users\jagat_brahma\Documents\VuGen\Scripts\WebHttpHtml1\libsodium-23.dll
+MD5             9CA1EF3B10593D712EB3834BA428C2A1                                       C:\Users\jagat_brahma\Documents\VuGen\Scripts\WebHttpHtml1\libsodium.dll
+MD5             FBCDDBC5971F8ADAAC8FA10363D0C877                                       C:\Users\jagat_brahma\Documents\VuGen\Scripts\WebHttpHtml1\libssl-3.dll
+MD5             963654D588A6FCB52BAFFC804B36ED03                                       C:\Users\jagat_brahma\Documents\VuGen\Scripts\WebHttpHtml1\msys-cjson-1.dll
+MD5             F1BED6ECFFE79BBA148C0B49A97D745B                                       C:\Users\jagat_brahma\Documents\VuGen\Scripts\WebHttpHtml1\transmitlib.dll

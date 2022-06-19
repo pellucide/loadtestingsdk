@@ -1,9 +1,0 @@
--+
--DCCI
--D_IDA_XL
--DWINNT
--IC:\Users\jagat_brahma\Documents\VuGen\Scripts\WebHttpHtml1
--IC:\Program Files (x86)\Micro Focus\Virtual User Generator\include
--ec:\users\jagat_brahma\documents\vugen\scripts\webhttphtml1\\logfile.log
-c:\users\jagat_brahma\documents\vugen\scripts\webhttphtml1\\combined_WebHttpHtml1.c
-c:\users\jagat_brahma\documents\vugen\scripts\webhttphtml1\\pre_cci.c

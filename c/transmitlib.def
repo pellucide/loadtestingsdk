@@ -1,0 +1,53 @@
+EXPORTS 
+	DATA 	 DATA
+	DATA_LEN 	 DATA
+	HEXDATA 	 DATA
+	HEXDATA_LEN 	 DATA
+	pkey 	 DATA
+	rsa 	 DATA
+	?test@@YAHXZ
+	Base64Encode1
+	RSASign
+	RsaSign1
+	RsaSign1_old
+	__local_stdio_printf_options
+	_vfprintf_l
+	_vsnprintf_l
+	_vsprintf_l
+	base64_decode
+	base64decode
+	base64encode
+	byteArrayToHexString
+	decode_rsa_private_key_from_pem
+	decode_rsa_private_key_from_pem_old
+	encode_rsa_private_key_to_pem
+	encode_rsa_private_key_to_pem_old
+	encode_rsa_public_key_to_pem
+	encode_rsa_public_key_to_pem_old
+	fprintf
+	genRsaKeyPair
+	genRsaKeyPair1
+	genRsaKeyPair2
+	getContentSignatureRsa
+	getContentSignatureRsa_old
+	getMilliSeconds
+	getMilliSeconds1
+	getRandomHexString
+	getRandomLong
+	getRandomString
+	getSha256
+	openssl_test_init
+	preProcess_local
+	preProcess_local_old
+	printf
+	processTransmitJsonHeaders
+	signWithRsa
+	sprintf
+	transmit_bind
+	transmit_bind_old
+	transmit_init
+	transmit_init_old
+	transmit_preProcess
+	transmit_preProcess_old
+	transmit_processPasswordAuthentication
+	transmit_processResponse

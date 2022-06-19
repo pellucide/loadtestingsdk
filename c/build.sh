@@ -9,14 +9,6 @@ LIBOPENSSL3=./openssl-3/x86/
 rm -f transmitlib.o
 gcc  -m32 -I . -I $LIBOPENSSL3/include -I $LIBSODIUM_MINGW_WIN32/include/ -c transmitlib.c 
 
-#rm EVP_PKEY_RSA_keygen.o 
-#gcc -m32 -I $LIBOPENSSL3/include -c EVP_PKEY_RSA_keygen.c 
-
-
-  #-L$LIBSODIUM_MSVC/Win32/Release/v142/dynamic/ \
-  #-L$LIBSODIUM_MSVC/Win32/Release/v142/static/ \
-  #-L$LIBOPENSSL/lib \
-
 
 rm -f transmitlib.dll
 gcc  -m32 \

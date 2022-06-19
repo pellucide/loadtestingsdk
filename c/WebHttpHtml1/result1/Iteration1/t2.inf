@@ -1,0 +1,13 @@
+[t2]
+SnapshotXmlFile=snapshot_2.xml
+ContentType=application/json
+StepName=Custom Request: assert
+Total=1
+FileName1=t2.json
+RequestHeaderFile=t2_RequestHeader.txt
+ResponseHeaderFile=t2_ResponseHeader.txt
+RawStepEndTime=1655649656927
+RawStepName=assert
+RequestBodyFile=t2_RequestBody.txt
+RawStepStartTime=1655649656465
+URL1=https://jagat.tsdemo.transmit-field.com/api/v2/auth/assert?aid=mobile&did=103edbbb-1821-403e-937c-78f9f9afc8a8&sid=df2ccf4a-c0f5-4105-b332-568fea997d67

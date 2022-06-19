@@ -1,0 +1,16 @@
+# ninja log v5
+0	49	0	clean	94eb5120419ed6fe
+27	1071	6773235502257380	CMakeFiles/transmitlib.dir/transmitlib.cpp.obj	7cb9e4babae1e6f8
+1458	2564	6773230822279463	transmitlib.dll	d56f9378cd9dd122
+1458	2564	6773230822279463	transmitlib.lib	d56f9378cd9dd122
+6	1568	6773235507198633	CMakeFiles/transmitlib.dir/C_/Users/jagat_brahma/git/loadtestingsdk/c/transmitlib.c.obj	3baca0608f26a4fe
+0	56	0	clean	94eb5120419ed6fe
+18	1126	6773238667553461	CMakeFiles/transmitlib.dir/transmitlib.cpp.obj	7cb9e4babae1e6f8
+3	1467	6773238671039621	CMakeFiles/transmitlib.dir/C_/Users/jagat_brahma/git/loadtestingsdk/c/transmitlib.c.obj	3baca0608f26a4fe
+1474	2521	6773238681058567	transmitlib.dll	d56f9378cd9dd122
+1474	2521	6773238681058567	transmitlib.lib	d56f9378cd9dd122
+0	434	0	clean	94eb5120419ed6fe
+38	4175	6773482525852556	CMakeFiles/transmitlib.dir/transmitlib.cpp.obj	7cb9e4babae1e6f8
+2	4783	6773482531072280	CMakeFiles/transmitlib.dir/C_/Users/jagat_brahma/git/loadtestingsdk/c/transmitlib.c.obj	3baca0608f26a4fe
+4784	6084	6773482545036802	transmitlib.dll	d56f9378cd9dd122
+4784	6084	6773482545036802	transmitlib.lib	d56f9378cd9dd122

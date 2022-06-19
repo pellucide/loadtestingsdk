@@ -1,0 +1,20 @@
+[
+    {
+        "actionName": "Action",
+        "steps": [
+            {
+                "stepId": "STEP1",
+                "stepName": "Custom Request: bind",
+                "infFile": "t1.inf",
+                "time": 1655649656382
+            },
+            {
+                "stepId": "STEP2",
+                "stepName": "Custom Request: assert",
+                "infFile": "t2.inf",
+                "time": 1655649656938
+            }
+        ],
+        "transactions": []
+    }
+]
