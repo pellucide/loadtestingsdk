@@ -1,0 +1,28 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/mae_shape_endpoint",
+            "data": {
+                "metadata": {
+                    "created": 1654550544473,
+                    "type": "string_list",
+                    "updated": 1654550544473
+                },
+                "values": [
+                    "mobile=/api/v0/decision/mobile",
+                    "web=/api/v0/decision"
+                ],
+                "id": "mae_shape_endpoint"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

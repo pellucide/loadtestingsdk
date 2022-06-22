@@ -1,0 +1,33 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/mae_oa2_pingfed_api",
+            "data": {
+                "metadata": {
+                    "created": 1635791630090,
+                    "type": "string_list",
+                    "updated": 1654701694330
+                },
+                "values": [
+                    "cmb_api_app|dut=oa2-auth-<oa2_wca_environment>.unionbank.com",
+                    "pte=oa2-auth-pte.unionbank.com",
+                    "cmc_mobile_app|dut=oa2-auth-<oa2_wca_environment>.unionbank.com",
+                    "sit=oa2-auth-uat1.unionbank.com",
+                    "sandbox=oa2-auth-dev2.unionbank.com",
+                    "dut=oa2-auth-tst2.unionbank.com",
+                    "mae_web_app|sandbox=oa2-auth-<oa2_wca_environment>.unionbank.com"
+                ],
+                "id": "mae_oa2_pingfed_api"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

@@ -1,0 +1,34 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/mae_raa_result_stageid_map",
+            "data": {
+                "metadata": {
+                    "created": 1637263203353,
+                    "type": "string_list",
+                    "updated": 1637263203353
+                },
+                "values": [
+                    "AUTHENTICATE_ERROR=23",
+                    "AUTHENTICATE_CHALLENGE=22",
+                    "ANALYZE_ERROR=13",
+                    "ANALYZE_CHALLENGE=12",
+                    "AUTHENTICATE_ALLOW=21",
+                    "ANALYZE_ALLOW=11",
+                    "AUTHENTICATE_DENY=23",
+                    "ANALYZE_DENY=13"
+                ],
+                "id": "mae_raa_result_stageid_map"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

@@ -1,0 +1,28 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/mae_hrt_ids_upgradeable_from_scq_to_otp",
+            "data": {
+                "metadata": {
+                    "created": 1655239161564,
+                    "type": "string_list",
+                    "updated": 1655239161564
+                },
+                "values": [
+                    "203",
+                    "703"
+                ],
+                "id": "mae_hrt_ids_upgradeable_from_scq_to_otp"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

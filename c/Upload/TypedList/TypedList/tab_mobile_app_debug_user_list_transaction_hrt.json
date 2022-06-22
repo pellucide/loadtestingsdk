@@ -1,0 +1,27 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/tab_mobile_app_debug_user_list_transaction_hrt",
+            "data": {
+                "metadata": {
+                    "created": 1644345221475,
+                    "type": "string_list",
+                    "updated": 1651687447016
+                },
+                "values": [
+                    "tabuserp2p"
+                ],
+                "id": "tab_mobile_app_debug_user_list_transaction_hrt"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

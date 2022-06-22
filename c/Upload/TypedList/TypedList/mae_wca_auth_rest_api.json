@@ -1,0 +1,33 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/mae_wca_auth_rest_api",
+            "data": {
+                "metadata": {
+                    "created": 1635451497199,
+                    "type": "string_list",
+                    "updated": 1655821223718
+                },
+                "values": [
+                    "cmb_api_app|dut=ssoauth-<oa2_wca_environment>.unionbank.com",
+                    "mae_web_app|sandbox=ssoauth-<oa2_wca_environment>.unionbank.com",
+                    "dut=ssoauth-tst2.unionbank.com",
+                    "cmc_mobile_app|dut=ssoauth-<oa2_wca_environment>.unionbank.com",
+                    "sandbox=ssoauth-dev2.unionbank.com",
+                    "pte=ssoauth-pte.uboc.com",
+                    "sit=ssoauth-uat1.unionbank.com"
+                ],
+                "id": "mae_wca_auth_rest_api"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

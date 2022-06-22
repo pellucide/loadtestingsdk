@@ -1,0 +1,30 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/mae_web_actimize_websessionlogin_txn_ids",
+            "data": {
+                "metadata": {
+                    "created": 1648172486556,
+                    "type": "string_list",
+                    "updated": 1648172486556
+                },
+                "values": [
+                    "12",
+                    "45",
+                    "56",
+                    "57"
+                ],
+                "id": "mae_web_actimize_websessionlogin_txn_ids"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

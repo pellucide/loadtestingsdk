@@ -1,0 +1,31 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/eip_boku_phone_risk_evaluation_service_url",
+            "data": {
+                "metadata": {
+                    "created": 1644445767202,
+                    "type": "string_list",
+                    "updated": 1644868697409
+                },
+                "values": [
+                    "sit=https://wso2apigw-eip-uat2.apps.opn-eip-aws-uat1-west.unionbank.com/enterprise/phone-risk-evaluation/v1/party/risk-management/evaluate-phone-risk",
+                    "pte=https://wso2apigw-eip-uat2.apps.opn-eip-aws-uat1-west.unionbank.com/enterprise/phone-risk-evaluation/v1/party/risk-management/evaluate-phone-risk",
+                    "dut=https://wso2apigw-eip-dev1.opn-apps-aws-lle1.unionbank.com/enterprise/phone-risk-evaluation/v1/party/risk-management/evaluate-phone-risk",
+                    "sandbox=https://wso2apigw-eip-dev1.opn-apps-aws-lle1.unionbank.com/enterprise/phone-risk-evaluation/v1/party/risk-management/evaluate-phone-risk",
+                    "prod=???"
+                ],
+                "id": "eip_boku_phone_risk_evaluation_service_url"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

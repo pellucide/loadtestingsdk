@@ -1,0 +1,31 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/soa_bco_service_url",
+            "data": {
+                "metadata": {
+                    "created": 1650649326474,
+                    "type": "string_list",
+                    "updated": 1655408081055
+                },
+                "values": [
+                    "pte=https://dpa-pte.unionbank.com:11076/internetBanking/contract/process/bco/v1",
+                    "sandbox=https://dpa-dev2.unionbank.com:11076/internetBanking/contract/process/bco/v1",
+                    "sit=https://dpa-tst2.unionbank.com:11076/internetBanking/contract/process/bco/v1",
+                    "dut=https://dpa-tst2.unionbank.com:11076/internetBanking/contract/process/bco/v1",
+                    "prod=https://dpa.unionbank.com:11076/internetBanking/contract/process/bco/v1"
+                ],
+                "id": "soa_bco_service_url"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

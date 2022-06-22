@@ -1,0 +1,30 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/mae_max_otp_codes",
+            "data": {
+                "metadata": {
+                    "created": 1650917134324,
+                    "type": "string_list",
+                    "updated": 1652716413774
+                },
+                "values": [
+                    "sandbox=5",
+                    "dut=5",
+                    "sit=5",
+                    "pte=5"
+                ],
+                "id": "mae_max_otp_codes"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}
