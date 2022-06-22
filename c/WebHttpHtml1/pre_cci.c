@@ -2603,23 +2603,25 @@ vuser_init()
 int transmit_init(char *str, char* str1);
 char pem_str_public[2096];
 char pem_str_private[2098];
-char requestBody[2999];
+char requestBody[9999];
 char contentSignature[1555];
 char test[22] = "Hello World!";
 int test_out_len = 64;
 char test_out[264];
 char test_out2[3266];
-char body[3999];
+char body[9999];
 char path[256], urlPath[256];
 char *currentFolder = "C:\\Users\\jagat_brahma\\git\\loadtestingsdk\\c\\WebHttpHtml1\\";
 char *baseUrl = "https://jagat.tsdemo.transmit-field.com";
-
-int transmit_bind(char * userId, char * clientVersion, int scheme, char * appId, char *path, char * body, char * contentSignature, char * debugString);
+ 
+char *params = "\"{\\\"auth_type\\\": \\\"PA\\\"}\"";
+int transmit_bind(char * userId, char * clientVersion, int scheme, char * appId, char * params, char *path, char * body, char * contentSignature, char * debugString);
 void base64decode (const void *b64_decode_this, int decode_this_many_bytes, char *decoded, int * outlen);
 void base64encode (const void *b64_encode_this, int encode_this_many_bytes, char *outbuf, int *outlen);
 void getSha256(char * inbuf, int inlen, char * outbuf, int *outlen);
 void byteArrayToHexString(char * byteArray, int inlen, char * hexString);
 void transmit_preProcess(char * path, char * body, char * clientVersion, char * deviceId, int scheme, char* contentSignature, char * debugString);
+int  transmit_processSuccessResponse(char * response, char * key, char * value, char *debugString);
 
 Action()
 {
@@ -2641,12 +2643,12 @@ Action()
 	
 	sprintf(pathToLoad, "%slibssl-3.dll", currentFolder);
     rc = ci_load_dll(ci_this_context,(pathToLoad));
-     
+   
 	lr_message("return code = %d", rc);
 
 	sprintf(pathToLoad, "%scjson.dll", currentFolder);
     rc = ci_load_dll(ci_this_context,(pathToLoad));
-	 
+
 	lr_message("return code = %d", rc);
 
 	sprintf(pathToLoad, "%stransmitlib.dll", currentFolder);
@@ -2654,19 +2656,11 @@ Action()
 	 
 	lr_message("return code = %d", rc);
 
-
-	
-	 
-	 
-	
-
-
     rc = transmit_init(pem_str_public, pem_str_private);
 	lr_message("return codefrom transmit_init = %d", rc);
 	lr_message("pem_str_public from transmit_init = %s--", pem_str_public);
 	lr_message("pem_str_private from transmit_init = %s--", pem_str_private);
 	
-		
 	lr_message("test[12] = %s", test);
 	base64encode(test, 12, test_out, &test_out_len);
 	test_out[test_out_len] = 0;
@@ -2682,7 +2676,8 @@ Action()
 	test_out2[test_out_len*2]=0;
 	lr_message("test_out2[%d] = %s", test_out_len*2, test_out2);
 	
-	rc = transmit_bind(userId, clientVersion, scheme, appId, path, body, contentSignature, test_out2);	
+	
+	rc = transmit_bind(userId, clientVersion, scheme, appId, params, path, body, contentSignature, test_out2);	
 	lr_message("return codefrom transmit_bind = %d", rc);
 	lr_message("path from transmit_bind = %s", path);
 	lr_message("body from transmit_bind = %s", body);
@@ -2708,8 +2703,6 @@ Action()
 		"EncType=application/json", 
         requestBody, 
 		"LAST");
-    
-
         
     response = lr_eval_string("{response}");
     lr_message("respose from transmit_bind = %s", response);
@@ -2745,6 +2738,11 @@ Action()
 		"LAST");        
     response = lr_eval_string("{response}");
     lr_message("respose from transmit_assert = %s", response);
+    
+    rc = transmit_processSuccessResponse(response, "sub", test_out2, 0);
+    lr_message("return code from transmit_processSuccessResponse = %d", rc);
+    lr_message("value of sub=%s", test_out2);
+     
     return 0; 	
 
 }

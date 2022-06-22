@@ -37,12 +37,12 @@ _declspec(dllexport) char DATA[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqr
 _declspec(dllexport) int  DATA_LEN = 62;
 _declspec(dllexport) char HEXDATA[] = "ABCDEF1234567890";
 _declspec(dllexport) int  HEXDATA_LEN = 16;
-_declspec(dllexport) char bindBody[4096];
 _declspec(dllexport) RSA* rsa = NULL;
 _declspec(dllexport) EVP_PKEY* pkey = NULL;
 _declspec(dllexport) unsigned char signature_bytes[512];
 char pem_bytes[4096];
 unsigned char signatureStr[524];
+unsigned char paramsStr[7724];
 
 
 int openssl_test_init() {
@@ -433,6 +433,56 @@ int encode_rsa_public_key_to_pem(EVP_PKEY* pkey, char* output_pem_string, int in
 
 	return len;
 }
+
+
+char** str_split(char* a_str, const char a_delim)
+{
+	char** result = 0;
+	size_t count = 0;
+	char* tmp = a_str;
+	char* last_comma = 0;
+	char delim[2];
+	delim[0] = a_delim;
+	delim[1] = 0;
+
+	/* Count how many elements will be extracted. */
+	while (*tmp)
+	{
+		if (a_delim == *tmp)
+		{
+			count++;
+			last_comma = tmp;
+		}
+		tmp++;
+	}
+
+	/* Add space for trailing token. */
+	count += last_comma < (a_str + strlen(a_str) - 1);
+
+	/* Add space for terminating null string so caller
+	   knows where the list of returned strings ends. */
+	count++;
+
+	result = malloc(sizeof(char*) * count);
+
+	if (result)
+	{
+		size_t idx = 0;
+		char* token = strtok(a_str, delim);
+
+		while (token)
+		{
+			//ssert(idx < count);
+			*(result + idx++) = strdup(token);
+			token = strtok(0, delim);
+		}
+		//assert(idx == count - 1);
+		*(result + idx) = 0;
+	}
+
+	return result;
+}
+
 
 
 
@@ -1036,6 +1086,8 @@ int RsaSign1(EVP_PKEY* signing_key,
 	Base64Encode1(sign, siglen, outbuf, outbuflen);
 }
 
+
+
 // Sign String
 int RsaSign1_old(RSA* rsa,
 	const unsigned char* buffer,
@@ -1089,7 +1141,8 @@ void getContentSignatureRsa(EVP_PKEY* pkey, char* plaintext, int plaintextlen,
 		getSha256(public_key_bytes, decoded_len, sha256, &sha256len);
 		byteArrayToHexString(sha256, sha256len, sha256str);
 		*contentSignatureLen = sprintf(contentSignature, "data:%s;key-id:%s;scheme:%d", signatureStr, sha256str, scheme);
-		sprintf(debugString, "pem_str:%s;plaintext:%s;data:%s;key-id:%s;scheme:%d", pem_str, plaintext, signatureStr, sha256str, scheme);
+		if (debugString != NULL)
+			sprintf(debugString, "pem_str:%s;plaintext:%s;data:%s;key-id:%s;scheme:%d", pem_str, plaintext, signatureStr, sha256str, scheme);
 	}
 }
 
@@ -1118,7 +1171,8 @@ void getContentSignatureRsa_old(RSA* rsa, char* plaintext, int plaintextlen,
 		getSha256(public_key_bytes, decoded_len, sha256, &sha256len);
 		byteArrayToHexString(sha256, sha256len, sha256str);
 		*contentSignatureLen = sprintf(contentSignature, "data:%s;key-id:%s;scheme:%d", signatureStr, sha256str, scheme);
-		sprintf(debugString, "pem_str:%s;plaintext:%s;data:%s;key-id:%s;scheme:%d", pem_str, plaintext, signatureStr, sha256str, scheme);
+		if (debugString != NULL)
+			sprintf(debugString, "pem_str:%s;plaintext:%s;data:%s;key-id:%s;scheme:%d", pem_str, plaintext, signatureStr, sha256str, scheme);
 	}
 }
 
@@ -1159,7 +1213,7 @@ void transmit_preProcess(char* path, char* body, char* clientVersion, char* devi
 	preProcess_local(pkey, path, body, clientVersion, deviceId, scheme, contentSignature, debugString);
 }
 
-int transmit_bind_old(char* userId, char* clientVersion, int scheme, char* appId,
+int transmit_bind_old(char* userId, char* clientVersion, int scheme, char* appId, char* params,
 	char* path, char* body, char* contentSignature, char* debugString) {
 	char pem_str[4096];
 	int pem_str_len = encode_rsa_public_key_to_pem_old(rsa, pem_str, 0);
@@ -1187,8 +1241,14 @@ int transmit_bind_old(char* userId, char* clientVersion, int scheme, char* appId
 	sprintf(timestampstr, "%d", timestamp);
 	sprintf(body, "%s", pem_str);
 
+	if (params != NULL) {
+		sprintf(paramsStr, "\"params\":%s", params);
+	}
+	else {
+		sprintf(paramsStr, "");
+	}
 
-	sprintf(body, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+	sprintf(body, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
 		"{ \"data\": { \"collection_result\": { \"metadata\": { \"scheme_version\": ", schemestr,
 		", \"timestamp\": ", timestampstr,
 		", \"version\": \"", clientVersion,
@@ -1222,7 +1282,8 @@ int transmit_bind_old(char* userId, char* clientVersion, int scheme, char* appId
 		"\"possible_emails\": [ \"f91c98012706e141b2e3bcc286af5e06\"], \"possible_names\": [ \"c3fa673b98c1a9ee6ecc3e38d0381966\"]}}},",
 		"\"public_key\": { \"key\": \"", pem_str,
 		"\",\"type\": \"rsa\"}, \"encryption_public_key\": { \"key\": \"", pem_str,
-		"\", \"type\": \"rsa\"}}, \"headers\": [{ \"type\": \"uid\",\"uid\": \"", userId, "\"}],\"push_token\": \"fakePushToken\"}");
+		"\", \"type\": \"rsa\"}}, \"headers\": [{ \"type\": \"uid\",\"uid\": \"", userId, "\"}],\"push_token\": \"fakePushToken\",",
+		paramsStr, "}");
 
 
 
@@ -1232,7 +1293,7 @@ int transmit_bind_old(char* userId, char* clientVersion, int scheme, char* appId
 	return 0;
 }
 
-int transmit_bind(char* userId, char* clientVersion, int scheme, char* appId,
+int transmit_bind(char* userId, char* clientVersion, int scheme, char* appId, char* params,
 	char* path, char* body, char* contentSignature, char* debugString) {
 	char pem_str[4096];
 	int pem_str_len = encode_rsa_public_key_to_pem(pkey, pem_str, 0);
@@ -1260,8 +1321,14 @@ int transmit_bind(char* userId, char* clientVersion, int scheme, char* appId,
 	sprintf(timestampstr, "%d", timestamp);
 	sprintf(body, "%s", pem_str);
 
+	if (params != NULL) {
+		sprintf(paramsStr, "\"params\":%s", params);
+	}
+	else {
+		sprintf(paramsStr, "");
+	}
 
-	sprintf(body, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+	sprintf(body, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
 		"{ \"data\": { \"collection_result\": { \"metadata\": { \"scheme_version\": ", schemestr,
 		", \"timestamp\": ", timestampstr,
 		", \"version\": \"", clientVersion,
@@ -1295,7 +1362,9 @@ int transmit_bind(char* userId, char* clientVersion, int scheme, char* appId,
 		"\"possible_emails\": [ \"f91c98012706e141b2e3bcc286af5e06\"], \"possible_names\": [ \"c3fa673b98c1a9ee6ecc3e38d0381966\"]}}},",
 		"\"public_key\": { \"key\": \"", pem_str,
 		"\",\"type\": \"rsa\"}, \"encryption_public_key\": { \"key\": \"", pem_str,
-		"\", \"type\": \"rsa\"}}, \"headers\": [{ \"type\": \"uid\",\"uid\": \"", userId, "\"}],\"push_token\": \"fakePushToken\"}");
+		"\", \"type\": \"rsa\"}}, \"headers\": [{ \"type\": \"uid\",\"uid\": \"", userId, "\"}],\"push_token\": \"fakePushToken\",",
+		paramsStr, "}");
+
 
 
 	preProcess_local(pkey, path, body, clientVersion, "deviceId", scheme, contentSignature, debugString);
@@ -1377,6 +1446,7 @@ int transmit_processResponse(char* response,
 
 
 
+
 void transmit_processPasswordAuthentication(char* userId, char* passwordValue, char* challenge, char* assertionId, char* body) {
 	sprintf(body, "%s%s%s%s%s%s%s%s%s",
 		"{\"headers\":[{\"type\":\"uid\",\"uid\":\"",
@@ -1388,5 +1458,203 @@ void transmit_processPasswordAuthentication(char* userId, char* passwordValue, c
 		"\",\"data\":{\"password\":\"",
 		passwordValue,
 		"\"},\"method\":\"password\"}}");
+}
+
+
+/* aaaack but it's fast and const should make it shared text page. */
+static const unsigned char pr2six[256] =
+{
+	/* ASCII table */
+	64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+	64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+	64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 62, 64, 64, 64, 63,
+	52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 64, 64, 64, 64, 64, 64,
+	64,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
+	15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 64, 64, 64, 64, 64,
+	64, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+	41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64,
+	64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+	64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+	64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+	64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+	64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+	64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+	64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+	64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64
+};
+
+int Base64decode_len(const char* bufcoded)
+{
+	int nbytesdecoded;
+	register const unsigned char* bufin;
+	register int nprbytes;
+
+	bufin = (const unsigned char*)bufcoded;
+	while (pr2six[*(bufin++)] <= 63);
+
+	nprbytes = (bufin - (const unsigned char*)bufcoded) - 1;
+	nbytesdecoded = ((nprbytes + 3) / 4) * 3;
+
+	return nbytesdecoded + 1;
+}
+
+int Base64decode(char* bufplain, const char* bufcoded)
+{
+	int nbytesdecoded;
+	register const unsigned char* bufin;
+	register unsigned char* bufout;
+	register int nprbytes;
+
+	bufin = (const unsigned char*)bufcoded;
+	while (pr2six[*(bufin++)] <= 63);
+	nprbytes = (bufin - (const unsigned char*)bufcoded) - 1;
+	nbytesdecoded = ((nprbytes + 3) / 4) * 3;
+
+	bufout = (unsigned char*)bufplain;
+	bufin = (const unsigned char*)bufcoded;
+
+	while (nprbytes > 4) {
+		*(bufout++) =
+			(unsigned char)(pr2six[*bufin] << 2 | pr2six[bufin[1]] >> 4);
+		*(bufout++) =
+			(unsigned char)(pr2six[bufin[1]] << 4 | pr2six[bufin[2]] >> 2);
+		*(bufout++) =
+			(unsigned char)(pr2six[bufin[2]] << 6 | pr2six[bufin[3]]);
+		bufin += 4;
+		nprbytes -= 4;
+	}
+
+	/* Note: (nprbytes == 1) would be an error, so just ingore that case */
+	if (nprbytes > 1) {
+		*(bufout++) =
+			(unsigned char)(pr2six[*bufin] << 2 | pr2six[bufin[1]] >> 4);
+	}
+	if (nprbytes > 2) {
+		*(bufout++) =
+			(unsigned char)(pr2six[bufin[1]] << 4 | pr2six[bufin[2]] >> 2);
+	}
+	if (nprbytes > 3) {
+		*(bufout++) =
+			(unsigned char)(pr2six[bufin[2]] << 6 | pr2six[bufin[3]]);
+	}
+
+	*(bufout++) = '\0';
+	nbytesdecoded -= (4 - nprbytes) & 3;
+	return nbytesdecoded;
+}
+
+static const char basis_64[] =
+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+int Base64encode_len(int len)
+{
+	return ((len + 2) / 3 * 4) + 1;
+}
+
+int Base64encode(char* encoded, const char* string, int len)
+{
+	int i;
+	char* p;
+
+	p = encoded;
+	for (i = 0; i < len - 2; i += 3) {
+		*p++ = basis_64[(string[i] >> 2) & 0x3F];
+		*p++ = basis_64[((string[i] & 0x3) << 4) |
+			((int)(string[i + 1] & 0xF0) >> 4)];
+		*p++ = basis_64[((string[i + 1] & 0xF) << 2) |
+			((int)(string[i + 2] & 0xC0) >> 6)];
+		*p++ = basis_64[string[i + 2] & 0x3F];
+	}
+	if (i < len) {
+		*p++ = basis_64[(string[i] >> 2) & 0x3F];
+		if (i == (len - 1)) {
+			*p++ = basis_64[((string[i] & 0x3) << 4)];
+			*p++ = '=';
+		}
+		else {
+			*p++ = basis_64[((string[i] & 0x3) << 4) |
+				((int)(string[i + 1] & 0xF0) >> 4)];
+			*p++ = basis_64[((string[i + 1] & 0xF) << 2)];
+		}
+		*p++ = '=';
+	}
+
+	*p++ = '\0';
+	return p - encoded;
+}
+
+
+/*
+{
+"sub": "harrison21",
+"op": "auth",
+"lvl": 1,
+"dsid": "179878e4-7938-4d84-aff3-623045b07c61",
+"oa2_pf_access_token": "0004yPE6abTyWDFVlJwJ3DyHyNil",
+"iss": "TS",
+"mcg_hrt_protected_endpoints": "{'/sec/transfer/execute-transfer-v1':'tab_hrt_transfer_execute_transfer','/sec/payment/execute-payment-v1':'tab_hrt_payment_execute_payment'}",
+"pid": "tab_login_journey",
+"sid": "3931a96d-48b4-40aa-b851-94bb35d19ac4",
+"aud": "tab_mobile_app",
+"pvid": "default_version",
+"exp": 1655823583,
+"xsmid": "81de124d-fe61-4579-83d4-c79fec05e5ef",
+"iat": 1655821783,
+"jti": "2ce3a896-8d44-49cd-a5df-27f57bdf2189",
+"did": "88c6a09b-2856-4c33-974c-fe233ddb1d01"
+}
+*/
+
+int  transmit_processSuccessResponse(char* response, char* key, char* value, char* debugString) {
+	char test_out[512];
+	int  test_out_len = 512;
+	char** tokens;
+	cJSON* jsonObj = cJSON_Parse(response);
+	if (jsonObj == NULL) {
+		if (debugString != NULL)    sprintf(debugString, "failed to parse response");
+		return -1;
+	}
+
+	cJSON* dataJsonObj = cJSON_GetObjectItem(jsonObj, "data");
+	if (dataJsonObj == NULL) {
+		if (debugString != NULL) sprintf(debugString, "data not found");
+		return -3;
+	}
+
+	char* token = cJSON_GetObjectItem(dataJsonObj, "token")->valuestring;
+	if (token == NULL) {
+		if (debugString != NULL) sprintf(debugString, "token not found");
+		return -2;
+	}
+
+	tokens = str_split(token, '.');
+	if (debugString != NULL)
+		sprintf(debugString, "--%s--", tokens[1]);
+
+
+	Base64decode(test_out, tokens[1]);
+
+	cJSON_Delete(jsonObj);
+	if (debugString != NULL)
+		sprintf(debugString, "%s", test_out);
+
+	cJSON * jsonObj1 = cJSON_Parse(test_out);
+	char * val = cJSON_GetObjectItem(jsonObj1, key)->valuestring;
+
+	sprintf(value, "%s", val);
+	
+	cJSON_Delete(jsonObj1);
+
+	if (tokens)
+	{
+		int i;
+		for (i = 0; *(tokens + i); i++)
+		{
+			free(*(tokens + i));
+		}
+		free(tokens);
+	}
+
+	return 0;
 }
 

@@ -6,8 +6,8 @@ Total=1
 FileName1=t1.json
 RequestHeaderFile=t1_RequestHeader.txt
 ResponseHeaderFile=t1_ResponseHeader.txt
-RawStepEndTime=1655649656370
+RawStepEndTime=1655864371926
 RawStepName=bind
 RequestBodyFile=t1_RequestBody.txt
-RawStepStartTime=1655649654739
+RawStepStartTime=1655864370538
 URL1=https://jagat.tsdemo.transmit-field.com/api/v2/auth/bind?aid=mobile&locale=en-US
