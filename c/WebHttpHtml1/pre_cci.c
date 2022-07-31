@@ -2614,7 +2614,7 @@ char path[256], urlPath[256];
 char *currentFolder = "C:\\Users\\jagat_brahma\\git\\loadtestingsdk\\c\\WebHttpHtml1\\";
 char *baseUrl = "https://jagat.tsdemo.transmit-field.com";
  
-char *params = "\"{\\\"auth_type\\\": \\\"PA\\\"}\"";
+char *params = "{\"authType\": \"PA\"}";
 int transmit_bind(char * userId, char * clientVersion, int scheme, char * appId, char * params, char *path, char * body, char * contentSignature, char * debugString);
 void base64decode (const void *b64_decode_this, int decode_this_many_bytes, char *decoded, int * outlen);
 void base64encode (const void *b64_encode_this, int encode_this_many_bytes, char *outbuf, int *outlen);
@@ -2622,6 +2622,9 @@ void getSha256(char * inbuf, int inlen, char * outbuf, int *outlen);
 void byteArrayToHexString(char * byteArray, int inlen, char * hexString);
 void transmit_preProcess(char * path, char * body, char * clientVersion, char * deviceId, int scheme, char* contentSignature, char * debugString);
 int  transmit_processSuccessResponse(char * response, char * key, char * value, char *debugString);
+
+
+char * testSuccessResponse = "{\"error_code\":0,\"error_message\":\"\",\"data\":{\"data\":{\"scq_answer_text\":\"home\"},\"state\":\"completed\",\"application_data\":{\"pending_approvals\":false},\"assertions_complete\":true,\"token\":\"eyJraWQiOiJ7XCJwcm92aWRlcl90eXBlXCI6XCJkYlwiLFwiYWxpYXNcIjpcIm1hZV9qd3Rfc2lnbmluZ19rZXlcIixcInR5cGVcIjpcImxvY2FsXCIsXCJ2ZXJzaW9uXCI6XCIxXCJ9IiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJoYXJyaXNvbjIxIiwib3AiOiJhdXRoIiwibHZsIjoxLCJkc2lkIjoiMDBiOGQ0MzctNmU5MS00YTI2LWIzYTQtMDc3ZTc4OWY3MDBhIiwib2EyX3BmX2FjY2Vzc190b2tlbiI6IjAwMDROaktESlB3OTgydWNUczl4R1FMZ0tKTXYiLCJpc3MiOiJUUyIsIm1jZ19ocnRfcHJvdGVjdGVkX2VuZHBvaW50cyI6InsnXC9zZWNcL3RyYW5zZmVyXC9leGVjdXRlLXRyYW5zZmVyLXYxJzondGFiX2hydF90cmFuc2Zlcl9leGVjdXRlX3RyYW5zZmVyJywnXC9zZWNcL3BheW1lbnRcL2V4ZWN1dGUtcGF5bWVudC12MSc6J3RhYl9ocnRfcGF5bWVudF9leGVjdXRlX3BheW1lbnQnfSIsInBpZCI6ImRlZmF1bHRfYmluZCIsInNpZCI6ImQ0ZjA4ZTA4LWE2MTYtNDQ0Zi05YWExLTk0Y2ZkZWE3ZjBmNyIsImF1ZCI6InRhYl9tb2JpbGVfYXBwIiwicHZpZCI6ImRlZmF1bHRfdmVyc2lvbiIsImV4cCI6MTY1NTkzMTQwNSwieHNtaWQiOiJlOGZhMjM4Yi1jYjEwLTRkNDUtOTQ2Yy1hODM4YWY4ZmU5MWUiLCJpYXQiOjE2NTU5Mjk2MDUsImp0aSI6ImY4M2UzZjQ4LTM1MzEtNGY4NC05ZTEwLTNkMWNlNWZjMGM2MyIsImRpZCI6ImIxNjU0NDQ0LTg4NDUtNDE2MC1iOWZkLWUwYjUyZTE2MmE0ZSJ9.dcBUP5RSDryhn10H9plyH5aOZI0N9bSWRHPaqAcbnNuk2S8LjUq0Z4vVtJiZHBJPtYlSnelrvPbpvSAp3UV6FapYXQ5tNFB4nc4WUhBM3OF850pkato6IqQRB8H3tpHQgExI2NQTOoIDGIUM4rLY2yYaiHnvsZYRUscTjClmv9vBs3WHusG0AA41SO447VjguilOoyfkGoyaByW7PKTBPXR3HetNNGSu-CmJBV7CglPbjY9XpKEE0ddCysd1FaYp6t-PE8MK4SF3Q4rQLCa12ugIQP2ywao_Bba1nvPVQDyIiK42jk_g-bLQ1LICY9l6Ypw5m21Ue40uZ3j7-vRfSA\"},\"headers\":[{\"device_id\":\"b1654444-8845-4160-b9fd-e0b52e162a4e\",\"type\":\"device_id\"},{\"session_id\":\"00b8d437-6e91-4a26-b3a4-077e789f700a\",\"type\":\"session_id\"}]}";
 
 Action()
 {
@@ -2739,11 +2742,18 @@ Action()
     response = lr_eval_string("{response}");
     lr_message("respose from transmit_assert = %s", response);
     
-    rc = transmit_processSuccessResponse(response, "sub", test_out2, 0);
+    rc = transmit_processSuccessResponse(testSuccessResponse, "xsmid", test_out2, 0);
     lr_message("return code from transmit_processSuccessResponse = %d", rc);
     lr_message("value of sub=%s", test_out2);
+
+    rc = transmit_processSuccessResponse(testSuccessResponse, "oa2_pf_access_token", test_out2, 0);
+    lr_message("return code from transmit_processSuccessResponse = %d", rc);
+    lr_message("value of sub=%s", test_out2);
+
+    
      
     return 0; 	
+    
 
 }
 

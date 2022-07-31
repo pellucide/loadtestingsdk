@@ -1,10 +1,10 @@
 HTTP/2.0 200
 Status: 200
-date: Wed, 22 Jun 2022 02:19:31 GMT
+date: Fri, 08 Jul 2022 17:23:42 GMT
 content-type: application/json
-content-length: 614
+content-length: 473
 pragma: no-cache
 cache-control: no-cache, must-revalidate, no-store
-set-cookie: ts_hwid=a920892a-b0f3-4504-8d97-cce69860deed; Expires=Thu, 22 Jun 2023 02:19:31 GMT; Path=/; Secure; HttpOnly; SameSite=none
+set-cookie: ts_hwid=2d461a73-d651-488d-8081-e7c26b05d3da; Expires=Sat, 08 Jul 2023 17:23:42 GMT; Path=/; Secure; HttpOnly; SameSite=none
 server: Authentication Server
 

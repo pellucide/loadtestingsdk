@@ -1,8 +1,8 @@
-HTTP/2.0 200
-Status: 200
-date: Wed, 22 Jun 2022 02:19:32 GMT
+HTTP/2.0 500
+Status: 500
+date: Fri, 08 Jul 2022 17:23:42 GMT
 content-type: application/json
-content-length: 837
+content-length: 81
 pragma: no-cache
 cache-control: no-cache, must-revalidate, no-store
 server: Authentication Server

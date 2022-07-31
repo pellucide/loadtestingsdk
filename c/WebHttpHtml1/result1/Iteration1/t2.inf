@@ -6,8 +6,8 @@ Total=1
 FileName1=t2.json
 RequestHeaderFile=t2_RequestHeader.txt
 ResponseHeaderFile=t2_ResponseHeader.txt
-RawStepEndTime=1655864372226
+RawStepEndTime=1657301022611
 RawStepName=assert
 RequestBodyFile=t2_RequestBody.txt
-RawStepStartTime=1655864371978
-URL1=https://jagat.tsdemo.transmit-field.com/api/v2/auth/assert?aid=mobile&did=8989dcf1-857f-4ba2-bf8f-c3f06288ac13&sid=653f653b-df47-4463-b2e3-ef40fb2accdb
+RawStepStartTime=1657301022358
+URL1=https://jagat.tsdemo.transmit-field.com/api/v2/auth/assert?aid=mobile&did=7a45b050-f659-4579-a03b-9ce0b69fb512&sid=5fc1b912-6756-45dd-bdbe-edffa3b53794

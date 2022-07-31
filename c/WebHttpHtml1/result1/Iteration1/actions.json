@@ -6,13 +6,13 @@
                 "stepId": "STEP1",
                 "stepName": "Custom Request: bind",
                 "infFile": "t1.inf",
-                "time": 1655864371935
+                "time": 1657301022314
             },
             {
                 "stepId": "STEP2",
                 "stepName": "Custom Request: assert",
                 "infFile": "t2.inf",
-                "time": 1655864372233
+                "time": 1657301022618
             }
         ],
         "transactions": []

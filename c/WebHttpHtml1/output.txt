@@ -1,4 +1,4 @@
-Virtual User Script started at: 6/22/2022 2:19:30 AM
+Virtual User Script started at: 7/8/2022 5:23:40 PM
 Starting action vuser_init.
 Web Turbo Replay of LoadRunner 12.63.0 for Windows 2016; build 399 (May 14 2019 11:24:39)  	[MsgId: MMSG-26983]
 Run mode: HTML  	[MsgId: MMSG-26993]
@@ -15,27 +15,27 @@ return code = 0
 return code = 0
 return codefrom transmit_init = 0
 pem_str_public from transmit_init = -----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzjIsqHBIEWVoSOq30V1yWOK4U
-N75Kl3ZOZc57zcOXpZtCSy8SKPY+t3eAhgFOidRAfC2LtB5NBZ9bP8f2KA06AMVj
-DPzlGN2zO7ulgj3+ZdAJNzMzHK/T7BkkkQuNFrKgYpjjoITXkZ78Gry0/1WOkgdI
-COrfq7tJoWnCfFf6/QIDAQAB
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCpsfdmtGoUpuR4kRiTyiccGqUp
+FSiqWJkwZhQCLdVmEJqI0EWWWHzlsZuQKJnXmAWg30Q1Kw9wQuAEfVG5mTx9IHLx
+7Tf4eUntJ+sHJ9o2wbSrMG+5n956sNmcSlXqMGEXrwxoyph4qIJolH/lp6s74lSv
+lClwWx57zIAaWRcppQIDAQAB
 -----END PUBLIC KEY-----
 --
 pem_str_private from transmit_init = -----BEGIN PRIVATE KEY-----
-MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALOMiyocEgRZWhI6
-rfRXXJY4rhQ3vkqXdk5lznvNw5elm0JLLxIo9j63d4CGAU6J1EB8LYu0Hk0Fn1s/
-x/YoDToAxWMM/OUY3bM7u6WCPf5l0Ak3MzMcr9PsGSSRC40WsqBimOOghNeRnvwa
-vLT/VY6SB0gI6t+ru0mhacJ8V/r9AgMBAAECgYEAkHqHgVsVJGrCD+koEXY7CqaR
-bbNtbJh0mqFRhk4NFfos9SuKtRJBFDaN8t3iL1C5eypxe/l0aIYdtU+dmHaiLLET
-iWlSOcwX+1WhgOU8bq56L9G6Fzp5i99qEzQJ6RV9cwRL2eCuhY0k/gPO51Yvq7lM
-CTBG1+Bm6rz44y3bgAECQQDf+rIVVme2knyGDwbiLQ+lMa2Wxl1pJkETH9ZAU7q7
-S8D+n9n1qCPF3WMtQiRjDbQSk7bdRrfG7Sf2RC1kkRDRAkEAzTfEPqltFNkogfYk
-L01rIGuR8BD8R/X4UZD7h0GfQM6ZKx+56tJDqV/9Y8j1FzK30ESkc1SVD/7aqMyS
-a1sybQJAJx1LvkgxooOgdXToWdVOtyWe0AbiRzuj/6f+rYsxwAWxtYXK9Yigfqxz
-5nJ3kkjRWrErLSdtbrL52Jr9ZmOjEQJAe/DrUCEJZWcGJP+guQTb51ewazoG8/sl
-PzX+A6Fpaj2cmkPuCFl3TetQYRy0kY8rHtjmLVVvNZrpOrtazwXkPQJAShTxG1q7
-m9hKtGdfWLmTO5ycsZhQvNfQ2kKauFYPrSghknBK2mOwRVymi7xlpQfWbP3Kyqf7
-N2CXPMvrso0TiQ==
+MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAKmx92a0ahSm5HiR
+GJPKJxwapSkVKKpYmTBmFAIt1WYQmojQRZZYfOWxm5AomdeYBaDfRDUrD3BC4AR9
+UbmZPH0gcvHtN/h5Se0n6wcn2jbBtKswb7mf3nqw2ZxKVeowYRevDGjKmHiogmiU
+f+WnqzviVK+UKXBbHnvMgBpZFymlAgMBAAECgYBNcDRZPw2FvR9X0cbocoDkd1hV
+Zh13lxTZHEwXLnlKqVsMAhcvY9QjMaiu4YhK9UnkPt6ucKcL8Miv48xuqPoL1X7W
+UmZ3vwim/8Fm7zgr2lnrSyb9NwQ+HJF42gtGacnSdGPaL+N+KUovAi3KNh3QNcFC
+9Jt8z8yNtzCmaGAvhQJBANXpjkBtMn+Z5NM0NozyCsPaTgwYYCYLppvI9Xc66JX8
+hnbQmHgJaVOhcsfE6zQdBmTq7bJcCff5+DicyyFZZKMCQQDLFUJZcBju7KlslYuZ
+QzSW/bGGR+MiuRRKnoCQ78ZnCkjEYbqiTiiVxKZt9Q2/ArKJQYUXSgculPgYyQrr
+F1UXAkADpVhsVrAepqPUybYITvPKBMWBxUSWQWqUiydL4fAm5kfwbHu8yARIjZ7k
+MsIDgF8khzCH8rOky1jkth9sMRbbAkADXxb65SGE1ej6JIFsyfDVkOChmg/rQ6dS
+lc8MmO5yR3ltyTGQADwsQFeC+85+nUzZenz7Jf94hoCX6L6FqJ2BAkEAt0CJo9w9
+KxBGyqTqGjeie042XfhU7RwI4HKuMsMGTQNpu/PuoLbOpdg0272mbaCNDlEJUg5G
+g9WIQPfL5hBiaA==
 -----END PRIVATE KEY-----
 --
 test[12] = Hello World!
@@ -45,66 +45,64 @@ test_out_len = 32
 test_out2[64] = 7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
 return codefrom transmit_bind = 0
 path from transmit_bind = /api/v2/auth/bind?aid=mobile
-body from transmit_bind = { "data": { "collection_result": { "metadata": { "scheme_version": 4, "timestamp": -1993006256, "version": "6.0.0 (7427);[1,2,3,6,7,8,10,11,12,14,28,19]"}, "content": { "accounts": [{ "name": "585E151900E6A8CAC6B8A1E2562592B","type": "D87632F38A03AC"},{"name": "b8d2a60277443092b75b9a9f71bce945","type": "3330d5072c5971394e189640a9f09b77" }],"capabilities": {"audio_acquisition_supported": true, "dyadic_present": true,"face_id_key_bio_protection_supported": false, "fido_client_present": true,"finger_print_supported": true, "host_provided_features": "19", "image_acquisition_supported": true,"persistent_keys_supported": true }, "collector_state": {"accounts": "active", "bluetooth": "active", "capabilities": "active","contacts": "active", "devicedetails": "active", "externalsdkdetails": "active","fidoauthenticators": "disabled", "hwauthenticators": "active", "largedata": "disabled","localenrollments": "active", "location": "active", "owner": "active", "software": "active"},"contacts": { "contacts_count": 765}, "device_details": {"connection": "wifi: 10.103.82.192","device_id": "-2013265920", "device_model": "N0C1G8q", "device_name": "D87632F38A03AC", "frontal_camera": true, "has_hw_security": true, "hw_type": "Phone", "jailbroken": false, "known_networks": [{"ssid": "ab2e79dbba72c3866298b74f1a1c6fa6"}, {"secure": true, "ssid": "4eb341e247478a5a5ec2ba7d755cc614"}], "logged_users": 0, "master_key_generated": -1342177280,"os_type": "Android", "os_version": "8.0.0", "roaming": false, "screen_lock": true, "sflags": -1,"sim_operator": "310410", "sim_operator_name": "", "sim_serial": "5860352", "subscriber_id": "310410035590766", "tampered": true, "tz": "America/New_York", "wifi_network": {"bssid": "d4705a482b5be4955808176e48f7371e", "secure": true, "ssid": "4eb341e247478a5a5ec2ba7d755cc614"}}, "hw_authenticators": { "face_id": { "secure": false, "supported": false, "user_registered": false},"fingerprint": { "secure": true, "supported": true, "user_registered": true}}, "installed_packages": ["20c496910ff8da1214ae52d3750684cd", "09e5b19fffdd4c9da52742ce536e1d8b", "5f5ca4b53bed9c75720d7ae1a8b949fc","2ce4266d32140417eebea06fd2d5d9cd", "40197bd6e7b2b8d5880b666b7a024ab6"], "local_enrollments": {},"location": {"enabled": true, "h_acc": 12.800999641418457, "lat": 40.3528937, "lng": -74.4993894},"owner_details": {"possible_emails": [ "f91c98012706e141b2e3bcc286af5e06"], "possible_names": [ "c3fa673b98c1a9ee6ecc3e38d0381966"]}}},"public_key": { "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzjIsqHBIEWVoSOq30V1yWOK4UN75Kl3ZOZc57zcOXpZtCSy8SKPY+t3eAhgFOidRAfC2LtB5NBZ9bP8f2KA06AMVjDPzlGN2zO7ulgj3+ZdAJNzMzHK/T7BkkkQuNFrKgYpjjoITXkZ78Gry0/1WOkgdICOrfq7tJoWnCfFf6/QIDAQAB","type": "rsa"}, "encryption_public_key": { "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzjIsqHBIEWVoSOq30V1yWOK4UN75Kl3ZOZc57zcOXpZtCSy8SKPY+t3eAhgFOidRAfC2LtB5NBZ9bP8f2KA06AMVjDPzlGN2zO7ulgj3+ZdAJNzMzHK/T7BkkkQuNFrKgYpjjoITXkZ78Gry0/1WOkgdICOrfq7tJoWnCfFf6/QIDAQAB", "type": "rsa"}}, "headers": [{ "type": "uid","uid": "test"}],"push_token": "fakePushToken","params":"{\"auth_type\": \"PA\"}"}
-contentSignature from transmit_bind = fUlJam9SGSbO4MjxPLIbR/Y/ujsv1M6YwOiJSkw27TRcar8=;key-id:6f06918709781083b1fcc2fa62e9cfdc6d86f6eb74e3a954efbaf7415dc00efc;scheme:4
-Action.c(86): web_set_sockets_option started  	[MsgId: MMSG-26355]
-Action.c(86): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
-Action.c(87): web_add_auto_header("X-TS-Client-Version") started  	[MsgId: MMSG-26355]
-Action.c(87): web_add_auto_header("X-TS-Client-Version") was successful  	[MsgId: MMSG-26392]
-Action.c(88): web_add_auto_header("loadrunnertest") started  	[MsgId: MMSG-26355]
-Action.c(88): web_add_auto_header("loadrunnertest") was successful  	[MsgId: MMSG-26392]
-Action.c(89): web_add_auto_header("headerforperftest") started  	[MsgId: MMSG-26355]
-Action.c(89): web_add_auto_header("headerforperftest") was successful  	[MsgId: MMSG-26392]
-Action.c(90): web_add_auto_header("authorization") started  	[MsgId: MMSG-26355]
-Action.c(90): Warning -26593: The header being added may cause unpredictable results when applied to all ensuing URLs. It is added anyway  	[MsgId: MWAR-26593]
-Action.c(90): web_add_auto_header("authorization") highest severity level was "warning"  	[MsgId: MMSG-26391]
-Action.c(92): web_reg_save_param started  	[MsgId: MMSG-26355]
-Action.c(92): Registering web_reg_save_param was successful  	[MsgId: MMSG-26390]
-Action.c(95): web_custom_request("bind") started  	[MsgId: MMSG-26355]
-Action.c(95): Warning: The string ' "scheme_version": 4, "timestamp": -1993006256, "version": "6.0.0 (7427);[1,2,3,6,7,8,10,11,12,14,28,19]"' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string ' "name": "585E151900E6A8CAC6B8A1E2562592B","type": "D87632F38A03AC"' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string '"name": "b8d2a60277443092b75b9a9f71bce945","type": "3330d5072c5971394e189640a9f09b77" ' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string '"audio_acquisition_supported": true, "dyadic_present": true,"face_id_key_bio_protection_supported": false, "fido_client_present": true,"finger_print_supported": true, "host_provided_features": "19", "image_acquisition_supported": true,"persistent_keys_supported": true ' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string '"accounts": "active", "bluetooth": "active", "capabilities": "active","contacts": "active", "devicedetails": "active", "externalsdkdetails": "active","fidoauthenticators": "disabled", "hwauthenticators": "active", "largedata": "disabled","localenrollments": "active", "location": "active", "owner": "active", "software": "active"' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string ' "contacts_count": 765' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string '"ssid": "ab2e79dbba72c3866298b74f1a1c6fa6"' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string '"secure": true, "ssid": "4eb341e247478a5a5ec2ba7d755cc614"' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string '"bssid": "d4705a482b5be4955808176e48f7371e", "secure": true, "ssid": "4eb341e247478a5a5ec2ba7d755cc614"' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string ' "secure": false, "supported": false, "user_registered": false' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string ' "secure": true, "supported": true, "user_registered": true' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string '' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string '"enabled": true, "h_acc": 12.800999641418457, "lat": 40.3528937, "lng": -74.4993894' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string '"possible_emails": [ "f91c98012706e141b2e3bcc286af5e06"], "possible_names": [ "c3fa673b98c1a9ee6ecc3e38d0381966"]' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string ' "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzjIsqHBIEWVoSOq30V1yWOK4UN75Kl3ZOZc57zcOXpZtCSy8SKPY+t3eAhgFOidRAfC2LtB5NBZ9bP8f2KA06AMVjDPzlGN2zO7ulgj3+ZdAJNzMzHK/T7BkkkQuNFrKgYpjjoITXkZ78Gry0/1WOkgdICOrfq7tJoWnCfFf6/QIDAQAB","type": "rsa"' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string ' "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzjIsqHBIEWVoSOq30V1yWOK4UN75Kl3ZOZc57zcOXpZtCSy8SKPY+t3eAhgFOidRAfC2LtB5NBZ9bP8f2KA06AMVjDPzlGN2zO7ulgj3+ZdAJNzMzHK/T7BkkkQuNFrKgYpjjoITXkZ78Gry0/1WOkgdICOrfq7tJoWnCfFf6/QIDAQAB", "type": "rsa"' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string ' "type": "uid","uid": "test"' with parameter delimiters is not a parameter.
-Action.c(95): Warning: The string '\"auth_type\": \"PA\"' with parameter delimiters is not a parameter.
-Action.c(95): Notify: Saving Parameter "response = {"error_code":0,"error_message":"","data":{"data":null,"challenge":"WWa0oTlRm/2Ny7KU3Ub7x0n6","state":"pending","control_flow":[{"methods":[{"last_used":1655864308557,"expired":false,"locked":false,"assertion_id":"0wEtVM1TZydqgXJFayc/zc0s","status":"registered","type":"password"}],"strings":{},"options":{"start_in_menu":true,"update_default":true,"start_with":"menu"},"assertion_id":"","escapes":[],"type":"authentication"}],"assertions_complete":false},"headers":[{"session_id":"653f653b-df47-4463-b2e3-ef40fb2accdb","type":"session_id"},{"device_id":"8989dcf1-857f-4ba2-bf8f-c3f06288ac13","type":"device_id"}]}".
-Action.c(95): web_custom_request("bind") was successful, 614 body bytes, 358 header bytes  	[MsgId: MMSG-26386]
-Action.c(106): Notify: Parameter Substitution: parameter "response" =  "{"error_code":0,"error_message":"","data":{"data":null,"challenge":"WWa0oTlRm/2Ny7KU3Ub7x0n6","state":"pending","control_flow":[{"methods":[{"last_used":1655864308557,"expired":false,"locked":false,"assertion_id":"0wEtVM1TZydqgXJFayc/zc0s","status":"registered","type":"password"}],"strings":{},"options":{"start_in_menu":true,"update_default":true,"start_with":"menu"},"assertion_id":"","escapes":[],"type":"authentication"}],"assertions_complete":false},"headers":[{"session_id":"653f653b-df47-4463-b2e3-ef40fb2accdb","type":"session_id"},{"device_id":"8989dcf1-857f-4ba2-bf8f-c3f06288ac13","type":"device_id"}]}"
-respose from transmit_bind = {"error_code":0,"error_message":"","data":{"data":null,"challenge":"WWa0oTlRm/2Ny7KU3Ub7x0n6","state":"pending","control_flow":[{"methods":[{"last_used":1655864308557,"expired":false,"locked":false,"assertion_id":"0wEtVM1TZydqgXJFayc/zc0s","status":"registered","type":"password"}],"strings":{},"options":{"start_in_menu":true,"update_default":true,"start_with":"menu"},"assertion_id":"","escapes":[],"type":"authentication"}],"assertions_complete":false},"headers":[{"session_id":"653f653b-df47-4463-b2e3-ef40fb2accdb","type":"session_id"},{"device_id":"8989dcf1-857f-4ba2-bf8f-c3f06288ac13","type":"device_id"}]}
+body from transmit_bind = { "data":{"params":{"authType": "PA"} , "collection_result": { "metadata": { "scheme_version": 4, "timestamp": -556356256, "version": "6.0.0 (7427);[1,2,3,6,7,8,10,11,12,14,28,19]"}, "content": { "accounts": [{ "name": "4DC053B651483FB0A9D2E672003B119","type": "A82C2FF5AECF28"},{"name": "b8d2a60277443092b75b9a9f71bce945","type": "3330d5072c5971394e189640a9f09b77" }],"capabilities": {"audio_acquisition_supported": true, "dyadic_present": true,"face_id_key_bio_protection_supported": false, "fido_client_present": true,"finger_print_supported": true, "host_provided_features": "19", "image_acquisition_supported": true,"persistent_keys_supported": true }, "collector_state": {"accounts": "active", "bluetooth": "active", "capabilities": "active","contacts": "active", "devicedetails": "active", "externalsdkdetails": "active","fidoauthenticators": "disabled", "hwauthenticators": "active", "largedata": "disabled","localenrollments": "active", "location": "active", "owner": "active", "software": "active"},"contacts": { "contacts_count": 765}, "device_details": {"connection": "wifi: 10.103.82.192","device_id": "317849600", "device_model": "LCBStsO", "device_name": "A82C2FF5AECF28", "frontal_camera": true, "has_hw_security": true, "hw_type": "Phone", "jailbroken": false, "known_networks": [{"ssid": "ab2e79dbba72c3866298b74f1a1c6fa6"}, {"secure": true, "ssid": "4eb341e247478a5a5ec2ba7d755cc614"}], "logged_users": 0, "master_key_generated": 1610612736,"os_type": "Android", "os_version": "8.0.0", "roaming": false, "screen_lock": true, "sflags": -1,"sim_operator": "310410", "sim_operator_name": "", "sim_serial": "25928", "subscriber_id": "310410035590766", "tampered": true, "tz": "America/New_York", "wifi_network": {"bssid": "d4705a482b5be4955808176e48f7371e", "secure": true, "ssid": "4eb341e247478a5a5ec2ba7d755cc614"}}, "hw_authenticators": { "face_id": { "secure": false, "supported": false, "user_registered": false},"fingerprint": { "secure": true, "supported": true, "user_registered": true}}, "installed_packages": ["20c496910ff8da1214ae52d3750684cd", "09e5b19fffdd4c9da52742ce536e1d8b", "5f5ca4b53bed9c75720d7ae1a8b949fc","2ce4266d32140417eebea06fd2d5d9cd", "40197bd6e7b2b8d5880b666b7a024ab6"], "local_enrollments": {},"location": {"enabled": true, "h_acc": 12.800999641418457, "lat": 40.3528937, "lng": -74.4993894},"owner_details": {"possible_emails": [ "f91c98012706e141b2e3bcc286af5e06"], "possible_names": [ "c3fa673b98c1a9ee6ecc3e38d0381966"]}}},"public_key": { "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCpsfdmtGoUpuR4kRiTyiccGqUpFSiqWJkwZhQCLdVmEJqI0EWWWHzlsZuQKJnXmAWg30Q1Kw9wQuAEfVG5mTx9IHLx7Tf4eUntJ+sHJ9o2wbSrMG+5n956sNmcSlXqMGEXrwxoyph4qIJolH/lp6s74lSvlClwWx57zIAaWRcppQIDAQAB","type": "rsa"}, "encryption_public_key": { "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCpsfdmtGoUpuR4kRiTyiccGqUpFSiqWJkwZhQCLdVmEJqI0EWWWHzlsZuQKJnXmAWg30Q1Kw9wQuAEfVG5mTx9IHLx7Tf4eUntJ+sHJ9o2wbSrMG+5n956sNmcSlXqMGEXrwxoyph4qIJolH/lp6s74lSvlClwWx57zIAaWRcppQIDAQAB", "type": "rsa"}}, "headers": [{ "type": "uid","uid": "test"}],"push_token": "fakePushToken","params":{"authType": "PA"}}
+contentSignature from transmit_bind = x1DrmAEb2rKPLaQ32+VpsDcJ8AyPKngj1cSb0tr898v72j/W0HBf0HaglDVdOE=;key-id:9ad88a0113d8bdc835a72420510b30d3a6a5477c340d8191fdd4f6c347b8ac94;scheme:4
+Action.c(89): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(89): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(90): web_add_auto_header("X-TS-Client-Version") started  	[MsgId: MMSG-26355]
+Action.c(90): web_add_auto_header("X-TS-Client-Version") was successful  	[MsgId: MMSG-26392]
+Action.c(91): web_add_auto_header("loadrunnertest") started  	[MsgId: MMSG-26355]
+Action.c(91): web_add_auto_header("loadrunnertest") was successful  	[MsgId: MMSG-26392]
+Action.c(92): web_add_auto_header("headerforperftest") started  	[MsgId: MMSG-26355]
+Action.c(92): web_add_auto_header("headerforperftest") was successful  	[MsgId: MMSG-26392]
+Action.c(93): web_add_auto_header("authorization") started  	[MsgId: MMSG-26355]
+Action.c(93): Warning -26593: The header being added may cause unpredictable results when applied to all ensuing URLs. It is added anyway  	[MsgId: MWAR-26593]
+Action.c(93): web_add_auto_header("authorization") highest severity level was "warning"  	[MsgId: MMSG-26391]
+Action.c(95): web_reg_save_param started  	[MsgId: MMSG-26355]
+Action.c(95): Registering web_reg_save_param was successful  	[MsgId: MMSG-26390]
+Action.c(98): web_custom_request("bind") started  	[MsgId: MMSG-26355]
+Action.c(98): Warning: The string '"authType": "PA"' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string ' "scheme_version": 4, "timestamp": -556356256, "version": "6.0.0 (7427);[1,2,3,6,7,8,10,11,12,14,28,19]"' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string ' "name": "4DC053B651483FB0A9D2E672003B119","type": "A82C2FF5AECF28"' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string '"name": "b8d2a60277443092b75b9a9f71bce945","type": "3330d5072c5971394e189640a9f09b77" ' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string '"audio_acquisition_supported": true, "dyadic_present": true,"face_id_key_bio_protection_supported": false, "fido_client_present": true,"finger_print_supported": true, "host_provided_features": "19", "image_acquisition_supported": true,"persistent_keys_supported": true ' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string '"accounts": "active", "bluetooth": "active", "capabilities": "active","contacts": "active", "devicedetails": "active", "externalsdkdetails": "active","fidoauthenticators": "disabled", "hwauthenticators": "active", "largedata": "disabled","localenrollments": "active", "location": "active", "owner": "active", "software": "active"' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string ' "contacts_count": 765' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string '"ssid": "ab2e79dbba72c3866298b74f1a1c6fa6"' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string '"secure": true, "ssid": "4eb341e247478a5a5ec2ba7d755cc614"' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string '"bssid": "d4705a482b5be4955808176e48f7371e", "secure": true, "ssid": "4eb341e247478a5a5ec2ba7d755cc614"' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string ' "secure": false, "supported": false, "user_registered": false' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string ' "secure": true, "supported": true, "user_registered": true' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string '' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string '"enabled": true, "h_acc": 12.800999641418457, "lat": 40.3528937, "lng": -74.4993894' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string '"possible_emails": [ "f91c98012706e141b2e3bcc286af5e06"], "possible_names": [ "c3fa673b98c1a9ee6ecc3e38d0381966"]' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string ' "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCpsfdmtGoUpuR4kRiTyiccGqUpFSiqWJkwZhQCLdVmEJqI0EWWWHzlsZuQKJnXmAWg30Q1Kw9wQuAEfVG5mTx9IHLx7Tf4eUntJ+sHJ9o2wbSrMG+5n956sNmcSlXqMGEXrwxoyph4qIJolH/lp6s74lSvlClwWx57zIAaWRcppQIDAQAB","type": "rsa"' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string ' "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCpsfdmtGoUpuR4kRiTyiccGqUpFSiqWJkwZhQCLdVmEJqI0EWWWHzlsZuQKJnXmAWg30Q1Kw9wQuAEfVG5mTx9IHLx7Tf4eUntJ+sHJ9o2wbSrMG+5n956sNmcSlXqMGEXrwxoyph4qIJolH/lp6s74lSvlClwWx57zIAaWRcppQIDAQAB", "type": "rsa"' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string ' "type": "uid","uid": "test"' with parameter delimiters is not a parameter.
+Action.c(98): Warning: The string '"authType": "PA"' with parameter delimiters is not a parameter.
+Action.c(98): Notify: Saving Parameter "response = {"error_code":0,"error_message":"","data":{"data":null,"challenge":"+uCJo6DmRDLJi9D1gJaVIgQE","state":"pending","control_flow":[{"button_text":"OK","text":"authType","strings":{},"assertion_id":"bQVkMsA7iwvAOxT1nQ9Ond4S","escapes":[],"title":"PA","type":"information","parameters":[]}],"assertions_complete":false},"headers":[{"session_id":"5fc1b912-6756-45dd-bdbe-edffa3b53794","type":"session_id"},{"device_id":"7a45b050-f659-4579-a03b-9ce0b69fb512","type":"device_id"}]}".
+Action.c(98): web_custom_request("bind") was successful, 473 body bytes, 358 header bytes  	[MsgId: MMSG-26386]
+Action.c(109): Notify: Parameter Substitution: parameter "response" =  "{"error_code":0,"error_message":"","data":{"data":null,"challenge":"+uCJo6DmRDLJi9D1gJaVIgQE","state":"pending","control_flow":[{"button_text":"OK","text":"authType","strings":{},"assertion_id":"bQVkMsA7iwvAOxT1nQ9Ond4S","escapes":[],"title":"PA","type":"information","parameters":[]}],"assertions_complete":false},"headers":[{"session_id":"5fc1b912-6756-45dd-bdbe-edffa3b53794","type":"session_id"},{"device_id":"7a45b050-f659-4579-a03b-9ce0b69fb512","type":"device_id"}]}"
+respose from transmit_bind = {"error_code":0,"error_message":"","data":{"data":null,"challenge":"+uCJo6DmRDLJi9D1gJaVIgQE","state":"pending","control_flow":[{"button_text":"OK","text":"authType","strings":{},"assertion_id":"bQVkMsA7iwvAOxT1nQ9Ond4S","escapes":[],"title":"PA","type":"information","parameters":[]}],"assertions_complete":false},"headers":[{"session_id":"5fc1b912-6756-45dd-bdbe-edffa3b53794","type":"session_id"},{"device_id":"7a45b050-f659-4579-a03b-9ce0b69fb512","type":"device_id"}]}
 respose from transmit_processResponse = 0
-deviceId = 8989dcf1-857f-4ba2-bf8f-c3f06288ac13
-sessionId = 653f653b-df47-4463-b2e3-ef40fb2accdb
-challenge = WWa0oTlRm/2Ny7KU3Ub7x0n6
-assertionId = 0wEtVM1TZydqgXJFayc/zc0s
-path = /api/v2/auth/assert?aid=mobile&did=8989dcf1-857f-4ba2-bf8f-c3f06288ac13&sid=653f653b-df47-4463-b2e3-ef40fb2accdb
-body from transmit_preProcess = {"headers":[{"type":"uid","uid":"test"}],"data":{"action":"authentication","assert":"authenticate","assertion_id":"0wEtVM1TZydqgXJFayc/zc0s","fch":"WWa0oTlRm/2Ny7KU3Ub7x0n6","data":{"password":"test"},"method":"password"}}
-contentSignature from transmit_preProcess = data:mc9Amha5VT3BndNI/jafNlQVuoXHezBcHSEd4WamufVHPqAcWCRZDcIKYYUEsgxPMcBtLGoVrvT6PI7MP7JABn092KFb+f+mpA489laNMf7jG0/lksSMCP71ypePcimE2+VJlBJaQ1ojDLPJ17mD6FKsHWlCh51Osg4F4BHAYPw=;key-id:6f06918709781083b1fcc2fa62e9cfdc6d86f6eb74e3a954efbaf7415dc00efc;scheme:4
-test_out2 from transmit_preProcess = pem_str:MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzjIsqHBIEWVoSOq30V1yWOK4UN75Kl3ZOZc57zcOXpZtCSy8SKPY+t3eAhgFOidRAfC2LtB5NBZ9bP8f2KA06AMVjDPzlGN2zO7ulgj3+ZdAJNzMzHK/T7BkkkQuNFrKgYpjjoITXkZ78Gry0/1WOkgdICOrfq7tJoWnCfFf6/QIDAQAB;plaintext:/api/v2/auth/assert?aid=mobile&did=8989dcf1-857f-4ba2-bf8f-c3f06288ac13&sid=653f653b-df47-4463-b2e3-ef40fb2accdb%%6.0.0 (7427);[1,2,3,6,7,8,10,11,12,14,28,19]%%{"headers":[{"type":"uid","uid":"test"}],"data":{"action":"authentication","assert":"authenticate","assertion_id":"0wEtVM1TZydqgXJFayc/zc0s","fch":"WWa0oTlRm/2Ny7KU3Ub7x0n6","data":{"password":"test"},"method":"password"}};data:mc9Amha5VT3BndNI/jafNlQVuoXHezBcHSEd4WamufVHPqAcWCRZDcIKYYUEsgxPMcBtLGoVrvT6PI7MP7JABn092KFb+f+mpA489laNMf7jG0/lksSMCP71ypePcimE2+VJlBJaQ1ojDLPJ17mD6FKsHWlCh51Osg4F4BHAYPw=;key-id:6f06918709781083b1fcc2fa62e9cfdc6d86f6eb74e3a954efbaf7415dc00efc;scheme:4
-Action.c(125): web_add_header("Content-Signature") started  	[MsgId: MMSG-26355]
-Action.c(125): web_add_header("Content-Signature") was successful  	[MsgId: MMSG-26392]
-Action.c(126): web_reg_save_param started  	[MsgId: MMSG-26355]
-Action.c(126): Registering web_reg_save_param was successful  	[MsgId: MMSG-26390]
-Action.c(127): web_custom_request("assert") started  	[MsgId: MMSG-26355]
-Action.c(127): Warning: The string '"type":"uid","uid":"test"' with parameter delimiters is not a parameter.
-Action.c(127): Warning: The string '"password":"test"' with parameter delimiters is not a parameter.
-Action.c(127): Notify: Saving Parameter "response = {"error_code":0,"error_message":"","data":{"state":"completed","application_data":{"pending_approvals":false},"assertions_complete":true,"token":"eyJraWQiOiJUUyIsInR5cCI6IkpXVCIsImFsZyI6IkhTMjU2In0.eyJzdWIiOiJ0ZXN0Iiwib3AiOiJhdXRoIiwibHZsIjoxLCJkc2lkIjoiNjUzZjY1M2ItZGY0Ny00NDYzLWIyZTMtZWY0MGZiMmFjY2RiIiwiaXNzIjoiVFMiLCJwaWQiOiJkZWZhdWx0X2JpbmQiLCJzaWQiOiJkM2QzYWJiMC0wZDgwLTQ0NWMtOTNjZS0wNzdlZWQ2ODhhMWQiLCJhdWQiOiJtb2JpbGUiLCJwdmlkIjoiYmluZF9mb3JfbG9hZHJ1bm5lciIsImV4cCI6MTY1NTg2NjE3MiwiaWF0IjoxNjU1ODY0MzcyLCJqdGkiOiJmM2U2YmQzMC1iMzA0LTRhY2EtYjVkOS05MTliNzk2OTMzZGIiLCJkaWQiOiI4OTg5ZGNmMS04NTdmLTRiYTItYmY4Zi1jM2YwNjI4OGFjMTMifQ.KY2Q0p_4FMjVPx0j1q-7d_MivkPqJ_ac-XDdagNzCUg"},"headers":[{"device_id":"8989dcf1-857f-4ba2-bf8f-c3f06288ac13","type":"device_id"},{"session_id":"653f653b-df47-4463-b2e3-ef40fb2accdb","type":"session_id"}]}".
-Action.c(127): web_custom_request("assert") was successful, 837 body bytes, 220 header bytes  	[MsgId: MMSG-26386]
-Action.c(138): Notify: Parameter Substitution: parameter "response" =  "{"error_code":0,"error_message":"","data":{"state":"completed","application_data":{"pending_approvals":false},"assertions_complete":true,"token":"eyJraWQiOiJUUyIsInR5cCI6IkpXVCIsImFsZyI6IkhTMjU2In0.eyJzdWIiOiJ0ZXN0Iiwib3AiOiJhdXRoIiwibHZsIjoxLCJkc2lkIjoiNjUzZjY1M2ItZGY0Ny00NDYzLWIyZTMtZWY0MGZiMmFjY2RiIiwiaXNzIjoiVFMiLCJwaWQiOiJkZWZhdWx0X2JpbmQiLCJzaWQiOiJkM2QzYWJiMC0wZDgwLTQ0NWMtOTNjZS0wNzdlZWQ2ODhhMWQiLCJhdWQiOiJtb2JpbGUiLCJwdmlkIjoiYmluZF9mb3JfbG9hZHJ1bm5lciIsImV4cCI6MTY1NTg2NjE3MiwiaWF0IjoxNjU1ODY0MzcyLCJqdGkiOiJmM2U2YmQzMC1iMzA0LTRhY2EtYjVkOS05MTliNzk2OTMzZGIiLCJkaWQiOiI4OTg5ZGNmMS04NTdmLTRiYTItYmY4Zi1jM2YwNjI4OGFjMTMifQ.KY2Q0p_4FMjVPx0j1q-7d_MivkPqJ_ac-XDdagNzCUg"},"headers":[{"device_id":"8989dcf1-857f-4ba2-bf8f-c3f06288ac13","type":"device_id"},{"session_id":"653f653b-df47-4463-b2e3-ef40fb2accdb","type":"session_id"}]}"
-respose from transmit_assert = {"error_code":0,"error_message":"","data":{"state":"completed","application_data":{"pending_approvals":false},"assertions_complete":true,"token":"eyJraWQiOiJUUyIsInR5cCI6IkpXVCIsImFsZyI6IkhTMjU2In0.eyJzdWIiOiJ0ZXN0Iiwib3AiOiJhdXRoIiwibHZsIjoxLCJkc2lkIjoiNjUzZjY1M2ItZGY0Ny00NDYzLWIyZTMtZWY0MGZiMmFjY2RiIiwiaXNzIjoiVFMiLCJwaWQiOiJkZWZhdWx0X2JpbmQiLCJzaWQiOiJkM2QzYWJiMC0wZDgwLTQ0NWMtOTNjZS0wNzdlZWQ2ODhhMWQiLCJhdWQiOiJtb2JpbGUiLCJwdmlkIjoiYmluZF9mb3JfbG9hZHJ1bm5lciIsImV4cCI6MTY1NTg2NjE3MiwiaWF0IjoxNjU1ODY0MzcyLCJqdGkiOiJmM2U2YmQzMC1iMzA0LTRhY2EtYjVkOS05MTliNzk2OTMzZGIiLCJkaWQiOiI4OTg5ZGNmMS04NTdmLTRiYTItYmY4Zi1jM2YwNjI4OGFjMTMifQ.KY2Q0p_4FMjVPx0j1q-7d_MivkPqJ_ac-XDdagNzCUg"},"headers":[{"device_id":"8989dcf1-857f-4ba2-bf8f-c3f06288ac13","type":"device_id"},{"session_id":"653f653b-df47-4463-b2e3-ef40fb2accdb","type":"session_id"}]}
-return code from transmit_processSuccessResponse = 0
-value of sub=test
+deviceId = 7a45b050-f659-4579-a03b-9ce0b69fb512
+sessionId = 5fc1b912-6756-45dd-bdbe-edffa3b53794
+challenge = +uCJo6DmRDLJi9D1gJaVIgQE
+assertionId = bQVkMsA7iwvAOxT1nQ9Ond4S
+path = /api/v2/auth/assert?aid=mobile&did=7a45b050-f659-4579-a03b-9ce0b69fb512&sid=5fc1b912-6756-45dd-bdbe-edffa3b53794
+body from transmit_preProcess = {"headers":[{"type":"uid","uid":"test"}],"data":{"action":"authentication","assert":"authenticate","assertion_id":"bQVkMsA7iwvAOxT1nQ9Ond4S","fch":"+uCJo6DmRDLJi9D1gJaVIgQE","data":{"password":"test"},"method":"password"}}
+contentSignature from transmit_preProcess = data:VYKBltnkO8njEe3bzeSxa7r6Wbg/7rKmvgU9f40DnpBERCU9uauU4izGbk+vc5VciARrJONXbuOmlI7DAg8293JiXbp/SrICDFU34MiYhpTYpupsTqJnaAyfEKH/lPHMTpPRaG564coLGSS3qrGnDklxaEMtJvDXkDmkJJTgq2Y=;key-id:9ad88a0113d8bdc835a72420510b30d3a6a5477c340d8191fdd4f6c347b8ac94;scheme:4
+test_out2 from transmit_preProcess = pem_str:MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCpsfdmtGoUpuR4kRiTyiccGqUpFSiqWJkwZhQCLdVmEJqI0EWWWHzlsZuQKJnXmAWg30Q1Kw9wQuAEfVG5mTx9IHLx7Tf4eUntJ+sHJ9o2wbSrMG+5n956sNmcSlXqMGEXrwxoyph4qIJolH/lp6s74lSvlClwWx57zIAaWRcppQIDAQAB;plaintext:/api/v2/auth/assert?aid=mobile&did=7a45b050-f659-4579-a03b-9ce0b69fb512&sid=5fc1b912-6756-45dd-bdbe-edffa3b53794%%6.0.0 (7427);[1,2,3,6,7,8,10,11,12,14,28,19]%%{"headers":[{"type":"uid","uid":"test"}],"data":{"action":"authentication","assert":"authenticate","assertion_id":"bQVkMsA7iwvAOxT1nQ9Ond4S","fch":"+uCJo6DmRDLJi9D1gJaVIgQE","data":{"password":"test"},"method":"password"}};data:VYKBltnkO8njEe3bzeSxa7r6Wbg/7rKmvgU9f40DnpBERCU9uauU4izGbk+vc5VciARrJONXbuOmlI7DAg8293JiXbp/SrICDFU34MiYhpTYpupsTqJnaAyfEKH/lPHMTpPRaG564coLGSS3qrGnDklxaEMtJvDXkDmkJJTgq2Y=;key-id:9ad88a0113d8bdc835a72420510b30d3a6a5477c340d8191fdd4f6c347b8ac94;scheme:4
+Action.c(128): web_add_header("Content-Signature") started  	[MsgId: MMSG-26355]
+Action.c(128): web_add_header("Content-Signature") was successful  	[MsgId: MMSG-26392]
+Action.c(129): web_reg_save_param started  	[MsgId: MMSG-26355]
+Action.c(129): Registering web_reg_save_param was successful  	[MsgId: MMSG-26390]
+Action.c(130): web_custom_request("assert") started  	[MsgId: MMSG-26355]
+Action.c(130): Warning: The string '"type":"uid","uid":"test"' with parameter delimiters is not a parameter.
+Action.c(130): Warning: The string '"password":"test"' with parameter delimiters is not a parameter.
+Action.c(130): Error -26612: HTTP Status-Code=500 (Internal Server Error) for "https://jagat.tsdemo.transmit-field.com/api/v2/auth/assert?aid=mobile&did=7a45b050-f659-4579-a03b-9ce0b69fb512&sid=5fc1b912-6756-45dd-bdbe-edffa3b53794"  	[MsgId: MERR-26612]
+Action.c(130): Notify: Saving Parameter "response = {"error_code":10,"error_message":"Encountered unexpected exception","headers":[]}".
+Action.c(130): web_custom_request("assert") highest severity level was "ERROR", 81 body bytes, 219 header bytes  	[MsgId: MMSG-26388]
 Ending action Action.
 Ending iteration 1.
 Ending Vuser...

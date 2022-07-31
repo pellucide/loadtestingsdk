@@ -1328,8 +1328,8 @@ int transmit_bind(char* userId, char* clientVersion, int scheme, char* appId, ch
 		sprintf(paramsStr, "");
 	}
 
-	sprintf(body, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
-		"{ \"data\": { \"collection_result\": { \"metadata\": { \"scheme_version\": ", schemestr,
+	sprintf(body, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+		"{ \"data\":{", paramsStr, " , \"collection_result\": { \"metadata\": { \"scheme_version\": ", schemestr,
 		", \"timestamp\": ", timestampstr,
 		", \"version\": \"", clientVersion,
 		"\"}, \"content\": { \"accounts\": [{ \"name\": \"", randomHexStr,
@@ -1605,8 +1605,11 @@ int Base64encode(char* encoded, const char* string, int len)
 }
 */
 
+
+char test_out[1512];
+
 int  transmit_processSuccessResponse(char* response, char* key, char* value, char* debugString) {
-	char test_out[512];
+
 	int  test_out_len = 512;
 	char** tokens;
 	cJSON* jsonObj = cJSON_Parse(response);
