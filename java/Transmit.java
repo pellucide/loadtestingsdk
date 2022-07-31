@@ -167,18 +167,7 @@ class Transmit {
         putSessionVar("ecPrivateKeyEncoded", privateKeyEncoded);
     }
 
-    public void printJmeterVars() {
-        //System.out.println("ctx="+ctx);
-        //System.out.println("vars="+vars);
-        //System.out.println("props="+props);
-        //System.out.println("prev="+prev);
-        //System.out.println("data="+data.toString());
-        //System.out.println("responseData="+prev.getResponseDataAsString());
 
-        for (String var : vars.keySet()) {
-            System.out.println("entry=" + var + ", value=" + vars.get(var));
-        }
-    }
 
     public String getClientVersion() {
         return predefinedVars.get("X-TS-Client-Version-6.1.0");
@@ -708,4 +697,79 @@ class Transmit {
         System.out.println("response = "+ response);
         return response;
     }
+    
+
+
+
+    byte[] readBuffer = new byte[194496];
+    public String sendGet(String path,  String body) {
+        String url = "https://"+ predefinedVars.get("url") + path;
+        int totalBytes=0;
+        StringBuilder response = new StringBuilder();
+
+        try {
+            URL urlObj = new URL(url);
+            HttpURLConnection urlCon = (HttpURLConnection) urlObj.openConnection();
+            urlCon.setRequestMethod("GET");
+            //urlCon.setDoOutput(true);
+            Set<Map.Entry<String, String>> hdrs = headers.entrySet();
+            for (Map.Entry<String, String> header: hdrs) {
+                urlCon.setRequestProperty(header.getKey(), header.getValue());
+            }
+            String contentSignature = getSessionVar("contentSignature");
+            //System.out.println("contentSignature = '"+ contentSignature +"'");
+            if (contentSignature != null)
+                urlCon.setRequestProperty("Content-Signature", contentSignature);
+            /*
+            StringBuilder urlParameters = new StringBuilder();
+            Set<Map.Entry<String, String>> params = parameters.entrySet();
+            for (Map.Entry<String,String> param : params) {
+                if (urlParameters.length() != 0) urlParameters.append('&');
+                urlParameters.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                urlParameters.append('=');
+                urlParameters.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+            }
+            byte[] postDataBytes = urlParameters.toString().getBytes(StandardCharsets.UTF_8);
+             */
+
+            /*
+            try(OutputStream os = urlCon.getOutputStream()) {
+                byte[] bb = body.getBytes("utf-8");
+                os.write(bb, 0, bb.length);
+            }
+            */
+            InputStream inputStream = urlCon.getInputStream();
+            BufferedInputStream reader = new BufferedInputStream(inputStream);
+            int bytesRead;
+            do {
+                bytesRead = reader.read(readBuffer);
+                if (bytesRead != -1) {
+                    response.append(new String(readBuffer, 0, bytesRead));
+                    totalBytes += bytesRead;
+                }
+            } while (bytesRead != -1) ;
+            reader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        //String response =  new String(readBuffer, 0, totalBytes);
+        return response.toString();
+    }
+
+    public void deleteDevices(String userId, String appId) {
+
+        System.out.println("========================================================");
+        String response = sendGet("/api/v2/mng/devices?uid="+userId+"&aid="+ appId, "");
+        JSONObject devicesJson = new JSONObject(response);
+        System.out.println("devicesJson = " + response.substring(0,400) );
+        JSONArray devices = devicesJson.getJSONArray("data");
+        int totalDevices = devices.length();
+        for (int index=0; index < totalDevices; index++) {
+            JSONObject device = devices.getJSONObject(index);
+            String deviceHwId = device.getString("device_hw_id");
+            String deleteResponse = sendPost("/api/v2/mng/support/reset/device/physical?uid=" + userId + "&deviceHwId=" + deviceHwId, "");
+            System.out.println("deleteResponse = " + deleteResponse );
+        }
+    }
+
 }
