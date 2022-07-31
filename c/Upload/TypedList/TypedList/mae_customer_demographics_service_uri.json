@@ -1,0 +1,31 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/mae_customer_demographics_service_uri",
+            "data": {
+                "metadata": {
+                    "created": 1641934772622,
+                    "type": "string_list",
+                    "updated": 1643825924179
+                },
+                "values": [
+                    "sandbox=https://ssoa-dev2.unionbank.com/SSOA/services/GenericSSOGatewayXml",
+                    "sit=https://ssoa-tst2.unionbank.com/SSOA/services/GenericSSOGatewayXml",
+                    "dut=https://ssoa-tst2.unionbank.com/SSOA/services/GenericSSOGatewayXml",
+                    "prod=https://ssoa.uboc.com/SSOA/services/GenericSSOGatewayXml",
+                    "pte=https://ssoa-pte.unionbank.com/SSOA/services/GenericSSOGatewayXml"
+                ],
+                "id": "mae_customer_demographics_service_uri"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

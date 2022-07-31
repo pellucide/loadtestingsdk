@@ -1,0 +1,31 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/mae_rsa_adaptive_auth_api",
+            "data": {
+                "metadata": {
+                    "created": 1635878358891,
+                    "type": "string_list",
+                    "updated": 1639685381277
+                },
+                "values": [
+                    "sandbox=https://eubcp.us1.qeadaptiveauth.com/AdaptiveAuthentication_6_5/AdaptiveAuthentication",
+                    "pte=https://eubcp.us1.qeadaptiveauth.com/AdaptiveAuthentication_6_5/AdaptiveAuthentication",
+                    "brands-playground-app|sandbox=https://mua279i-api-local.mae.unionbank.com/bhilton/rsa-adaptive-auth-sim",
+                    "sit=https://eubcp.us1.qeadaptiveauth.com/AdaptiveAuthentication_6_5/AdaptiveAuthentication",
+                    "dut=https://eubcp.us1.qeadaptiveauth.com/AdaptiveAuthentication_6_5/AdaptiveAuthentication"
+                ],
+                "id": "mae_rsa_adaptive_auth_api"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

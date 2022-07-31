@@ -1,0 +1,32 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/wca_hrt_ids_to_allow_for_unregistered_scq",
+            "data": {
+                "metadata": {
+                    "created": 1652805813995,
+                    "type": "string_list",
+                    "updated": 1652805813995
+                },
+                "values": [
+                    "45",
+                    "12",
+                    "11",
+                    "56",
+                    "55",
+                    "57"
+                ],
+                "id": "wca_hrt_ids_to_allow_for_unregistered_scq"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

@@ -1,0 +1,31 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/eip_oa2_bearer_token_service_url",
+            "data": {
+                "metadata": {
+                    "created": 1644445819102,
+                    "type": "string_list",
+                    "updated": 1644445819102
+                },
+                "values": [
+                    "sandbox=https://wso2apigw-eip-dev1.opn-apps-aws-lle1.unionbank.com/token",
+                    "prod=???",
+                    "sit=https://wso2apigw-eip-dev1.opn-apps-aws-lle1.unionbank.com/token",
+                    "pte=https://wso2apigw-eip-dev1.opn-apps-aws-lle1.unionbank.com/token",
+                    "dut=https://wso2apigw-eip-dev1.opn-apps-aws-lle1.unionbank.com/token"
+                ],
+                "id": "eip_oa2_bearer_token_service_url"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

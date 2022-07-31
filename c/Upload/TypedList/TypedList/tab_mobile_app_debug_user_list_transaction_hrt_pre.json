@@ -1,0 +1,25 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/tab_mobile_app_debug_user_list_transaction_hrt_pre",
+            "data": {
+                "metadata": {
+                    "created": 1644345210546,
+                    "type": "string_list",
+                    "updated": 1644345210546
+                },
+                "values": [],
+                "id": "tab_mobile_app_debug_user_list_transaction_hrt_pre"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

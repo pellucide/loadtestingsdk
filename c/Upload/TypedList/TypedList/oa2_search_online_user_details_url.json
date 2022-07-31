@@ -1,0 +1,31 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/oa2_search_online_user_details_url",
+            "data": {
+                "metadata": {
+                    "created": 1645467275689,
+                    "type": "string_list",
+                    "updated": 1654876048941
+                },
+                "values": [
+                    "sandbox=https://a4c-dev2.unionbank.com/users/users/v1/private/iam/search-online-user-details",
+                    "dut=https://a4c-tst2.unionbank.com/users/users/v1/private/iam/search-online-user-details",
+                    "pte=https://a4c-pte.unionbank.com/users/users/v1/private/iam/search-online-user-details",
+                    "prod=https://a4c.unionbank.com/users/users/v1/private/iam/search-online-user-details",
+                    "sit=???"
+                ],
+                "id": "oa2_search_online_user_details_url"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

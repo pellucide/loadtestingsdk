@@ -1,0 +1,25 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/tab_mobile_app_debug_user_list_login_pre_auth",
+            "data": {
+                "metadata": {
+                    "created": 1644345176457,
+                    "type": "string_list",
+                    "updated": 1644345176457
+                },
+                "values": [],
+                "id": "tab_mobile_app_debug_user_list_login_pre_auth"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

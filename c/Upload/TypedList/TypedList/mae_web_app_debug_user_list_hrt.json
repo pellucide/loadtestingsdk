@@ -1,0 +1,69 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/mae_web_app_debug_user_list_hrt",
+            "data": {
+                "metadata": {
+                    "created": 1654110108503,
+                    "type": "string_list",
+                    "updated": 1654288178159
+                },
+                "values": [
+                    "maedev2id22",
+                    "maedev2id14",
+                    "maedev2id9",
+                    "maedev2id11",
+                    "maedev2id24",
+                    "maebusbcoid3",
+                    "maedev2id18",
+                    "maebuswebid3",
+                    "maebusbcoid4",
+                    "maedev2id10",
+                    "maedev2id19",
+                    "maebuswebid4",
+                    "maedev2id21",
+                    "maedev2id5",
+                    "maedev2id28",
+                    "maebuswebid2",
+                    "maedev2id25",
+                    "maedev2id13",
+                    "maedev2id6",
+                    "maedev2id17",
+                    "maebuswebaid4",
+                    "maebuswebaid1",
+                    "maebuswebid1",
+                    "maedev2id26",
+                    "maedev2id7",
+                    "maebuswebaid2",
+                    "maedev2id3",
+                    "seledash",
+                    "maebuswebaid5",
+                    "maebusbcoid2",
+                    "maedev2id16",
+                    "luketesttkn",
+                    "maedev2id12",
+                    "maedev2id23",
+                    "maedev2id27",
+                    "maedev2id8",
+                    "maebuswebaid3",
+                    "maedev2id20",
+                    "bradtesttoken",
+                    "maedev2id15",
+                    "maebusbcoid5",
+                    "maebusbcoid1",
+                    "maedev2id4"
+                ],
+                "id": "mae_web_app_debug_user_list_hrt"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

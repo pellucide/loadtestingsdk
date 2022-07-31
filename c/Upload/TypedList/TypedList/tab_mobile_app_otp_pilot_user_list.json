@@ -1,0 +1,67 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/tab_mobile_app_otp_pilot_user_list",
+            "data": {
+                "metadata": {
+                    "created": 1649089678542,
+                    "type": "string_list",
+                    "updated": 1654548801120
+                },
+                "values": [
+                    "maetst2id3web",
+                    "maetst2id25",
+                    "maetst2id10",
+                    "maetst2id1",
+                    "maetst2id6bco",
+                    "maetst2id17",
+                    "maetst2id2bco",
+                    "maetst2id8",
+                    "maetst2id13",
+                    "maetst2id4web",
+                    "maetst2id19",
+                    "maetst2id24",
+                    "maetst2id18",
+                    "maetst2id9",
+                    "maetst2id1bco",
+                    "maetst2id21",
+                    "maetst2id14",
+                    "maetst2id5",
+                    "maetst2id15",
+                    "maetst2id23",
+                    "maetst2id6",
+                    "maetst2id5bco",
+                    "maetst2id5web",
+                    "maetst2id1admn",
+                    "maetst2id4admn",
+                    "maetst2id11",
+                    "maetst2id2web",
+                    "maetst2id27",
+                    "maetst2id2",
+                    "maetst2id16",
+                    "maetst2id7",
+                    "maetst2id1web",
+                    "maetst2id4bco",
+                    "maetst2id26",
+                    "maetst2id20",
+                    "maetst2id22",
+                    "maetst2id2admn",
+                    "maetst2id3bco",
+                    "maetst2id12",
+                    "maetst2id3",
+                    "maetst2id3admn"
+                ],
+                "id": "tab_mobile_app_otp_pilot_user_list"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

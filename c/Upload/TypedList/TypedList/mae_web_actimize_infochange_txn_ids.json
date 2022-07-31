@@ -1,0 +1,35 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/mae_web_actimize_infochange_txn_ids",
+            "data": {
+                "metadata": {
+                    "created": 1648087396674,
+                    "type": "string_list",
+                    "updated": 1648087396674
+                },
+                "values": [
+                    "6000",
+                    "6001",
+                    "50",
+                    "5",
+                    "54",
+                    "53",
+                    "6002",
+                    "6003",
+                    "52"
+                ],
+                "id": "mae_web_actimize_infochange_txn_ids"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

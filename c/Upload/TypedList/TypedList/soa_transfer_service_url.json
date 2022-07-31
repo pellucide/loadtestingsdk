@@ -1,0 +1,31 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/soa_transfer_service_url",
+            "data": {
+                "metadata": {
+                    "created": 1650639323838,
+                    "type": "string_list",
+                    "updated": 1655400707701
+                },
+                "values": [
+                    "prod=https://dpa.unionbank.com:41007/internetBanking/contract/entity/transferServices/v1",
+                    "sandbox=https://dpa-tst2.unionbank.com:41007/internetBanking/contract/entity/transferServices/v1",
+                    "sit=https://dpa-tst2.unionbank.com:41007/internetBanking/contract/entity/transferServices/v1",
+                    "pte=https://dpa-pte.unionbank.com:41007/internetBanking/contract/entity/transferServices/v1",
+                    "dut=https://dpa-tst2.unionbank.com:41007/internetBanking/contract/entity/transferServices/v1"
+                ],
+                "id": "soa_transfer_service_url"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

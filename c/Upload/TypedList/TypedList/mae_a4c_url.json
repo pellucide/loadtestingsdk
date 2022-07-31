@@ -1,0 +1,31 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/mae_a4c_url",
+            "data": {
+                "metadata": {
+                    "created": 1649258167475,
+                    "type": "string_list",
+                    "updated": 1654877009858
+                },
+                "values": [
+                    "prod=https://a4c.unionbank.com/",
+                    "pte=https://a4c-pte.unionbank.com/",
+                    "dut=https://a4c-tst2.unionbank.com/",
+                    "sandbox=https://a4c-dev2.unionbank.com/",
+                    "sit=???"
+                ],
+                "id": "mae_a4c_url"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}

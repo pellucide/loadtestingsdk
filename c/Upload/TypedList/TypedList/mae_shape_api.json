@@ -1,0 +1,41 @@
+{
+    "exports": [
+        {
+            "path": "tsasm:///string_lists/mae_shape_api",
+            "data": {
+                "metadata": {
+                    "created": 1642745352013,
+                    "type": "string_list",
+                    "updated": 1652813697011
+                },
+                "values": [
+                    "pte=unionbank-eqsv2-l3-test-2.fastcache.net",
+                    "sit=unionbank-eqsv2-l3-test-2.fastcache.net",
+                    "mobile|dut=unionbank_eqsv2-l3_api_test_2.fastcache.net",
+                    "web|prod=unionbank-web-prod.fastcache.net",
+                    "mobile|pte=unionbank_eqsv2-l3_api_test_2.fastcache.net",
+                    "web|dut=unionbank-eqsv2-l3-test-2.fastcache.net",
+                    "web|sandbox=unionbank-eqsv2-l3-test-2.fastcache.net",
+                    "web|sit=unionbank-eqsv2-l3-test-2.fastcache.net",
+                    "dut=unionbank-eqsv2-l3-test-2.fastcache.net",
+                    "sandbox=unionbank-eqsv2-l3-test-2.fastcache.net",
+                    "mobile|sandbox=unionbank_eqsv2-l3_api_test_2.fastcache.net",
+                    "mobile|prod=unionbank-api-prod.fastcache.net",
+                    "prod=unionbank-api-prod.fastcache.net",
+                    "mobile|sit=unionbank_eqsv2-l3_api_test_2.fastcache.net",
+                    "web|pte=unionbank-eqsv2-l3-test-2.fastcache.net"
+                ],
+                "id": "mae_shape_api"
+            },
+            "category": "string_list",
+            "type": "dependency",
+            "constraints": [
+                {
+                    "server_version": "6.1.3",
+                    "type": "server_version"
+                }
+            ],
+            "dependencies": []
+        }
+    ]
+}
